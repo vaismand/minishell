@@ -6,7 +6,7 @@
 /*   By: dvaisman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 12:24:24 by dvaisman          #+#    #+#             */
-/*   Updated: 2023/11/23 20:51:24 by dvaisman         ###   ########.fr       */
+/*   Updated: 2023/11/28 15:26:10 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int				ft_toupper(int c);
 int				ft_memcmp(const void *s1, const void *s2, size_t n);
 int				ft_atoi(const char *str);
 int				ft_strncmp(char *s1, char *s2, unsigned int n);
+int				ft_strcmp(char *s1, char *s2);
 int				ft_strcontain(const char *str, char c);
 
 #endif

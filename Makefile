@@ -17,7 +17,7 @@ BLUE      = \033[0;94m
 all: ${NAME}
 
 ${NAME}: ${OBJS}
-	@${MAKE} -s -C ./lib/libft > /dev/null
+	@${MAKE} -s -C ./lib/libft
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -lreadline -o $(NAME)
 	@echo "${GREEN}Compilation is done!"
 
@@ -25,11 +25,12 @@ ${NAME}: ${OBJS}
 	@${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
 fclean: clean
+	@${MAKE} clean -s -C ./lib/libft
 	@${RM} ${NAME}
 	@echo "${BLUE}Cleaning is done!"
 
 clean:
-	@${MAKE} clean -s -C ./lib/libft
+	@${MAKE} fclean -s -C ./lib/libft
 	@${RM} ${OBJS}
 
 re: fclean all

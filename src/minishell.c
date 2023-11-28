@@ -6,57 +6,75 @@
 /*   By: dvaisman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2023/11/28 14:38:05 by dvaisman         ###   ########.fr       */
+/*   Updated: 2023/11/28 15:24:10 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int	cd(char *path)
+{
+	return chdir(path);
+}
+
 char **get_input(char *input)
 {
-    char **command = malloc(8 * sizeof(char *));
-    char *separator = " ";
-    char *parsed;
-    int index = 0;
+	char **command = malloc(8 * sizeof(char *));
+	char *separator = " ";
+	char *parsed;
+	int index = 0;
 
-    parsed = strtok(input, separator);
-    while (parsed != NULL) {
-        command[index] = parsed;
-        index++;
+	parsed = strtok(input, separator);
+	while (parsed != NULL) {
+		command[index] = parsed;
+		index++;
+		parsed = strtok(NULL, separator);
+	}
 
-        parsed = strtok(NULL, separator);
-    }
-
-    command[index] = NULL;
-    return command;
+	command[index] = NULL;
+	return command;
 }
 
 int main()
 {
-    char **command;
-    char *input;
-    pid_t child_pid;
-    int stat_loc;
+	char **command;
+	char *input;
+	pid_t child_pid;
+	int stat_loc;
 
-    while (1) {
-        input = readline("unixsh> ");
-        command = get_input(input);
-
-        if (!command[0])
+	while (1) {
+		input = readline("unixsh> ");
+		command = get_input(input);
+		if (ft_strcmp(command[0], "cd") == 0)
 		{
-            free(input);
-            free(command);
+            if (cd(command[1]) < 0)
+                perror(command[1]);
             continue;
+        }
+		if (!command[0])
+		{
+			free(input);
+			free(command);
+			continue;
 		}
-        child_pid = fork();
-        if (child_pid == 0) {
-            execvp(command[0], command);
-            printf("This won't be printed if execvp is successul\n");
+		child_pid = fork();
+		if (child_pid < 0) {
+			perror("Fork failed");
+			exit(1);
 		}
-        else
-            waitpid(child_pid, &stat_loc, WUNTRACED);
-        free(input);
-        free(command);
-    }
-    return 0;
+		if (child_pid == 0) {
+			execvp(command[0], command);
+			if (execvp(command[0], command) < 0)
+			{
+				perror(command[0]);
+				exit(1);
+			}
+			printf("This won't be printed if execvp is successul\n");
+		}
+		else
+			waitpid(child_pid, &stat_loc, WUNTRACED);
+		free(input);
+		free(command);
+	}
+	return 0;
 }
