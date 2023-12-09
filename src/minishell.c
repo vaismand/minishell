@@ -6,7 +6,7 @@
 /*   By: dvaisman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2023/11/28 15:24:10 by dvaisman         ###   ########.fr       */
+/*   Updated: 2023/12/09 12:54:01 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int main()
         }
 		if (!command[0])
 		{
-			free(input);
+			free(input);child_pid = fork();
 			free(command);
 			continue;
 		}
