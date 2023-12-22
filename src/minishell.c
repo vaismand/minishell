@@ -6,75 +6,72 @@
 /*   By: dvaisman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2023/12/09 12:54:01 by dvaisman         ###   ########.fr       */
+/*   Updated: 2023/12/22 15:49:42 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	cd(char *path)
+char	*read_command()
 {
-	return chdir(path);
+
+	char	*command;
+
+	command = readline("minishell$ ");
+	return (command);
 }
 
-char **get_input(char *input)
+// Function to parse the command
+char	**parse_command(char *command)
 {
-	char **command = malloc(8 * sizeof(char *));
-	char *separator = " ";
-	char *parsed;
-	int index = 0;
+	char	**args;
 
-	parsed = strtok(input, separator);
-	while (parsed != NULL) {
-		command[index] = parsed;
-		index++;
-		parsed = strtok(NULL, separator);
+	args = ft_split(command, ' ');
+	return (args);
+}
+
+int execute_command(char **args)
+{
+	pid_t	pid;
+	char	**environ;
+	int		status;
+
+	pid = fork();
+
+	if (pid == 0) {
+
+		if (execve(args[0], args, environ) == -1) {
+			perror("minishell");
+			exit(EXIT_FAILURE);
+		}
 	}
-
-	command[index] = NULL;
-	return command;
+	else if (pid < 0)
+		perror("minishell");
+	else
+	{
+		waitpid(pid, &status, WUNTRACED);
+		while (!WIFEXITED(status) && !WIFSIGNALED(status))
+		{
+			waitpid(pid, &status, WUNTRACED);
+		}
+	}
+	return (1);
 }
 
-int main()
+int main(void)
 {
-	char **command;
-	char *input;
-	pid_t child_pid;
-	int stat_loc;
+	char	*command;
+	char	**args;
+	int		status;
 
-	while (1) {
-		input = readline("unixsh> ");
-		command = get_input(input);
-		if (ft_strcmp(command[0], "cd") == 0)
-		{
-            if (cd(command[1]) < 0)
-                perror(command[1]);
-            continue;
-        }
-		if (!command[0])
-		{
-			free(input);child_pid = fork();
-			free(command);
-			continue;
-		}
-		child_pid = fork();
-		if (child_pid < 0) {
-			perror("Fork failed");
-			exit(1);
-		}
-		if (child_pid == 0) {
-			execvp(command[0], command);
-			if (execvp(command[0], command) < 0)
-			{
-				perror(command[0]);
-				exit(1);
-			}
-			printf("This won't be printed if execvp is successul\n");
-		}
-		else
-			waitpid(child_pid, &stat_loc, WUNTRACED);
-		free(input);
+	while (1)
+	{
+		command = read_command();
+		args = parse_command(command);
+		status = execute_command(args);
+
 		free(command);
+		free(args);
 	}
-	return 0;
+	return (0);
 }

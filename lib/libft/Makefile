@@ -1,5 +1,7 @@
 .SILENT:
 
+CFLAGS	= -Wall -Wextra -Werror
+NAME	= libft.a
 SRCS	= ft_atoi.c \
 			ft_bzero.c \
 			ft_calloc.c \
@@ -16,7 +18,6 @@ SRCS	= ft_atoi.c \
 			ft_strdup.c \
 			ft_substr.c \
 			ft_strchr.c \
-			ft_strcmp.c \
 			ft_strlcat.c \
 			ft_strlcpy.c \
 			ft_strlen.c \
@@ -50,18 +51,21 @@ SRCS_B	= ft_lstnew.c \
 
 OBJS	= ${SRCS:.c=.o}
 OBJS_B  = ${SRCS_B:.c=.o}
-NAME	= libft.a
 LIBC	= ar rc
-CC		= gcc
+CC		= cc
 RM		= rm -f
-CFLAGS	= -Wall -Wextra -Werror
 INCS 	= .
+
+RED       = \033[0;91m
+GREEN     = \033[1;92m
+BLUE      = \033[0;94m
 
 .c.o:
 	@${CC} ${CFLAGS} -c $< -o ${<:.c=.o} -I ${INCS}
 
 ${NAME}: ${OBJS}
 	@${LIBC} ${NAME} ${OBJS}
+	@echo "${GREEN}Libft Compilation is done!"
 
 all: ${NAME}
 
@@ -70,6 +74,7 @@ bonus: ${NAME} ${OBJS_B}
 
 fclean: clean
 	@${RM} ${NAME} ${bonus}
+	@echo "${BLUE}Libft Cleaning is done!"
 
 clean:
 	@${RM} -f ${OBJS} ${OBJS_B}
