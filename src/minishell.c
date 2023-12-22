@@ -6,11 +6,24 @@
 /*   By: dvaisman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2023/12/22 15:49:42 by dvaisman         ###   ########.fr       */
+/*   Updated: 2023/12/22 16:01:18 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_init_env()
+{
+	extern char	**environ;
+	int			i;
+
+	i = 0;
+	while (environ[i])
+	{
+		ft_putendl(environ[i]);
+		i++;
+	}
+}
 
 char	*read_command()
 {
@@ -21,7 +34,6 @@ char	*read_command()
 	return (command);
 }
 
-// Function to parse the command
 char	**parse_command(char *command)
 {
 	char	**args;
@@ -64,6 +76,7 @@ int main(void)
 	char	**args;
 	int		status;
 
+	ft_init_env();
 	while (1)
 	{
 		command = read_command();

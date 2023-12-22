@@ -6,7 +6,7 @@
 /*   By: dvaisman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2023/12/22 15:27:21 by dvaisman         ###   ########.fr       */
+/*   Updated: 2023/12/22 16:05:10 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,10 @@
 #include <sys/wait.h>
 #include "../lib/libft/libft.h"
 
-typedef struct s_gnl
-{
-	char	*buff;
-	char	*str;
-	char	*line;
-	int		fd;
-	int		i;
-	int		j;
-}				t_gnl;
+extern char	**mini_env;
 
+
+void	ft_init_env();
 char	*get_next_line(int fd);
 
 #endif
