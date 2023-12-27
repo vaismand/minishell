@@ -6,11 +6,18 @@
 /*   By: dvaisman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2023/12/22 16:01:18 by dvaisman         ###   ########.fr       */
+/*   Updated: 2023/12/27 14:25:03 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	ft_putendl(char *s)
+{
+	ft_putstr_fd(s, 1);
+	ft_putchar_fd('\n', 1);
+	return (1);
+}
 
 void	ft_init_env()
 {
@@ -49,10 +56,10 @@ int execute_command(char **args)
 	int		status;
 
 	pid = fork();
-
 	if (pid == 0) {
 
-		if (execve(args[0], args, environ) == -1) {
+		if (execve(args[0], args, environ) == -1)
+		{
 			perror("minishell");
 			exit(EXIT_FAILURE);
 		}
@@ -76,13 +83,12 @@ int main(void)
 	char	**args;
 	int		status;
 
-	ft_init_env();
+	//ft_init_env();
 	while (1)
 	{
 		command = read_command();
 		args = parse_command(command);
 		status = execute_command(args);
-
 		free(command);
 		free(args);
 	}
