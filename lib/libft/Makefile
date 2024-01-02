@@ -1,90 +1,57 @@
-.SILENT:
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: dkohn <marvin@42.fr>                       +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/09/11 17:29:31 by dkohn             #+#    #+#              #
+#    Updated: 2023/12/14 16:42:35 by dkohn            ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
 
-CFLAGS	= -Wall -Wextra -Werror
-NAME	= libft.a
-SRCS	= ft_atoi.c \
-			ft_bzero.c \
-			ft_calloc.c \
-			ft_isalnum.c \
-			ft_isalpha.c \
-			ft_isascii.c \
-			ft_isdigit.c \
-			ft_isprint.c \
-			ft_memcpy.c \
-			ft_memchr.c \
-			ft_memcmp.c \
-			ft_memmove.c \
-			ft_memset.c \
-			ft_strdup.c \
-			ft_substr.c \
-			ft_strcmp.c \
-			ft_strchr.c \
-			ft_strlcat.c \
-			ft_strlcpy.c \
-			ft_strlen.c \
-			ft_strncmp.c \
-			ft_strnstr.c \
-			ft_strrchr.c \
-			ft_tolower.c \
-			ft_toupper.c \
-			ft_strjoin.c \
-			ft_strtrim.c \
-			ft_itoa.c \
-			ft_putchar_fd.c \
-			ft_putstr_fd.c \
-			ft_putendl_fd.c \
-			ft_putnbr_fd.c \
-			ft_strmapi.c \
-			ft_split.c \
-			ft_striteri.c \
-			ft_chartostr.c \
-			ft_strndup.c \
+# Define the source and object directories
+SRCDIR = srcs
+OBJDIR = obj
 
-SRCS_B	= ft_lstnew.c \
-		ft_lstadd_front.c \
-		ft_lstsize.c \
-		ft_lstlast.c \
-		ft_lstadd_back.c \
-		ft_lstdelone.c \
-		ft_lstclear.c \
-		ft_lstiter.c \
-		ft_lstmap.c \
+# Define the compiler and compiler flags
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
 
-OBJS	= ${SRCS:.c=.o}
-OBJS_B  = ${SRCS_B:.c=.o}
-LIBC	= ar rc
-CC		= cc
-RM		= rm -f
-INCS 	= .
+# Define the target name
+NAME = libft.a
 
-RED       = \033[0;91m
-GREEN     = \033[1;92m
-BLUE      = \033[0;94m
+# Automatically find all source files in the "srcs" directory
+SOURCES = $(wildcard $(SRCDIR)/*.c)
 
-.c.o:
-	@${CC} ${CFLAGS} -c $< -o ${<:.c=.o} -I ${INCS}
+# Generate object file names in the "obj" directory from source files
+OBJECTS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SOURCES))
 
-${NAME}: ${OBJS}
-	@${LIBC} ${NAME} ${OBJS}
-	@echo "${GREEN}Libft Compilation is done!"
+# Phony targets
+.PHONY: all clean fclean re
 
-all: ${NAME}
+# Default target to build the library
+all: $(NAME)
 
-bonus: ${NAME} ${OBJS_B}
-	@${LIBC} ${NAME} ${OBJS_B}
+# Rule to create the "obj" directory if it doesn't exist
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
 
-fclean: clean
-	@${RM} ${NAME} ${bonus}
-	@echo "${BLUE}Libft Cleaning is done!"
+# Rule to compile source files into object files with explicit dependencies
+$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
+	$(CC) $(CFLAGS) -c -o $@ $<
 
+# Build the library from object files
+$(NAME): $(OBJECTS)
+	ar rc $(NAME) $(OBJECTS)
+
+# Clean target to remove object files
 clean:
-	@${RM} -f ${OBJS} ${OBJS_B}
+	rm -rf $(OBJDIR)
 
+# Full clean target to remove object files and the library
+fclean: clean
+	rm -f $(NAME)
+
+# Rebuild the library
 re: fclean all
-
-norm:
-	norminette -R CheckForbiddenSourceHeader */*.[ch]
-
-so:
-	$(CC) -nostartfiles -fPIC $(CFLAGS) $(SRCS)
-	gcc -nostartfiles -shared -o libft.so $(OBJS)
