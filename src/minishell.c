@@ -12,6 +12,11 @@
 
 #include "minishell.h"
 
+int	cd(char *path)
+{
+	return chdir(path);
+}
+
 int	ft_putendl(char *s)
 {
 	ft_putstr_fd(s, 1);
@@ -38,6 +43,13 @@ char	*read_command()
 	char	*command;
 
 	command = readline("minishell$ ");
+	// if (strcmp(command[0], "cd") == 0)
+	// {
+	// 	if (cd(command[1]) < 0)
+	// 	{
+	// 		perror(command[1]);
+	// 	}
+	// }
 	return (command);
 }
 
@@ -52,7 +64,7 @@ char	**parse_command(char *command)
 int execute_command(char **args)
 {
 	pid_t	pid;
-	char	**environ;
+	extern char	**environ;
 	int		status;
 
 	pid = fork();
@@ -92,5 +104,6 @@ int main(void)
 		free(command);
 		free(args);
 	}
+	(void)status;
 	return (0);
 }
