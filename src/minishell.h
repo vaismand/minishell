@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2023/12/22 16:05:10 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/02 16:28:04 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <readline/readline.h>
 #include <unistd.h>
 #include <sys/wait.h>
-#include "../lib/libft/libft.h"
+#include "../lib/libft/srcs/libft.h"
 
 extern char	**mini_env;
 
