@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2023/12/27 14:25:03 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/02 16:29:07 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	**parse_command(char *command)
 int execute_command(char **args)
 {
 	pid_t	pid;
-	char	**environ;
+	extern char	**environ;
 	int		status;
 
 	pid = fork();
@@ -83,12 +83,13 @@ int main(void)
 	char	**args;
 	int		status;
 
+	(void)status;
 	//ft_init_env();
 	while (1)
 	{
 		command = read_command();
 		args = parse_command(command);
-		status = execute_command(args);
+		execute_command(args);
 		free(command);
 		free(args);
 	}
