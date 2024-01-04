@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/04 17:29:30 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/04 21:22:38 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+//global variable for the signal
+static volatile sig_atomic_t jump_active = 0;
+static sigjmp_buf env;
+
+int cd(char *path) {
+    return chdir(path);
+}
 
 //creating a new list for every command
 t_list	*new_lst(char *argv, char **envp)
@@ -152,6 +160,14 @@ void	redirecting(t_list *pipex)
 	else
 		middle_child(pipex);
 }
+// handles the signal
+void sigint_handler(int signo) 
+{
+    if (!jump_active)
+        return;
+    siglongjmp(env, 42);
+	(void)signo;
+}
 
 //executes the command
 int execute_command(t_list *cmd_list)
@@ -163,6 +179,7 @@ int execute_command(t_list *cmd_list)
 	pid = fork();
 	if (pid == 0)
 	{
+		
 		redirecting(cmd_list);
 		execve(cmd_list->path, cmd_list->cmd, cmd_list->envp);
 		perror("minishell");
@@ -177,7 +194,7 @@ int execute_command(t_list *cmd_list)
 		{
 			waitpid(pid, &status, WUNTRACED);
 		}
-		close(cmd_list->pd[1]);
+		close(cmd_list->pd[1]); //dont forget to close the pipe
 	}
 	return (1);
 }
@@ -211,14 +228,41 @@ int main(int ac, char **av, char **envp)
 {
 	int		status;
 	t_list	*cmd_list;
+	// struct of signal
+	struct sigaction sig;
+
+    sig.sa_handler = sigint_handler;
+    sigemptyset(&sig.sa_mask);
+    sig.sa_flags = SA_RESTART;
+    sigaction(SIGINT, &sig, NULL);
 
 	(void)ac;
 	(void)av;
 	(void)status;
 	while (1)
 	{
+		// handle of CTRL+C
+		if (sigsetjmp(env, 1) == 42)
+		{
+			printf("\n");
+			continue;
+		}
+		jump_active = 1;
 		struct_init(&cmd_list, envp);
-		if (ft_strncmp(cmd_list->cmd[0], "cd", 3) == 0)
+		// should fix problem with empty command
+		// if (cmd_list == NULL)
+		// 	continue;
+
+		// continue if the command is empty
+		if (!cmd_list)
+			continue;
+		if (ft_strncmp(cmd_list->cmd[0], "NULL", 5) == 0)
+		{
+			printf("test\n");
+			printf("\n");
+			exit(0);
+		}
+		else if (ft_strncmp(cmd_list->cmd[0], "cd", 3) == 0)
 			chdir(cmd_list->cmd[1]);
 		else if (ft_strncmp(cmd_list->cmd[0], "exit", 5) == 0)
 			exit(0);
