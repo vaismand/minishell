@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/04 21:22:38 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/05 13:04:05 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*path_creator(char **cmd)
 }
 
 //initializes the struct
-void	struct_init(t_list **pipex, char **envp)
+void	struct_init(t_list **pipex, char **envp, char *cmd)
 {
 	t_list	*tmp;
 	char	*cmd;
@@ -87,7 +87,6 @@ void	struct_init(t_list **pipex, char **envp)
 	int 	i;
 
 	i = -1;
-	cmd = readline("minishell$ ");
 	argv = ft_split(cmd, '|');
 	while (argv[++i])
 	{
@@ -227,6 +226,7 @@ void	freepipex(t_list *pipex)
 int main(int ac, char **av, char **envp)
 {
 	int		status;
+	char	*cmd;
 	t_list	*cmd_list;
 	// struct of signal
 	struct sigaction sig;
@@ -248,7 +248,8 @@ int main(int ac, char **av, char **envp)
 			continue;
 		}
 		jump_active = 1;
-		struct_init(&cmd_list, envp);
+		cmd = ft_readline();
+		struct_init(&cmd_list, envp, cmd);
 		// should fix problem with empty command
 		// if (cmd_list == NULL)
 		// 	continue;
