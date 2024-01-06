@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/06 14:56:22 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/06 15:01:14 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,6 +270,7 @@ int main(int ac, char **av, char **envp)
 			execute_command(cmd_list);
 			cmd_list = cmd_list->next;
 		}
+		ft_printf("\n");
 	}
 	return (0);
 }
