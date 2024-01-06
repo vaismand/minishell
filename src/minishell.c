@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/06 11:33:34 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/06 14:51:58 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,22 +256,22 @@ int main(int ac, char **av, char **envp)
 		}
 		jump_active = 1;
 		cmd = readline("supershell$ ");
-		if (cmd == NULL) // exit shell if CTRL+D
+		if (cmd == NULL || ft_strncmp(cmd, "exit", 4) == 0) // exit shell if CTRL+D or exit
 			exit(0);
+		if (ft_strncmp(cmd, "cd", 2) == 0)
+		{
+			chdir(ft_split(cmd, ' ')[1]);
+			continue;
+		}
 		if (ft_strlen(cmd) == 0) //if the command is empty, continue
 			continue;
 		add_history(cmd); //add the command to the history
 		struct_init(&cmd_list, envp, cmd);
-		if (ft_strncmp(cmd_list->cmd[0], "cd", 3) == 0)
-			chdir(cmd_list->cmd[1]);
-		else if (ft_strncmp(cmd_list->cmd[0], "exit", 5) == 0)
-			exit(0);
 		while (cmd_list)
 		{
 			execute_command(cmd_list);
 			cmd_list = cmd_list->next;
 		}
-		freepipex(cmd_list);
 	}
 	return (0);
 }
