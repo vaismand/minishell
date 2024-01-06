@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:04:04 by dkohn             #+#    #+#             */
-/*   Updated: 2024/01/06 15:23:09 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/06 15:56:26 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 typedef struct s_list
 {
 	int				pd[2];
+	int				out;
+	int				in;
 	int				pid;
 	int				index;
 	char			**cmd;

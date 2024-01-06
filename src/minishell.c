@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/06 15:41:26 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/06 16:00:47 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,8 @@
 static volatile sig_atomic_t jump_active = 0;
 static sigjmp_buf env;
 
-int cd(char *path) {
-    return chdir(path);
-}
-
 //creating a new list for every command
-t_list	*new_lst(char *argv, char **envp, int redirin, int redirout)
+t_list	*new_lst(char *argv, char **envp)
 {
 	t_list	*tmp;
 
@@ -32,13 +28,11 @@ t_list	*new_lst(char *argv, char **envp, int redirin, int redirout)
 	tmp->cmd = ft_split(argv, ' ');
 	tmp->path = path_creator(tmp->cmd);
 	tmp->next = NULL;
+	tmp->out = 0;
+	tmp->in = 0;
 	tmp->prev = NULL;
 	tmp->pd[0] = 0;
 	tmp->pd[1] = 0;
-	if (redirin == 1)
-		tmp->pd[0] = open(argv, O_RDONLY);
-	if (redirout == 1)
-		tmp->pd[1] = open(argv, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	return (tmp);
 }
 
@@ -88,17 +82,19 @@ void	struct_init(t_list **pipex, char **envp, char *cmd)
 	t_list	*tmp;
 	char	**argv;
 	int 	i;
+	int		ii;
 
+	ii = 0;
 	i = -1;
 	argv = ft_split(cmd, '|');
 	while (argv[++i])
 	{
-		if (argv[i] == '>')
-		{
-			tmp = new_lst(argv[i], envp, 0, 1);
-		}
-		else if (argv[i] == '<')
-			tmp = new_lst(argv[i], envp, 1, 0);
+		tmp = new_lst(argv[i], envp);
+		argv = ft_split(argv[i], ' ');
+		if (argv[i + 1] == '>')
+			tmp->out = argv[i + 2];
+		else if (argv[i + 1] == '<')
+			tmp->in = open(argv[i + 2] , O_RDONLY);
 		if (!tmp)
 			perror("malloc error");
 		tmp->index = i;
@@ -174,12 +170,6 @@ void sigint_handler(int signo)
         return;
     siglongjmp(env, 42);
 	(void)signo;
-}
-
-void sigquit_handler(int signo) 
-{
-	(void)signo;
-	//I do nothing here
 }
 
 //executes the command
