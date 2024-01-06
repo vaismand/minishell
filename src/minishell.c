@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/06 16:00:47 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/06 16:29:15 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ t_list	*new_lst(char *argv, char **envp)
 {
 	t_list	*tmp;
 
+	if (!argv || !envp || ft_strncmp(argv, ">", 1) == 0 || ft_strncmp(argv, ">", 1) == 0)
+		return (NULL);
 	tmp = malloc(sizeof(t_list));
 	if (!tmp)
 		perror("malloc error");
@@ -81,22 +83,21 @@ void	struct_init(t_list **pipex, char **envp, char *cmd)
 {
 	t_list	*tmp;
 	char	**argv;
+	char	**tmp2;
 	int 	i;
-	int		ii;
 
-	ii = 0;
 	i = -1;
 	argv = ft_split(cmd, '|');
 	while (argv[++i])
 	{
 		tmp = new_lst(argv[i], envp);
-		argv = ft_split(argv[i], ' ');
-		if (argv[i + 1] == '>')
-			tmp->out = argv[i + 2];
-		else if (argv[i + 1] == '<')
-			tmp->in = open(argv[i + 2] , O_RDONLY);
 		if (!tmp)
 			perror("malloc error");
+		tmp2 = ft_split(argv[i], ' ');
+		if (tmp2[1] && ft_strncmp(tmp2[1], ">", 1) == 0)
+			tmp->out = open(tmp2[2] , O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		else if (tmp2[1] && ft_strncmp(tmp2[1], "<", 1) == 0)
+			tmp->in = open(tmp2[2] , O_RDONLY);
 		tmp->index = i;
 		ft_lstadd_back(pipex, tmp);
 	}
@@ -154,6 +155,10 @@ void	middle_child(t_list *pipex)
 //redirects the input and output of the commands depending on their position
 void	redirecting(t_list *pipex)
 {
+	if (pipex->in != 0)
+		dup2(pipex->in, 0);
+	if (pipex->out != 0)
+		dup2(pipex->out, 1);	
 	if (pipex->prev == NULL && pipex->next == NULL)
 		return ;
 	else if (pipex->prev == NULL)
