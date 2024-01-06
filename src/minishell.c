@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
+/*   Updated: 2024/01/06 15:41:26 by dkohn            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 //global variable for the signal
@@ -5,7 +17,7 @@ static volatile sig_atomic_t jump_active = 0;
 static sigjmp_buf env;
 
 //creating a new list for every command
-t_list	*new_lst(char *argv, char **envp)
+t_list	*new_lst(char *argv, char **envp, int redirin, int redirout)
 {
 	t_list	*tmp;
 
@@ -19,6 +31,10 @@ t_list	*new_lst(char *argv, char **envp)
 	tmp->prev = NULL;
 	tmp->pd[0] = 0;
 	tmp->pd[1] = 0;
+	if (redirin == 1)
+		tmp->pd[0] = open(argv, O_RDONLY);
+	if (redirout == 1)
+		tmp->pd[1] = open(argv, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	return (tmp);
 }
 
@@ -73,7 +89,12 @@ void	struct_init(t_list **pipex, char **envp, char *cmd)
 	argv = ft_split(cmd, '|');
 	while (argv[++i])
 	{
-		tmp = new_lst(argv[i], envp);
+		if (argv[i] == '>')
+		{
+			tmp = new_lst(argv[i], envp, 0, 1);
+		}
+		else if (argv[i] == '<')
+			tmp = new_lst(argv[i], envp, 1, 0);
 		if (!tmp)
 			perror("malloc error");
 		tmp->index = i;
