@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/04 20:12:27 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/06 11:10:11 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <fcntl.h>
 #include <signal.h>
+#include <stdarg.h>
+#include <stdbool.h>
 #include <readline/readline.h>
+#include <readline/history.h>
 #include <unistd.h>
 #include <sys/wait.h>
 #include <setjmp.h>

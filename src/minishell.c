@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/05 13:04:05 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/06 11:33:34 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ char	*path_creator(char **cmd)
 void	struct_init(t_list **pipex, char **envp, char *cmd)
 {
 	t_list	*tmp;
-	char	*cmd;
 	char	**argv;
 	int 	i;
 
@@ -168,6 +167,12 @@ void sigint_handler(int signo)
 	(void)signo;
 }
 
+void sigquit_handler(int signo) 
+{
+	(void)signo;
+	//I do nothing here
+}
+
 //executes the command
 int execute_command(t_list *cmd_list)
 {
@@ -232,10 +237,12 @@ int main(int ac, char **av, char **envp)
 	struct sigaction sig;
 
     sig.sa_handler = sigint_handler;
+	sig.sa_flags = SA_RESTART;
     sigemptyset(&sig.sa_mask);
-    sig.sa_flags = SA_RESTART;
-    sigaction(SIGINT, &sig, NULL);
-
+	sigaddset(&sig.sa_mask, SIGINT);
+	sigaction(SIGINT, &sig, NULL);
+	signal(SIGQUIT, SIG_IGN);
+	
 	(void)ac;
 	(void)av;
 	(void)status;
@@ -248,22 +255,14 @@ int main(int ac, char **av, char **envp)
 			continue;
 		}
 		jump_active = 1;
-		cmd = ft_readline();
-		struct_init(&cmd_list, envp, cmd);
-		// should fix problem with empty command
-		// if (cmd_list == NULL)
-		// 	continue;
-
-		// continue if the command is empty
-		if (!cmd_list)
-			continue;
-		if (ft_strncmp(cmd_list->cmd[0], "NULL", 5) == 0)
-		{
-			printf("test\n");
-			printf("\n");
+		cmd = readline("supershell$ ");
+		if (cmd == NULL) // exit shell if CTRL+D
 			exit(0);
-		}
-		else if (ft_strncmp(cmd_list->cmd[0], "cd", 3) == 0)
+		if (ft_strlen(cmd) == 0) //if the command is empty, continue
+			continue;
+		add_history(cmd); //add the command to the history
+		struct_init(&cmd_list, envp, cmd);
+		if (ft_strncmp(cmd_list->cmd[0], "cd", 3) == 0)
 			chdir(cmd_list->cmd[1]);
 		else if (ft_strncmp(cmd_list->cmd[0], "exit", 5) == 0)
 			exit(0);
