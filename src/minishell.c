@@ -6,19 +6,17 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/06 11:33:34 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/06 14:55:05 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 //global variable for the signal
-static volatile sig_atomic_t jump_active = 0;
+// should leave only one
 static sigjmp_buf env;
-
-int cd(char *path) {
-    return chdir(path);
-}
+static volatile sig_atomic_t jump_active = 0;
+extern long long sig_exit_status;
 
 //creating a new list for every command
 t_list	*new_lst(char *argv, char **envp)
@@ -159,18 +157,15 @@ void	redirecting(t_list *pipex)
 		middle_child(pipex);
 }
 // handles the signal
-void sigint_handler(int signo) 
+void sigint_handler(int signum) 
 {
-    if (!jump_active)
-        return;
-    siglongjmp(env, 42);
-	(void)signo;
-}
-
-void sigquit_handler(int signo) 
-{
-	(void)signo;
-	//I do nothing here
+	if (signum == SIGINT)
+	{
+    	ft_putchar_fd('\n', STDERR_FILENO);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		sig_exit_status = 130;
+	}
 }
 
 //executes the command
@@ -182,8 +177,7 @@ int execute_command(t_list *cmd_list)
 	pipe(cmd_list->pd);
 	pid = fork();
 	if (pid == 0)
-	{
-		
+	{	
 		redirecting(cmd_list);
 		execve(cmd_list->path, cmd_list->cmd, cmd_list->envp);
 		perror("minishell");
@@ -236,7 +230,7 @@ int main(int ac, char **av, char **envp)
 	// struct of signal
 	struct sigaction sig;
 
-    sig.sa_handler = sigint_handler;
+    sig.sa_handler = &sigint_handler;
 	sig.sa_flags = SA_RESTART;
     sigemptyset(&sig.sa_mask);
 	sigaddset(&sig.sa_mask, SIGINT);
@@ -263,7 +257,9 @@ int main(int ac, char **av, char **envp)
 		add_history(cmd); //add the command to the history
 		struct_init(&cmd_list, envp, cmd);
 		if (ft_strncmp(cmd_list->cmd[0], "cd", 3) == 0)
+		{
 			chdir(cmd_list->cmd[1]);
+		}
 		else if (ft_strncmp(cmd_list->cmd[0], "exit", 5) == 0)
 			exit(0);
 		while (cmd_list)
