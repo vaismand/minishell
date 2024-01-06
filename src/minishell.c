@@ -4,10 +4,6 @@
 static volatile sig_atomic_t jump_active = 0;
 static sigjmp_buf env;
 
-int cd(char *path) {
-    return chdir(path);
-}
-
 //creating a new list for every command
 t_list	*new_lst(char *argv, char **envp)
 {
@@ -155,12 +151,6 @@ void sigint_handler(int signo)
 	(void)signo;
 }
 
-void sigquit_handler(int signo) 
-{
-	(void)signo;
-	//I do nothing here
-}
-
 //executes the command
 int execute_command(t_list *cmd_list)
 {
@@ -216,36 +206,27 @@ void	freepipex(t_list *pipex)
 	}
 }
 
-void	set_signals(void)
+void	set_signals(struct sigaction *sig)
 {
-	struct sigaction sig;
-
-	sig.sa_handler = sigint_handler;
-	sig.sa_flags = SA_RESTART;
-	sigemptyset(&sig.sa_mask);
-	sigaddset(&sig.sa_mask, SIGINT);
-	sigaction(SIGINT, &sig, NULL);
+	sig->sa_handler = sigint_handler;
+	sig->sa_flags = SA_RESTART;
+	sigemptyset(&sig->sa_mask);
+	sigaddset(&sig->sa_mask, SIGINT);
+	sigaction(SIGINT, sig, NULL);
 	signal(SIGQUIT, SIG_IGN);
 }
 
 int main(int ac, char **av, char **envp)
 {
-	int		status;
 	char	*cmd;
 	t_list	*cmd_list;
 	// struct of signal
 	struct sigaction sig;
 
-    sig.sa_handler = sigint_handler;
-	sig.sa_flags = SA_RESTART;
-    sigemptyset(&sig.sa_mask);
-	sigaddset(&sig.sa_mask, SIGINT);
-	sigaction(SIGINT, &sig, NULL);
-	signal(SIGQUIT, SIG_IGN);
-	
+    
+	set_signals(&sig);
 	(void)ac;
 	(void)av;
-	(void)status;
 	while (1)
 	{
 		// handle of CTRL+C
