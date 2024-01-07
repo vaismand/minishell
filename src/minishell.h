@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/06 11:10:11 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/07 10:19:27 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,11 @@
 #include <setjmp.h>
 #include "../lib/libft/srcs/libft.h"
 
-extern char	**mini_env;
+typedef struct s_shell
+{
+    char	**envp;
+    t_list	*cmd_list;
+}				t_shell;
 
 
 void	ft_init_env();

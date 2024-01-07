@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/06 16:29:15 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/07 10:21:50 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,27 +232,44 @@ void	freepipex(t_list *pipex)
 	}
 }
 
-void	set_signals(struct sigaction *sig)
+void	set_signals(struct sigaction sig)
 {
-	sig->sa_handler = sigint_handler;
-	sig->sa_flags = SA_RESTART;
-	sigemptyset(&sig->sa_mask);
-	sigaddset(&sig->sa_mask, SIGINT);
-	sigaction(SIGINT, sig, NULL);
+
+	sig.sa_handler = sigint_handler;
+	sig.sa_flags = SA_RESTART;
+	sigemptyset(&sig.sa_mask);
+	sigaddset(&sig.sa_mask, SIGINT);
+	sigaction(SIGINT, &sig, NULL);
 	signal(SIGQUIT, SIG_IGN);
+}
+
+//separate function for the input
+char	*ft_getinput(void)
+{
+	char	*input;
+
+	input = readline("supershell$ ");
+	if (input == NULL)
+		exit(0);
+	return (input);
+}
+
+void	init_shell(t_shell *shell, char **envp, struct sigaction sig)
+{
+	shell->envp = envp;
+	set_signals(sig);
 }
 
 int main(int ac, char **av, char **envp)
 {
 	char	*cmd;
-	t_list	*cmd_list;
-	// struct of signal
+	t_shell	shell;
 	struct sigaction sig;
+	// struct of signal
 
-    
-	set_signals(&sig);
-	(void)ac;
-	(void)av;
+	if (av && ac > 1)
+		exit(0);
+	init_shell(&shell, envp, sig);
 	while (1)
 	{
 		// handle of CTRL+C
@@ -262,7 +279,7 @@ int main(int ac, char **av, char **envp)
 			continue;
 		}
 		jump_active = 1;
-		cmd = readline("supershell$ ");
+		cmd = ft_getinput();
 		if (cmd == NULL || ft_strncmp(cmd, "exit", 4) == 0) // exit shell if CTRL+D or exit
 			exit(0);
 		if (ft_strncmp(cmd, "cd", 2) == 0)
@@ -273,11 +290,11 @@ int main(int ac, char **av, char **envp)
 		if (ft_strlen(cmd) == 0) //if the command is empty, continue
 			continue;
 		add_history(cmd); //add the command to the history
-		struct_init(&cmd_list, envp, cmd);
-		while (cmd_list)
+		struct_init(&shell.cmd_list, envp, cmd);
+		while (shell.cmd_list)
 		{
-			execute_command(cmd_list);
-			cmd_list = cmd_list->next;
+			execute_command(shell.cmd_list);
+			shell.cmd_list = shell.cmd_list->next;
 		}
 	}
 	return (0);
