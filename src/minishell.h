@@ -29,15 +29,15 @@
 
 typedef struct s_shell
 {
-    char	**envp;
-    t_list	*cmd_list;
+	char	**envp;
+	t_list	*cmd_list;
 }				t_shell;
 
-
-void	ft_init_env();
-char	*get_next_line(int fd);
 char	*path_creator(char **cmd);
-void	read_commands(t_list *cmd_list);
 int		execute_command(t_list *cmd_list);
 char	**path_finder(char **envp);
+void	redirecting(t_list *pipex);
+void	set_signals(void);
+t_list	*new_lst(char *argv, char **envp);
+
 #endif

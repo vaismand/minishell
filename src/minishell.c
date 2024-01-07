@@ -13,30 +13,7 @@
 #include "minishell.h"
 
 //global variable for the signal
-static volatile sig_atomic_t jump_active = 0;
 static sigjmp_buf env;
-
-//creating a new list for every command
-t_list	*new_lst(char *argv, char **envp)
-{
-	t_list	*tmp;
-
-	if (!argv || !envp || ft_strncmp(argv, ">", 1) == 0 || ft_strncmp(argv, ">", 1) == 0)
-		return (NULL);
-	tmp = malloc(sizeof(t_list));
-	if (!tmp)
-		perror("malloc error");
-	tmp->envp = envp;
-	tmp->cmd = ft_split(argv, ' ');
-	tmp->path = path_creator(tmp->cmd);
-	tmp->next = NULL;
-	tmp->out = 0;
-	tmp->in = 0;
-	tmp->prev = NULL;
-	tmp->pd[0] = 0;
-	tmp->pd[1] = 0;
-	return (tmp);
-}
 
 //frees the paths array from path_finder
 void	free_paths(char **paths)
@@ -103,80 +80,6 @@ void	struct_init(t_list **pipex, char **envp, char *cmd)
 	}
 }
 
-//redirects the output of the first command
-void	first_child(t_list *pipex)
-{
-	dup2(pipex->pd[1], 1);
-	close(pipex->pd[1]);
-	close(pipex->pd[0]);
-	while (pipex->next)
-	{
-		pipex = pipex->next;
-		close(pipex->pd[0]);
-		close(pipex->pd[1]);
-	}
-}
-
-//redirects the input of the last command
-void	last_child(t_list *pipex)
-{
-	dup2(pipex->prev->pd[0], 0);
-	if (pipex->prev)
-	{
-		close(pipex->prev->pd[0]);
-		close(pipex->prev->pd[1]);
-	}
-	while (pipex->prev)
-	{
-		close(pipex->pd[0]);
-		close(pipex->pd[1]);
-		pipex = pipex->prev;
-	}
-}
-
-//redirects the input and output of the middle commands
-void	middle_child(t_list *pipex)
-{
-	dup2(pipex->prev->pd[0], 0);
-	dup2(pipex->pd[1], 1);
-	while (pipex->prev)
-	{
-		close(pipex->pd[0]);
-		close(pipex->pd[1]);
-		pipex = pipex->prev;
-	}
-	while (pipex->next)
-	{
-		close(pipex->pd[0]);
-		close(pipex->pd[1]);
-		pipex = pipex->next;
-	}
-}
-//redirects the input and output of the commands depending on their position
-void	redirecting(t_list *pipex)
-{
-	if (pipex->in != 0)
-		dup2(pipex->in, 0);
-	if (pipex->out != 0)
-		dup2(pipex->out, 1);	
-	if (pipex->prev == NULL && pipex->next == NULL)
-		return ;
-	else if (pipex->prev == NULL)
-		first_child(pipex);
-	else if (pipex->next == NULL)
-		last_child(pipex);
-	else
-		middle_child(pipex);
-}
-// handles the signal
-void sigint_handler(int signo) 
-{
-    if (!jump_active)
-        return;
-    siglongjmp(env, 42);
-	(void)signo;
-}
-
 //executes the command
 int execute_command(t_list *cmd_list)
 {
@@ -232,19 +135,8 @@ void	freepipex(t_list *pipex)
 	}
 }
 
-void	set_signals(struct sigaction sig)
-{
-
-	sig.sa_handler = sigint_handler;
-	sig.sa_flags = SA_RESTART;
-	sigemptyset(&sig.sa_mask);
-	sigaddset(&sig.sa_mask, SIGINT);
-	sigaction(SIGINT, &sig, NULL);
-	signal(SIGQUIT, SIG_IGN);
-}
-
 //separate function for the input
-char	*ft_getinput(void)
+static char	*ft_getinput(void)
 {
 	char	*input;
 
@@ -254,22 +146,21 @@ char	*ft_getinput(void)
 	return (input);
 }
 
-void	init_shell(t_shell *shell, char **envp, struct sigaction sig)
+static void	init_shell(t_shell *shell, char **envp)
 {
 	shell->envp = envp;
-	set_signals(sig);
+	set_signals();
 }
 
 int main(int ac, char **av, char **envp)
 {
 	char	*cmd;
 	t_shell	shell;
-	struct sigaction sig;
 	// struct of signal
 
 	if (av && ac > 1)
 		exit(0);
-	init_shell(&shell, envp, sig);
+	init_shell(&shell, envp);
 	while (1)
 	{
 		// handle of CTRL+C
@@ -278,7 +169,6 @@ int main(int ac, char **av, char **envp)
 			printf("\n");
 			continue;
 		}
-		jump_active = 1;
 		cmd = ft_getinput();
 		if (cmd == NULL || ft_strncmp(cmd, "exit", 4) == 0) // exit shell if CTRL+D or exit
 			exit(0);
