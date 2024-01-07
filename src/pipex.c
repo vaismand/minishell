@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../inc/minishell.h"
 
 //creating a new list for every command
 t_list	*new_lst(char *argv, char **envp)

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../inc/minishell.h"
 
 //global variable for the signal
 static sigjmp_buf env;
@@ -156,7 +156,6 @@ int main(int ac, char **av, char **envp)
 {
 	char	*cmd;
 	t_shell	shell;
-	// struct of signal
 
 	if (av && ac > 1)
 		exit(0);
