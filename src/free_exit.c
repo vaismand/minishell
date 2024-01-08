@@ -6,11 +6,12 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:10:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 15:09:18 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:12:35 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
 //free all the allocated memory and exit the program
 
 //frees the paths array from path_finder

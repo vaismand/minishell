@@ -6,11 +6,13 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:21:45 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 15:06:12 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:12:21 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+//file for initializing and handling the signals
 
 // handles the signal
 void	kv_sigint_handler(int signo)

@@ -6,11 +6,11 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 15:10:15 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:11:10 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//file for executing commands
+//file for executing commands including builtin commands
 
 #include "../inc/minishell.h"
 

@@ -6,13 +6,14 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 15:09:57 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:11:38 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 // This part of the project responsible for taking input from the user 
 // and parsing it into a list of commands.
+// first we should check for special characters like |, <, >, >>, <<, ;
 
 //creates the path for the command
 char	*kv_path_creator(char **cmd)

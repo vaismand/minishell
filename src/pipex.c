@@ -6,11 +6,13 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:23:24 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 15:09:03 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:11:53 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+//file for pipex
 
 //creating a new list for every command
 t_list	*kv_new_lst(char *argv, char **envp)
