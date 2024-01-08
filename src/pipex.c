@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:23:24 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/07 21:23:24 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/07 23:10:00 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,11 @@ t_list	*new_lst(char *argv, char **envp)
 {
 	t_list	*tmp;
 
-	if (!argv || !envp || ft_strncmp(argv, ">", 1) == 0 || ft_strncmp(argv, ">", 1) == 0)
+	if (!argv || !envp || ft_strncmp(argv, ">", 1) == 0 || ft_strncmp(argv, "<", 1) == 0)
 		return (NULL);
 	tmp = malloc(sizeof(t_list));
 	if (!tmp)
 		perror("malloc error");
-	tmp->envp = envp;
 	tmp->cmd = ft_split(argv, ' ');
 	tmp->path = path_creator(tmp->cmd);
 	tmp->next = NULL;

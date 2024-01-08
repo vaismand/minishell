@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/07 10:21:50 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 09:42:01 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,16 @@ void	struct_init(t_list **pipex, char **envp, char *cmd)
 
 	i = -1;
 	argv = ft_split(cmd, '|');
+	if (!argv)
+		perror("malloc error");
 	while (argv[++i])
 	{
 		tmp = new_lst(argv[i], envp);
 		if (!tmp)
 			perror("malloc error");
 		tmp2 = ft_split(argv[i], ' ');
+		if (!tmp2)
+			perror("malloc error");
 		if (tmp2[1] && ft_strncmp(tmp2[1], ">", 1) == 0)
 			tmp->out = open(tmp2[2] , O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		else if (tmp2[1] && ft_strncmp(tmp2[1], "<", 1) == 0)
@@ -81,18 +85,16 @@ void	struct_init(t_list **pipex, char **envp, char *cmd)
 }
 
 //executes the command
-int execute_command(t_list *cmd_list)
+int execute_command(t_shell shell)
 {
 	pid_t	pid;
 	int		status;
 
-	pipe(cmd_list->pd);
 	pid = fork();
 	if (pid == 0)
 	{
-		
-		redirecting(cmd_list);
-		execve(cmd_list->path, cmd_list->cmd, cmd_list->envp);
+		redirecting(shell.cmd_list);
+		execve(shell.cmd_list->path, shell.cmd_list->cmd, shell.envp);
 		perror("minishell");
 		exit(EXIT_FAILURE);
 	}
@@ -105,10 +107,10 @@ int execute_command(t_list *cmd_list)
 		{
 			waitpid(pid, &status, WUNTRACED);
 		}
-		close(cmd_list->pd[1]); //dont forget to close the pipe
 	}
 	return (1);
 }
+
 //frees the list
 void	freepipex(t_list *pipex)
 {
@@ -149,6 +151,7 @@ static char	*ft_getinput(void)
 static void	init_shell(t_shell *shell, char **envp)
 {
 	shell->envp = envp;
+	shell->cmd_list = NULL;
 	set_signals();
 }
 
@@ -179,10 +182,10 @@ int main(int ac, char **av, char **envp)
 		if (ft_strlen(cmd) == 0) //if the command is empty, continue
 			continue;
 		add_history(cmd); //add the command to the history
-		struct_init(&shell.cmd_list, envp, cmd);
+		struct_init(&shell.cmd_list, shell.envp, cmd);
 		while (shell.cmd_list)
 		{
-			execute_command(shell.cmd_list);
+			execute_command(shell);
 			shell.cmd_list = shell.cmd_list->next;
 		}
 	}
