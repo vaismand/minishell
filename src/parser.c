@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 10:49:21 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 11:44:16 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
 	t_list	*tmp;
 	char	**argv;
 	char	**tmp2;
-	int 	i;
+	int		i;
 
 	i = -1;
 	argv = ft_split(cmd, '|');
@@ -64,9 +64,9 @@ void	cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
 		if (!tmp2)
 			perror("malloc error");
 		if (tmp2[1] && ft_strncmp(tmp2[1], ">", 1) == 0)
-			tmp->out = open(tmp2[2] , O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			tmp->out = open(tmp2[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		else if (tmp2[1] && ft_strncmp(tmp2[1], "<", 1) == 0)
-			tmp->in = open(tmp2[2] , O_RDONLY);
+			tmp->in = open(tmp2[2], O_RDONLY);
 		tmp->index = i;
 		ft_lstadd_back(cmd_list, tmp);
 	}

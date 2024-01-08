@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:10:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 10:39:22 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 11:46:26 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,6 @@ void	freepipex(t_list *pipex)
 //free and exit
 void	free_exit(t_shell *shell, int exit_code)
 {
-    freepipex(shell->cmd_list);
-    exit(exit_code);
+	freepipex(shell->cmd_list);
+	exit(exit_code);
 }

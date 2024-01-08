@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:23:24 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/07 23:10:00 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 11:46:02 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ t_list	*new_lst(char *argv, char **envp)
 {
 	t_list	*tmp;
 
-	if (!argv || !envp || ft_strncmp(argv, ">", 1) == 0 || ft_strncmp(argv, "<", 1) == 0)
+	if (!argv || !envp || ft_strncmp(argv, ">", 1) == 0 \
+		|| ft_strncmp(argv, "<", 1) == 0)
 		return (NULL);
 	tmp = malloc(sizeof(t_list));
 	if (!tmp)
@@ -82,13 +83,14 @@ static void	middle_child(t_list *pipex)
 		pipex = pipex->next;
 	}
 }
+
 //redirects the input and output of the commands depending on their position
 void	redirecting(t_list *pipex)
 {
 	if (pipex->in != 0)
 		dup2(pipex->in, 0);
 	if (pipex->out != 0)
-		dup2(pipex->out, 1);	
+		dup2(pipex->out, 1);
 	if (pipex->prev == NULL && pipex->next == NULL)
 		return ;
 	else if (pipex->prev == NULL)

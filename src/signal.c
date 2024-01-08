@@ -6,41 +6,37 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:21:45 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 09:56:17 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 11:39:07 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 // handles the signal
-void sigint_handler(int signo) 
+void	sigint_handler(int signo)
 {
 	if (signo == SIGINT)
 	{
 		ft_putchar_fd('\n', STDOUT_FILENO);
-		// Let readline know that we've moved to a new line
 		rl_on_new_line();
-		// Clear the current input line in readline
 		rl_replace_line("", 0);
-		// Redisplay the prompt on a new line
 		rl_redisplay();
-
 	}
 }
 
-void set_signals(void)
+// sets the signals for SIGINT and SIGQUIT(CTRL-\ ignored)
+void	set_signals(void)
 {
-    struct sigaction sigint_act;
-    struct sigaction sigquit_act;
-    // Setting up the SIGINT handler
-    sigint_act.sa_handler = sigint_handler;
-    sigint_act.sa_flags = SA_RESTART;
-    sigemptyset(&sigint_act.sa_mask);
-    sigaddset(&sigint_act.sa_mask, SIGINT);
-    sigaction(SIGINT, &sigint_act, NULL);
-    // Setting up SIGQUIT to be ignored
-    sigquit_act.sa_handler = SIG_IGN; // SIG_IGN to ignore the signal
-    sigquit_act.sa_flags = 0; // Explicitly set sa_flags to 0 for sigquit_act
-    sigemptyset(&sigquit_act.sa_mask); // Initialize the signal mask for sigquit_act
-    sigaction(SIGQUIT, &sigquit_act, NULL);
+	struct sigaction	sigint_act;
+	struct sigaction	sigquit_act;
+
+	sigint_act.sa_handler = sigint_handler;
+	sigint_act.sa_flags = SA_RESTART;
+	sigemptyset(&sigint_act.sa_mask);
+	sigaddset(&sigint_act.sa_mask, SIGINT);
+	sigaction(SIGINT, &sigint_act, NULL);
+	sigquit_act.sa_handler = SIG_IGN;
+	sigquit_act.sa_flags = 0;
+	sigemptyset(&sigquit_act.sa_mask);
+	sigaction(SIGQUIT, &sigquit_act, NULL);
 }

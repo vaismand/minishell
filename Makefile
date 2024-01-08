@@ -7,6 +7,7 @@ SRCS = src/minishell.c \
 		src/pipex.c \
 		src/free_exit.c \
 		src/parser.c \
+		src/execute.c \
 
 
 OBJS := $(SRCS:.c=.o)
