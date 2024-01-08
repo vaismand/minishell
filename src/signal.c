@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:21:45 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 09:48:41 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 09:56:17 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,17 @@ void sigint_handler(int signo)
 
 void set_signals(void)
 {
-	struct sigaction sigint_act;
-	struct sigaction sigquit_act;
-	// Setting up the SIGINT handler
-	sigint_act.sa_handler = sigint_handler;
-	sigint_act.sa_flags = SA_RESTART;
-	sigemptyset(&sigint_act.sa_mask);
-	sigemptyset(&sigquit_act.sa_mask);
-	sigaddset(&sigint_act.sa_mask, SIGINT);
-	sigaction(SIGINT, &sigint_act, NULL);
-	// Setting up SIGQUIT to be ignored
-	sigquit_act.sa_handler = SIG_IGN; // SIG_IGN to ignore the signal
-	sigaction(SIGQUIT, &sigquit_act, NULL);
+    struct sigaction sigint_act;
+    struct sigaction sigquit_act;
+    // Setting up the SIGINT handler
+    sigint_act.sa_handler = sigint_handler;
+    sigint_act.sa_flags = SA_RESTART;
+    sigemptyset(&sigint_act.sa_mask);
+    sigaddset(&sigint_act.sa_mask, SIGINT);
+    sigaction(SIGINT, &sigint_act, NULL);
+    // Setting up SIGQUIT to be ignored
+    sigquit_act.sa_handler = SIG_IGN; // SIG_IGN to ignore the signal
+    sigquit_act.sa_flags = 0; // Explicitly set sa_flags to 0 for sigquit_act
+    sigemptyset(&sigquit_act.sa_mask); // Initialize the signal mask for sigquit_act
+    sigaction(SIGQUIT, &sigquit_act, NULL);
 }

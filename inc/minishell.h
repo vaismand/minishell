@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/07 23:08:37 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 10:53:06 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,13 @@ typedef struct s_shell
 }				t_shell;
 
 char	*path_creator(char **cmd);
-int		execute_command(t_shell shell);
-char	**path_finder(char **envp);
 void	redirecting(t_list *pipex);
 void	set_signals(void);
-void sigint_handler(int signo);
+void	sigint_handler(int signo);
+void	free_exit(t_shell *shell, int exit_code);
+void	freepipex(t_list *pipex);
+void	free_paths(char **paths);
+void	cmd_list_init(t_list **cmd_list, char **envp, char *cmd);
 t_list	*new_lst(char *argv, char **envp);
 
 #endif

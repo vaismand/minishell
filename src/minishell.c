@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 09:42:01 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 11:09:09 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,81 +15,46 @@
 //global variable for the signal
 static sigjmp_buf env;
 
-//frees the paths array from path_finder
-void	free_paths(char **paths)
+//check valid input of user
+bool	valid_cmd(char *cmd, t_shell shell)
 {
-	int	i;
-
-	i = 0;
-	while (paths[i])
-		free(paths[i++]);
-	free(paths);
+	if (cmd == NULL || ft_strlen(cmd) == 0)
+		return (false);
+	if (ft_strncmp(cmd, "exit", 4) == 0)
+		free_exit(&shell, 0);
+	return (true);
 }
 
-//creates the path for the command
-char	*path_creator(char **cmd)
+//executes builtin commands
+static int	execute_builtin(t_shell shell) 
 {
-	char	**paths;
-	char	*path;
-	char	*tmp;
-	int		i;
+    char **cmd = shell.cmd_list->cmd;
 
-	paths = ft_split(getenv("PATH"), ':');
-	if (!paths)
-		perror("PATH not found");
-	i = -1;
-	while (paths[++i])
+    if (ft_strncmp(cmd[0], "cd", 3) == 0) 
 	{
-		tmp = ft_strjoin(paths[i], "/");
-		if (!tmp)
-			return (free_paths(paths), NULL);
-		path = ft_strjoin(tmp, cmd[0]);
-		if (!path)
-			return (free_paths(paths), free(tmp), NULL);
-		free(tmp);
-		if (access(path, F_OK) == 0)
-			break ;
-		free(path);
-	}
-	free_paths(paths);
-	return (path);
-}
-
-//initializes the struct
-void	struct_init(t_list **pipex, char **envp, char *cmd)
-{
-	t_list	*tmp;
-	char	**argv;
-	char	**tmp2;
-	int 	i;
-
-	i = -1;
-	argv = ft_split(cmd, '|');
-	if (!argv)
-		perror("malloc error");
-	while (argv[++i])
-	{
-		tmp = new_lst(argv[i], envp);
-		if (!tmp)
-			perror("malloc error");
-		tmp2 = ft_split(argv[i], ' ');
-		if (!tmp2)
-			perror("malloc error");
-		if (tmp2[1] && ft_strncmp(tmp2[1], ">", 1) == 0)
-			tmp->out = open(tmp2[2] , O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		else if (tmp2[1] && ft_strncmp(tmp2[1], "<", 1) == 0)
-			tmp->in = open(tmp2[2] , O_RDONLY);
-		tmp->index = i;
-		ft_lstadd_back(pipex, tmp);
-	}
+        if (cmd[1]) 
+		{
+            if (chdir(cmd[1]) != 0) 
+			{
+                perror("cd");
+                return (-1); // Or some error code
+            }
+        }
+        return (1); // Successfully executed builtin command
+    }
+    return (0); // Not a builtin command
 }
 
 //executes the command
-int execute_command(t_shell shell)
+static int execute_command(t_shell shell)
 {
 	pid_t	pid;
+	int		builtin_status;
 	int		status;
 
+	builtin_status = execute_builtin(shell);
+	if (builtin_status != 0)
+		return (builtin_status);
 	pid = fork();
 	if (pid == 0)
 	{
@@ -104,37 +69,9 @@ int execute_command(t_shell shell)
 	{
 		waitpid(pid, &status, WUNTRACED);
 		while (!WIFEXITED(status) && !WIFSIGNALED(status))
-		{
 			waitpid(pid, &status, WUNTRACED);
-		}
 	}
 	return (1);
-}
-
-//frees the list
-void	freepipex(t_list *pipex)
-{
-	t_list	*tmp;
-
-	while (pipex)
-	{
-		if (pipex->pd[0])
-			close(pipex->pd[0]);
-		if (pipex->pd[1])
-			close(pipex->pd[1]);
-		if (pipex->cmd)
-		{
-			pipex->index = 0;
-			while (pipex->cmd[pipex->index])
-				free(pipex->cmd[pipex->index++]);
-			free(pipex->cmd);
-		}
-		if (pipex->path)
-			free(pipex->path);
-		tmp = pipex;
-		pipex = pipex->next;
-		free(tmp);
-	}
 }
 
 //separate function for the input
@@ -172,22 +109,21 @@ int main(int ac, char **av, char **envp)
 			continue;
 		}
 		cmd = ft_getinput();
-		if (cmd == NULL || ft_strncmp(cmd, "exit", 4) == 0) // exit shell if CTRL+D or exit
-			exit(0);
+		if (!valid_cmd(cmd, shell))
+			continue;
 		if (ft_strncmp(cmd, "cd", 2) == 0)
 		{
 			chdir(ft_split(cmd, ' ')[1]);
 			continue;
 		}
-		if (ft_strlen(cmd) == 0) //if the command is empty, continue
-			continue;
 		add_history(cmd); //add the command to the history
-		struct_init(&shell.cmd_list, shell.envp, cmd);
+		cmd_list_init(&shell.cmd_list, shell.envp, cmd);
 		while (shell.cmd_list)
 		{
 			execute_command(shell);
 			shell.cmd_list = shell.cmd_list->next;
 		}
+		freepipex(shell.cmd_list);
 	}
 	return (0);
 }

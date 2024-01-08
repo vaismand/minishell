@@ -5,6 +5,8 @@ NAME      = minishell
 SRCS = src/minishell.c \
 		src/signal.c \
 		src/pipex.c \
+		src/free_exit.c \
+		src/parser.c \
 
 
 OBJS := $(SRCS:.c=.o)
