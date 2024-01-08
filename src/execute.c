@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 15:11:10 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 17:27:44 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ int	kv_execute_command(t_shell shell)
 	builtin_status = kv_execute_builtin(shell);
 	if (builtin_status != 0)
 		return (builtin_status);
+	if (shell.cmd_list->next && pipe(shell.cmd_list->pd) < 0)
+		perror("minishell");
 	pid = fork();
 	if (pid == 0)
 	{
@@ -57,6 +59,8 @@ int	kv_execute_command(t_shell shell)
 		perror("minishell");
 	else
 	{
+		if (shell.cmd_list->next)
+			close(shell.cmd_list->pd[1]);
 		waitpid(pid, &status, WUNTRACED);
 		while (!WIFEXITED(status) && !WIFSIGNALED(status))
 			waitpid(pid, &status, WUNTRACED);

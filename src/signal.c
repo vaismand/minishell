@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:21:45 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 15:12:21 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 16:15:56 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 //file for initializing and handling the signals
+// getting doulle ($supershell$) prompt after CTRL-C in cat
 
 // handles the signal
 void	kv_sigint_handler(int signo)

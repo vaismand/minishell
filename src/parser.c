@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 15:11:38 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:48:51 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
 
 	i = -1;
 	argv = ft_split(cmd, '|');
-	if (!argv)
+	if (!argv || !argv[0])
 		perror("malloc error");
 	while (argv[++i])
 	{
@@ -62,6 +62,9 @@ void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
 		if (!tmp)
 			perror("malloc error");
 		tmp2 = ft_split(argv[i], ' ');
+		ft_printf("tmp2[0] = %s\n", tmp2[0]);
+		ft_printf("tmp2[1] = %s\n", tmp2[1]);
+		ft_printf("tmp2[2] = %s\n", tmp2[2]);
 		if (!tmp2)
 			perror("malloc error");
 		if (tmp2[1] && ft_strncmp(tmp2[1], ">", 1) == 0)
