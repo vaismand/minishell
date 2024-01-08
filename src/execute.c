@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 11:44:37 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:10:15 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "../inc/minishell.h"
 
 //executes builtin commands
-static int	execute_builtin(t_shell shell)
+static int	kv_execute_builtin(t_shell shell)
 {
 	char	**cmd;
 
@@ -36,19 +36,19 @@ static int	execute_builtin(t_shell shell)
 }
 
 //executes the command
-int	execute_command(t_shell shell)
+int	kv_execute_command(t_shell shell)
 {
 	pid_t	pid;
 	int		builtin_status;
 	int		status;
 
-	builtin_status = execute_builtin(shell);
+	builtin_status = kv_execute_builtin(shell);
 	if (builtin_status != 0)
 		return (builtin_status);
 	pid = fork();
 	if (pid == 0)
 	{
-		redirecting(shell.cmd_list);
+		kv_redirecting(shell.cmd_list);
 		execve(shell.cmd_list->path, shell.cmd_list->cmd, shell.envp);
 		perror("minishell");
 		exit(EXIT_FAILURE);

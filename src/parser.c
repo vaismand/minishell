@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 11:44:16 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:09:57 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // and parsing it into a list of commands.
 
 //creates the path for the command
-char	*path_creator(char **cmd)
+char	*kv_path_creator(char **cmd)
 {
 	char	**paths;
 	char	*path;
@@ -30,21 +30,21 @@ char	*path_creator(char **cmd)
 	{
 		tmp = ft_strjoin(paths[i], "/");
 		if (!tmp)
-			return (free_paths(paths), NULL);
+			return (kv_free_paths(paths), NULL);
 		path = ft_strjoin(tmp, cmd[0]);
 		if (!path)
-			return (free_paths(paths), free(tmp), NULL);
+			return (kv_free_paths(paths), free(tmp), NULL);
 		free(tmp);
 		if (access(path, F_OK) == 0)
 			break ;
 		free(path);
 	}
-	free_paths(paths);
+	kv_free_paths(paths);
 	return (path);
 }
 
 //initializes the struct
-void	cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
+void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
 {
 	t_list	*tmp;
 	char	**argv;
@@ -57,7 +57,7 @@ void	cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
 		perror("malloc error");
 	while (argv[++i])
 	{
-		tmp = new_lst(argv[i], envp);
+		tmp = kv_new_lst(argv[i], envp);
 		if (!tmp)
 			perror("malloc error");
 		tmp2 = ft_split(argv[i], ' ');

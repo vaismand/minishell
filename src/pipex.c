@@ -6,14 +6,14 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:23:24 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 11:46:02 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:09:03 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
 //creating a new list for every command
-t_list	*new_lst(char *argv, char **envp)
+t_list	*kv_new_lst(char *argv, char **envp)
 {
 	t_list	*tmp;
 
@@ -24,7 +24,7 @@ t_list	*new_lst(char *argv, char **envp)
 	if (!tmp)
 		perror("malloc error");
 	tmp->cmd = ft_split(argv, ' ');
-	tmp->path = path_creator(tmp->cmd);
+	tmp->path = kv_path_creator(tmp->cmd);
 	tmp->next = NULL;
 	tmp->out = 0;
 	tmp->in = 0;
@@ -35,7 +35,7 @@ t_list	*new_lst(char *argv, char **envp)
 }
 
 //redirects the output of the first command
-static void	first_child(t_list *pipex)
+static void	kv_first_child(t_list *pipex)
 {
 	dup2(pipex->pd[1], 1);
 	close(pipex->pd[1]);
@@ -49,7 +49,7 @@ static void	first_child(t_list *pipex)
 }
 
 //redirects the input of the last command
-static void	last_child(t_list *pipex)
+static void	kv_last_child(t_list *pipex)
 {
 	dup2(pipex->prev->pd[0], 0);
 	if (pipex->prev)
@@ -66,7 +66,7 @@ static void	last_child(t_list *pipex)
 }
 
 //redirects the input and output of the middle commands
-static void	middle_child(t_list *pipex)
+static void	kv_middle_child(t_list *pipex)
 {
 	dup2(pipex->prev->pd[0], 0);
 	dup2(pipex->pd[1], 1);
@@ -85,7 +85,7 @@ static void	middle_child(t_list *pipex)
 }
 
 //redirects the input and output of the commands depending on their position
-void	redirecting(t_list *pipex)
+void	kv_redirecting(t_list *pipex)
 {
 	if (pipex->in != 0)
 		dup2(pipex->in, 0);
@@ -94,9 +94,9 @@ void	redirecting(t_list *pipex)
 	if (pipex->prev == NULL && pipex->next == NULL)
 		return ;
 	else if (pipex->prev == NULL)
-		first_child(pipex);
+		kv_first_child(pipex);
 	else if (pipex->next == NULL)
-		last_child(pipex);
+		kv_last_child(pipex);
 	else
-		middle_child(pipex);
+		kv_middle_child(pipex);
 }

@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 11:34:30 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:08:00 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,15 @@ typedef struct s_shell
 	t_list	*cmd_list;
 }				t_shell;
 
-int		execute_command(t_shell shell);
-char	*path_creator(char **cmd);
-void	redirecting(t_list *pipex);
-void	set_signals(void);
-void	sigint_handler(int signo);
-void	free_exit(t_shell *shell, int exit_code);
-void	freepipex(t_list *pipex);
-void	free_paths(char **paths);
-void	cmd_list_init(t_list **cmd_list, char **envp, char *cmd);
-t_list	*new_lst(char *argv, char **envp);
+int		kv_execute_command(t_shell shell);
+char	*kv_path_creator(char **cmd);
+void	kv_redirecting(t_list *pipex);
+void	kv_set_signals(void);
+void	kv_sigint_handler(int signo);
+void	kv_free_exit(t_shell *shell, int exit_code);
+void	kv_freepipex(t_list *pipex);
+void	kv_free_paths(char **paths);
+void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd);
+t_list	*kv_new_lst(char *argv, char **envp);
 
 #endif

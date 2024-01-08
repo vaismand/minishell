@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:10:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 11:46:26 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/08 15:09:18 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 //free all the allocated memory and exit the program
 
 //frees the paths array from path_finder
-void	free_paths(char **paths)
+void	kv_free_paths(char **paths)
 {
 	int	i;
 
@@ -25,7 +25,7 @@ void	free_paths(char **paths)
 }
 
 //frees the list
-void	freepipex(t_list *pipex)
+void	kv_freepipex(t_list *pipex)
 {
 	t_list	*tmp;
 
@@ -51,8 +51,8 @@ void	freepipex(t_list *pipex)
 }
 
 //free and exit
-void	free_exit(t_shell *shell, int exit_code)
+void	kv_free_exit(t_shell *shell, int exit_code)
 {
-	freepipex(shell->cmd_list);
+	kv_freepipex(shell->cmd_list);
 	exit(exit_code);
 }
