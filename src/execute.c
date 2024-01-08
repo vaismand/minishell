@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 17:27:44 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/08 20:19:34 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,14 +56,20 @@ int	kv_execute_command(t_shell shell)
 		exit(EXIT_FAILURE);
 	}
 	else if (pid < 0)
+	{
 		perror("minishell");
+	}
 	else
 	{
-		if (shell.cmd_list->next)
-			close(shell.cmd_list->pd[1]);
 		waitpid(pid, &status, WUNTRACED);
 		while (!WIFEXITED(status) && !WIFSIGNALED(status))
 			waitpid(pid, &status, WUNTRACED);
+		if (shell.cmd_list->next)
+			close(shell.cmd_list->pd[1]);
+		if (shell.cmd_list->in)
+			close(shell.cmd_list->in);
+		if (shell.cmd_list->out)
+			close(shell.cmd_list->out);
 	}
 	return (1);
 }

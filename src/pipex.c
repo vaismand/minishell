@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:23:24 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 17:29:32 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/08 20:11:32 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ t_list	*kv_new_lst(char *argv, char **envp)
 static void	kv_first_child(t_list *pipex)
 {
 	dup2(pipex->pd[1], 1);
+	close(pipex->pd[1]);
+	close(pipex->pd[0]);
 	while (pipex->next)
 	{
-		close(pipex->pd[0]);
-		close(pipex->pd[1]);
 		pipex = pipex->next;
 	}
 }
@@ -52,10 +52,13 @@ static void	kv_first_child(t_list *pipex)
 static void	kv_last_child(t_list *pipex)
 {
 	dup2(pipex->prev->pd[0], 0);
+	if (pipex->prev)
+	{
+		close(pipex->prev->pd[0]);
+		close(pipex->prev->pd[1]);
+	}
 	while (pipex->prev)
 	{
-		close(pipex->pd[0]);
-		close(pipex->pd[1]);
 		pipex = pipex->prev;
 	}
 }
@@ -67,14 +70,10 @@ static void	kv_middle_child(t_list *pipex)
 	dup2(pipex->pd[1], 1);
 	while (pipex->prev)
 	{
-		close(pipex->pd[0]);
-		close(pipex->pd[1]);
 		pipex = pipex->prev;
 	}
 	while (pipex->next)
 	{
-		close(pipex->pd[0]);
-		close(pipex->pd[1]);
 		pipex = pipex->next;
 	}
 }
@@ -82,15 +81,15 @@ static void	kv_middle_child(t_list *pipex)
 //redirects the input and output of the commands depending on their position
 void	kv_redirecting(t_list *pipex)
 {
-	if (pipex->in != 0)
-	{
-		dup2(pipex->in, 0);
-		close(pipex->in);
-	}	
 	if (pipex->out != 0)
 	{
 		dup2(pipex->out, 1);
 		close(pipex->out);
+	}
+	if (pipex->in != 0)
+	{
+		dup2(pipex->in, 0);
+		close(pipex->in);
 	}
 	if (pipex->prev == NULL && pipex->next == NULL)
 		return ;
