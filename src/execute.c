@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 20:19:34 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/10 15:02:41 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,10 @@ int	kv_execute_command(t_shell shell)
 		if (shell.cmd_list->next)
 			close(shell.cmd_list->pd[1]);
 		if (shell.cmd_list->in)
+		{
 			close(shell.cmd_list->in);
+			unlink("/tmp/tmp_heredoc"); // Delete the temporary file
+		}
 		if (shell.cmd_list->out)
 			close(shell.cmd_list->out);
 	}

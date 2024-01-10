@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 20:12:22 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/10 15:10:36 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,20 +60,12 @@ void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
 	{
 		tmp2 = ft_split(argv[i], ' ');
 		argv[i] = kv_strip_cmd(argv[i]);
-		ft_printf("argv[%d] = %s\n", i, argv[i]);
 		tmp = kv_new_lst(argv[i], envp);
 		if (!tmp)
 			perror("malloc error");
 		if (!tmp2)
 			perror("malloc error");
-		if (tmp2[1] && ft_strncmp(tmp2[1], ">>", 2) == 0)
-			tmp->out = open(tmp2[2], O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else if (tmp2[1] && ft_strncmp(tmp2[1], ">", 1) == 0)
-			tmp->out = open(tmp2[2], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		else if (tmp2[1] && ft_strncmp(tmp2[1], "<", 1) == 0)
-			tmp->in = open(tmp2[2], O_RDONLY);
-		ft_printf("tmp->in = %d\n", tmp->in);
-		ft_printf("tmp->out = %d\n", tmp->out);
+		kv_redir_open(tmp2[1], tmp2[2], tmp);
 		tmp->index = i;
 		ft_lstadd_back(cmd_list, tmp);
 	}

@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 20:15:21 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/10 15:09:37 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct s_shell
 }				t_shell;
 
 int		kv_execute_command(t_shell shell);
+int		kv_handle_heredoc(char *delimiter);
 char	*kv_path_creator(char **cmd);
 char	*kv_strip_cmd(char *cmd);
 void	kv_close_pipes(t_list *pipex);
@@ -44,6 +45,7 @@ void	kv_free_exit(t_shell *shell, int exit_code);
 void	kv_freepipex(t_list *pipex);
 void	kv_free_paths(char **paths);
 void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd);
+void	kv_redir_open(char *argv, char *file, t_list *cmd_list);
 t_list	*kv_new_lst(char *argv, char **envp);
 
 #endif
