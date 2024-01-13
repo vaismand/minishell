@@ -35,12 +35,27 @@ static int	kv_execute_builtin(t_shell shell)
 	return (0);
 }
 
+//parent process
+static void	kv_parent(pid_t pid, t_shell shell)
+{
+	waitpid(pid, &shell.status, WUNTRACED);
+	while (!WIFEXITED(shell.status) && !WIFSIGNALED(shell.status))
+		waitpid(pid, &shell.status, WUNTRACED);
+	if (shell.cmd_list->next)
+		close(shell.cmd_list->pd[1]);
+	if (shell.cmd_list->in)
+	{
+		close(shell.cmd_list->in);
+		unlink("/tmp/tmp_heredoc"); // Delete the temporary file
+	}
+	if (shell.cmd_list->out)
+		close(shell.cmd_list->out);
+}
 //executes the command
 int	kv_execute_command(t_shell shell)
 {
 	pid_t	pid;
 	int		builtin_status;
-	int		status;
 
 	builtin_status = kv_execute_builtin(shell);
 	if (builtin_status != 0)
@@ -56,23 +71,8 @@ int	kv_execute_command(t_shell shell)
 		exit(EXIT_FAILURE);
 	}
 	else if (pid < 0)
-	{
 		perror("minishell");
-	}
 	else
-	{
-		waitpid(pid, &status, WUNTRACED);
-		while (!WIFEXITED(status) && !WIFSIGNALED(status))
-			waitpid(pid, &status, WUNTRACED);
-		if (shell.cmd_list->next)
-			close(shell.cmd_list->pd[1]);
-		if (shell.cmd_list->in)
-		{
-			close(shell.cmd_list->in);
-			unlink("/tmp/tmp_heredoc"); // Delete the temporary file
-		}
-		if (shell.cmd_list->out)
-			close(shell.cmd_list->out);
-	}
+		kv_parent(pid, shell);
 	return (1);
 }

@@ -29,6 +29,7 @@
 
 typedef struct s_shell
 {
+	int		status;
 	char	**envp;
 	t_list	*cmd_list;
 }				t_shell;
