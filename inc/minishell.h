@@ -30,6 +30,7 @@
 typedef struct s_shell
 {
 	int		status;
+	int		exit_status;
 	char	**envp;
 	t_list	*cmd_list;
 }				t_shell;

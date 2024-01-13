@@ -61,7 +61,7 @@ static void	kv_run_shell_loop(t_shell *shell)
 		kv_cmd_list_init(&shell->cmd_list, shell->envp, cmd);
 		while (shell->cmd_list)
 		{
-			kv_execute_command(*shell);
+			shell->exit_status = kv_execute_command(*shell);
 			shell->cmd_list = shell->cmd_list->next;
 		}
 		kv_freepipex(shell->cmd_list);
