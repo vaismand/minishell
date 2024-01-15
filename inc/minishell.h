@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/10 15:09:37 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/15 23:15:43 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,26 @@
 # include <setjmp.h>
 # include "../lib/libft/srcs/libft.h"
 
+typedef struct s_env_var
+{
+	char	*v_name;
+	char	*v_value;
+}				t_env_var;
+
 typedef struct s_shell
 {
 	int		status;
 	int		exit_status;
 	char	**envp;
 	t_list	*cmd_list;
+	t_env_var	*env_var;
 }				t_shell;
 
-int		kv_execute_command(t_shell shell);
+int		kv_execute_command(t_shell *shell);
 int		kv_handle_heredoc(char *delimiter);
 char	*kv_path_creator(char **cmd);
 char	*kv_strip_cmd(char *cmd);
+char	*kv_cmd_parser(char *cmd, t_shell *shell);
 void	kv_close_pipes(t_list *pipex);
 void	kv_redirecting(t_list *pipex);
 void	kv_set_signals(void);

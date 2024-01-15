@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:10:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 15:12:35 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/15 22:46:18 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,15 @@ void	kv_freepipex(t_list *pipex)
 //free and exit
 void	kv_free_exit(t_shell *shell, int exit_code)
 {
-	kv_freepipex(shell->cmd_list);
+	if (shell->env_var)
+	{
+		if (shell->env_var->v_name)
+			free(shell->env_var->v_name);
+		if (shell->env_var->v_value)
+			free(shell->env_var->v_value);
+		free(shell->env_var);
+	}
+	if (shell->cmd_list)
+		kv_freepipex(shell->cmd_list);
 	exit(exit_code);
 }

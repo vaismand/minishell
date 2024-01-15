@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/10 15:10:36 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/15 23:32:05 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,45 @@ char	*kv_path_creator(char **cmd)
 	}
 	kv_free_paths(paths);
 	return (path);
+}
+
+//receive the input and check for $
+//should add also $? here
+char *kv_cmd_parser(char *cmd, t_shell *shell) 
+{
+	int		i;
+	int		j;
+	int		k;
+	//const char	*tmp;
+	char	*new_cmd;
+
+	new_cmd = malloc(sizeof(char) * (ft_strlen(cmd) * 2));
+	if (!new_cmd)
+		perror("malloc error");
+	new_cmd[0] = '\0';
+	i = -1;
+	k = 0;
+	while (cmd[++i] && cmd[i] != '\0')
+	{
+		if (cmd[i] == '$')
+		{
+			shell->env_var->v_name = malloc(sizeof(char) * (ft_strlen(cmd) * 2));
+			shell->env_var->v_value = malloc(sizeof(char) * (ft_strlen(cmd) * 2));
+			if (!shell->env_var->v_name || !shell->env_var->v_value)
+				perror("malloc error");
+			i++;
+			j = 0;
+			while (cmd[i] && (ft_isalpha(cmd[i]) || cmd[i] == '_'))
+				shell->env_var->v_name[j++] = cmd[i++];
+			shell->env_var->v_name[j] = '\0';
+			shell->env_var->v_value = getenv(shell->env_var->v_name);
+		}
+		else
+			new_cmd[k++] = cmd[i];
+	}
+	new_cmd[k] = '\0';
+	free(cmd);
+	return (new_cmd);
 }
 
 //initializes the struct
