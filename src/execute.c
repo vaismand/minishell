@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/10 15:02:41 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/15 23:03:55 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 #include "../inc/minishell.h"
 
 //executes builtin commands
-static int	kv_execute_builtin(t_shell shell)
+static int	kv_execute_builtin(t_shell *shell)
 {
 	char	**cmd;
 
-	cmd = shell.cmd_list->cmd;
+	cmd = shell->cmd_list->cmd;
 	if (ft_strncmp(cmd[0], "cd", 3) == 0)
 	{
 		if (cmd[1])
@@ -36,23 +36,23 @@ static int	kv_execute_builtin(t_shell shell)
 }
 
 //parent process
-static void	kv_parent(pid_t pid, t_shell shell)
+static void	kv_parent(pid_t pid, t_shell *shell)
 {
-	waitpid(pid, &shell.status, WUNTRACED);
-	while (!WIFEXITED(shell.status) && !WIFSIGNALED(shell.status))
-		waitpid(pid, &shell.status, WUNTRACED);
-	if (shell.cmd_list->next)
-		close(shell.cmd_list->pd[1]);
-	if (shell.cmd_list->in)
+	waitpid(pid, &shell->status, WUNTRACED);
+	while (!WIFEXITED(shell->status) && !WIFSIGNALED(shell->status))
+		waitpid(pid, &shell->status, WUNTRACED);
+	if (shell->cmd_list->next)
+		close(shell->cmd_list->pd[1]);
+	if (shell->cmd_list->in)
 	{
-		close(shell.cmd_list->in);
+		close(shell->cmd_list->in);
 		unlink("/tmp/tmp_heredoc"); // Delete the temporary file
 	}
-	if (shell.cmd_list->out)
-		close(shell.cmd_list->out);
+	if (shell->cmd_list->out)
+		close(shell->cmd_list->out);
 }
 //executes the command
-int	kv_execute_command(t_shell shell)
+int	kv_execute_command(t_shell *shell)
 {
 	pid_t	pid;
 	int		builtin_status;
@@ -60,13 +60,13 @@ int	kv_execute_command(t_shell shell)
 	builtin_status = kv_execute_builtin(shell);
 	if (builtin_status != 0)
 		return (builtin_status);
-	if (shell.cmd_list->next && pipe(shell.cmd_list->pd) < 0)
+	if (shell->cmd_list->next && pipe(shell->cmd_list->pd) < 0)
 		perror("minishell");
 	pid = fork();
 	if (pid == 0)
 	{
-		kv_redirecting(shell.cmd_list);
-		execve(shell.cmd_list->path, shell.cmd_list->cmd, shell.envp);
+		kv_redirecting(shell->cmd_list);
+		execve(shell->cmd_list->path, shell->cmd_list->cmd, shell->envp);
 		perror("minishell");
 		exit(EXIT_FAILURE);
 	}
