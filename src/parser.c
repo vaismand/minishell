@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/10 15:10:36 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/16 16:17:19 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,30 +50,23 @@ void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
 	t_list	*tmp;
 	char	**argv;
 	char	**tmp2;
+	int 	args;
 	int		i;
 
 	i = -1;
-	argv = ft_split(cmd, '|');
+	argv = ft_split_ignore_quotes(cmd, '|');
 	if (!argv || !argv[0])
 		perror("malloc error");
 	while (argv[++i])
 	{
-		tmp2 = ft_split(argv[i], ' ');
-		argv[i] = kv_strip_cmd(argv[i]);
-		tmp = kv_new_lst(argv[i], envp);
-		if (!tmp)
+		ft_printf("argv[%d] = %s\n", i, argv[i]);
+		tmp2 = ft_split_ignore_quotes(argv[i], ' ');
+		tmp = kv_new_lst(tmp2, envp);
+		args = arr_len(tmp2);
+		if (!tmp || !tmp2)
 			perror("malloc error");
-		if (!tmp2)
-			perror("malloc error");
-		kv_redir_open(tmp2[1], tmp2[2], tmp);
-		tmp->index = i;
+		if (args > 2)
+			kv_redir_open(tmp2[args - 2], tmp2[args - 1], tmp);
 		ft_lstadd_back(cmd_list, tmp);
 	}
-}
-
-char	*kv_strip_cmd(char *cmd)
-{
-	cmd = ft_split(cmd, '>')[0];
-	cmd = ft_split(cmd, '<')[0];
-	return(cmd);
 }

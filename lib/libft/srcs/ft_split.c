@@ -6,13 +6,13 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 20:00:29 by dkohn             #+#    #+#             */
-/*   Updated: 2023/12/09 14:07:09 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/16 15:55:02 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_count(char const *s, char c)
+static int	ft_count(char const *s, char c)
 {
 	int	count;
 	int	i;

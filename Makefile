@@ -9,6 +9,7 @@ SRCS = src/minishell.c \
 		src/parser.c \
 		src/execute.c \
 		src/file_opening.c \
+		src/ft_split_quotes.c \
 
 
 OBJS := $(SRCS:.c=.o)

@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:23:24 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/08 20:11:32 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/16 16:58:04 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,26 @@
 //file for pipex
 
 //creating a new list for every command
-t_list	*kv_new_lst(char *argv, char **envp)
+t_list	*kv_new_lst(char **argv, char **envp)
 {
+	int i;
 	t_list	*tmp;
 
-	if (!argv || !envp || ft_strncmp(argv, ">", 1) == 0 \
-		|| ft_strncmp(argv, "<", 1) == 0)
+	if (!argv || !envp)
 		return (NULL);
+	i = -1;
 	tmp = malloc(sizeof(t_list));
 	if (!tmp)
 		perror("malloc error");
-	tmp->cmd = ft_split(argv, ' ');
+	tmp->cmd = (char **)malloc(sizeof(char *) * (count_cmds(argv) + 1));
+	while (argv[++i])
+	{
+		if (strncmp(argv[i], ">>", 2) == 0 || strncmp(argv[i], "<<", 2) == 0
+			|| strncmp(argv[i], ">", 1) == 0 || strncmp(argv[i], "<", 1) == 0)
+			break ;
+		tmp->cmd[i] = ft_strdup(argv[i]);
+		tmp->cmd[i] = kv_strip_cmd(tmp->cmd[i]);
+	}
 	tmp->path = kv_path_creator(tmp->cmd);
 	tmp->next = NULL;
 	tmp->out = 0;
