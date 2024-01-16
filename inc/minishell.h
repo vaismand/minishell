@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/16 17:07:28 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/16 18:37:19 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ int 	arr_len(char **arr);
 char    *kv_strip_cmd(char *cmd);
 char	*kv_path_creator(char **cmd);
 char	*kv_strip_cmd(char *cmd);
+char 	*kv_cmd_parser(char *cmd, t_shell *shell);
 void	kv_close_pipes(t_list *pipex);
 void	kv_redirecting(t_list *pipex);
 void	kv_set_signals(void);
