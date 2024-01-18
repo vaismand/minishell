@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/16 17:09:09 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/18 13:56:15 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int		count_cmds(char **cmd);
 int 	arr_len(char **arr);
 char    *kv_strip_cmd(char *cmd);
 char	*kv_path_creator(char **cmd);
-int		kv_cmd_parser(cmd, shell);
+char	*kv_strip_cmd(char *cmd);
 void	kv_close_pipes(t_list *pipex);
 void	kv_redirecting(t_list *pipex);
 void	kv_set_signals(void);
