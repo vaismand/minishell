@@ -44,42 +44,61 @@ char	*kv_path_creator(char **cmd)
 	return (path);
 }
 
+void kv_get_env_var_value(char *cmd, int *i, t_shell *shell)
+{
+	int j;
+
+	shell->env_var->v_name = malloc(sizeof(char) * (ft_strlen(cmd) + 1));
+	if (!shell->env_var->v_name)
+		perror("malloc error");
+	(*i)++;
+	j = 0;
+	while (cmd[*i] && (ft_isalpha(cmd[*i]) || cmd[*i] == '_'))
+	{
+		shell->env_var->v_name[j++] = cmd[*i];
+		(*i)++;
+	}
+	shell->env_var->v_name[j] = '\0';
+	shell->env_var->v_value = getenv(shell->env_var->v_name);
+	free(shell->env_var->v_name);
+}
+
 //receive the input and check for $
 //should add also $? here
 char *kv_cmd_parser(char *cmd, t_shell *shell) 
 {
-	int		i;
-	int		j;
-	int		k;
-	//const char	*tmp;
-	char	*new_cmd;
+	int i;
+	int k;
+	char *new_cmd;
+	char *temp;
 
 	new_cmd = malloc(sizeof(char) * (ft_strlen(cmd) * 2));
 	if (!new_cmd)
 		perror("malloc error");
-	new_cmd[0] = '\0';
 	i = -1;
 	k = 0;
-	while (cmd[++i] && cmd[i] != '\0')
+	while (cmd[++i])
 	{
 		if (cmd[i] == '$')
 		{
-			shell->env_var->v_name = malloc(sizeof(char) * (ft_strlen(cmd) * 2));
-			shell->env_var->v_value = malloc(sizeof(char) * (ft_strlen(cmd) * 2));
-			if (!shell->env_var->v_name || !shell->env_var->v_value)
-				perror("malloc error");
-			i++;
-			j = 0;
-			while (cmd[i] && (ft_isalpha(cmd[i]) || cmd[i] == '_'))
-				shell->env_var->v_name[j++] = cmd[i++];
-			shell->env_var->v_name[j] = '\0';
-			shell->env_var->v_value = getenv(shell->env_var->v_name);
+			kv_get_env_var_value(cmd, &i, shell);
+			if (shell->env_var->v_value)
+			{
+				temp = ft_strjoin(new_cmd, shell->env_var->v_value);
+				free(new_cmd);
+				new_cmd = temp;
+				k = ft_strlen(new_cmd);
+			}
 		}
 		else
+		{
 			new_cmd[k++] = cmd[i];
+			new_cmd[k] = '\0';
+		}
 	}
 	new_cmd[k] = '\0';
 	free(cmd);
+	printf("new_cmd: %s\n", new_cmd);
 	return (new_cmd);
 }
 
@@ -98,7 +117,6 @@ void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
 		perror("malloc error");
 	while (argv[++i])
 	{
-		ft_printf("argv[%d] = %s\n", i, argv[i]);
 		tmp2 = ft_split_ignore_quotes(argv[i], ' ');
 		tmp = kv_new_lst(tmp2, envp);
 		args = arr_len(tmp2);

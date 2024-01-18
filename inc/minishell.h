@@ -50,6 +50,8 @@ int 	arr_len(char **arr);
 char    *kv_strip_cmd(char *cmd);
 char	*kv_path_creator(char **cmd);
 char	*kv_strip_cmd(char *cmd);
+char 	*kv_cmd_parser(char *cmd, t_shell *shell);
+char	**ft_split_ignore_quotes(char const *s, char c);
 void	kv_close_pipes(t_list *pipex);
 void	kv_redirecting(t_list *pipex);
 void	kv_set_signals(void);
