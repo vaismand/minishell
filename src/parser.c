@@ -98,7 +98,6 @@ char *kv_cmd_parser(char *cmd, t_shell *shell)
 	}
 	new_cmd[k] = '\0';
 	free(cmd);
-	printf("new_cmd: %s\n", new_cmd);
 	return (new_cmd);
 }
 
