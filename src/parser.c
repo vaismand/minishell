@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/16 17:07:44 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/20 14:23:39 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-// This part of the project responsible for taking input from the user 
+// This part of the project responsible for taking input from the user
 // and parsing it into a list of commands.
 // first we should check for special characters like |, <, >, >>, <<, ;
 
@@ -44,33 +44,63 @@ char	*kv_path_creator(char **cmd)
 	return (path);
 }
 
-void kv_get_env_var_value(char *cmd, int *i, t_shell *shell)
+int	kv_get_exit_status(char *new_cmd, int *i, t_shell *shell)
 {
+	int	j;
+	char *exit_status;
+
+	*i += 2;
+	exit_status = ft_itoa(shell->exit_status);
+	j = 0;
+	while (exit_status[j])
+	{
+		new_cmd[j] = exit_status[j];
+		new_cmd[j + 1] = '\0';
+		j++;
+	}
+	free(exit_status);
+	return (j);
+}
+
+//expands the command with ? operator
+int kv_get_env_var_value(char *new_cmd, char *cmd, int *i, t_shell *shell)
+{
+	int k;
 	int j;
 
 	shell->env_var->v_name = malloc(sizeof(char) * (ft_strlen(cmd) + 1));
 	if (!shell->env_var->v_name)
 		perror("malloc error");
-	(*i)++;
-	j = 0;
-	while (cmd[*i] && (ft_isalpha(cmd[*i]) || cmd[*i] == '_'))
+	k = 0;
+	j = *i;
+	while (cmd[++j] && cmd[j] != ' ' && cmd[j] != '$')
 	{
-		shell->env_var->v_name[j++] = cmd[*i];
-		(*i)++;
+		shell->env_var->v_name[k++] = cmd[j];
+		shell->env_var->v_name[k] = '\0';
 	}
-	shell->env_var->v_name[j] = '\0';
 	shell->env_var->v_value = getenv(shell->env_var->v_name);
-	free(shell->env_var->v_name);
+	if (!shell->env_var->v_value)
+		shell->env_var->v_value = "";
+	k = 0;
+	while (shell->env_var->v_value[k])
+	{
+		new_cmd[k] = shell->env_var->v_value[k];
+		new_cmd[k + 1] = '\0';
+		k++;
+	}
+	*i = j - 1;
+	return (k);
 }
 
 //receive the input and check for $
 //should add also $? here
-char *kv_cmd_parser(char *cmd, t_shell *shell) 
+char *kv_cmd_parser(char *cmd, t_shell *shell)
 {
 	int i;
 	int k;
+	bool quote;
+	bool dquote;
 	char *new_cmd;
-	char *temp;
 
 	new_cmd = malloc(sizeof(char) * (ft_strlen(cmd) * 2));
 	if (!new_cmd)
@@ -79,24 +109,20 @@ char *kv_cmd_parser(char *cmd, t_shell *shell)
 	k = 0;
 	while (cmd[++i])
 	{
-		if (cmd[i] == '$')
-		{
-			kv_get_env_var_value(cmd, &i, shell);
-			if (shell->env_var->v_value)
-			{
-				temp = ft_strjoin(new_cmd, shell->env_var->v_value);
-				free(new_cmd);
-				new_cmd = temp;
-				k = ft_strlen(new_cmd);
-			}
-		}
+		if (cmd[i] == '\'' && !dquote)
+			quote = !quote;
+		if (cmd[i] == '\"' && !quote)
+			dquote = !dquote;
+		if (cmd[i] && cmd[i] == '$' && cmd[i + 1] == '?' && !quote)
+			k += kv_get_exit_status(&new_cmd[k], &i, shell);
+		else if (cmd[i] && cmd[i] == '$' && !quote)
+			k += kv_get_env_var_value(&new_cmd[k], cmd, &i, shell);
 		else
 		{
 			new_cmd[k++] = cmd[i];
 			new_cmd[k] = '\0';
 		}
 	}
-	new_cmd[k] = '\0';
 	free(cmd);
 	return (new_cmd);
 }
