@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/20 14:23:39 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/21 09:29:18 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,8 @@ char *kv_cmd_parser(char *cmd, t_shell *shell)
 {
 	int i;
 	int k;
-	bool quote;
-	bool dquote;
+	bool quote = false;
+	bool dquote = false;
 	char *new_cmd;
 
 	new_cmd = malloc(sizeof(char) * (ft_strlen(cmd) * 2));

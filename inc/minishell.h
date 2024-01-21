@@ -6,11 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2024/01/16 18:37:19 by dvaisman         ###   ########.fr       */
-=======
-/*   Updated: 2024/01/18 13:58:42 by dkohn            ###   ########.fr       */
->>>>>>> c71d84308f50aab9647ea150cdcda9497aee889d
+/*   Updated: 2024/01/21 09:49:27 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +56,7 @@ void	kv_close_pipes(t_list *pipex);
 void	kv_redirecting(t_list *pipex);
 void	kv_set_signals(void);
 void	kv_sigint_handler(int signo);
+void	kv_child_handler(int signo);
 void	kv_free_exit(t_shell *shell, int exit_code);
 void	kv_freepipex(t_list *pipex);
 void	kv_free_paths(char **paths);

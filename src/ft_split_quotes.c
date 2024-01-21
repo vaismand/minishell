@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_quotes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:30:38 by dkohn             #+#    #+#             */
-/*   Updated: 2024/01/16 17:05:17 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/21 10:21:25 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,13 +87,14 @@ int count_cmds(char **cmd)
 	int i;
 
 	i = 0;
-	while (cmd[i] && ft_strncmp(cmd[i], ">", 1) != 0
+	while (cmd[i] != NULL && ft_strncmp(cmd[i], ">", 1) != 0 \
 		&& ft_strncmp(cmd[i], "<", 1) != 0)
 		i++;
-	return i;
+	return (i);
 }
 
-int arr_len(char **arr) {
+int arr_len(char **arr) 
+{
 	int i;
 
 	i = 0;
