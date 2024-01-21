@@ -44,26 +44,27 @@ char	*kv_path_creator(char **cmd)
 	return (path);
 }
 
-int	kv_get_exit_status(char *new_cmd, int *i, t_shell *shell)
+static int kv_get_exit_status(char *new_cmd, int *i, t_shell *shell, char *cmd) 
 {
 	int	j;
+	int	k;
 	char *exit_status;
 
-	*i += 2;
 	exit_status = ft_itoa(shell->exit_status);
 	j = 0;
+	k = 0;
 	while (exit_status[j])
-	{
-		new_cmd[j] = exit_status[j];
-		new_cmd[j + 1] = '\0';
-		j++;
-	}
+		new_cmd[k++] = exit_status[j++];
 	free(exit_status);
-	return (j);
+	*i += 2;
+	while (cmd[*i])
+		new_cmd[k++] = cmd[(*i)++];
+	new_cmd[k] = '\0';
+	return k;
 }
 
 //expands the command with $ operator
-int kv_get_env_var_value(char *new_cmd, char *cmd, int *i, t_shell *shell)
+static int kv_get_env_var_value(char *new_cmd, char *cmd, int *i, t_shell *shell)
 {
 	int k;
 	int j;
@@ -114,7 +115,7 @@ char *kv_cmd_parser(char *cmd, t_shell *shell)
 		if (cmd[i] == '\"' && !quote)
 			dquote = !dquote;
 		if (cmd[i] && cmd[i] == '$' && cmd[i + 1] == '?' && !quote)
-			k += kv_get_exit_status(&new_cmd[k], &i, shell);
+			k += kv_get_exit_status(&new_cmd[k], &i, shell, cmd);
 		else if (cmd[i] && cmd[i] == '$' && !quote && ft_isalpha(cmd[i + 1]))
 			k += kv_get_env_var_value(&new_cmd[k], cmd, &i, shell);
 		else
