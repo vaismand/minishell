@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/21 14:54:42 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/21 23:22:59 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,81 @@
 
 #include "../inc/minishell.h"
 
-//executes builtin commands
-static int	kv_execute_builtin(t_shell *shell)
+//still not working
+static int kv_exit_command(t_shell *shell) 
 {
-	char	**cmd;
+    char **cmd = shell->cmd_list->cmd;
+    int exit_status = shell->exit_status;
 
-	cmd = shell->cmd_list->cmd;
-	if (ft_strncmp(cmd[0], "cd", 3) == 0)
+    if (cmd[1]) 
 	{
-		if (cmd[1])
+        // Check if the argument is a valid number
+        char *endptr;
+        long val = strtol(cmd[1], &endptr, 10);
+
+        // Check for no digits found or extra characters after the number
+        if (endptr == cmd[1] || *endptr != '\0') {
+            fprintf(stderr, "exit: numeric argument required\n");
+            return (1); // Return an error status
+        }
+
+        // Check for overflow or underflow
+        if ((val == LONG_MAX || val == LONG_MIN) && errno == ERANGE) 
 		{
-			if (chdir(cmd[1]) != 0)
-			{
-				perror("cd");
-				return (1);
-			}
-		}
-		return (1);
-	}
+            fprintf(stderr, "exit: argument out of range\n");
+            return (1); // Return an error status
+        }
+        exit_status = (int)val;
+    }
+	printf("exit_status: %d\n", exit_status);
+    //exit(exit_status);
 	return (0);
+}
+
+//executes builtin commands
+static int kv_execute_builtin(t_shell *shell) 
+{
+    char **cmd;
+
+    cmd = shell->cmd_list->cmd;
+	printf("cmd[0]: %s\n", cmd[0]);
+	if (ft_strncmp(cmd[0], "exit", 5) == 0) 
+        kv_exit_command(shell);
+    if (ft_strncmp(cmd[0], "cd", 3) == 0) 
+	{
+        if (cmd[1] && cmd[2]) 
+		{
+            fprintf(stderr, "cd: too many arguments\n");
+            return (1);
+        }
+        if (cmd[1]) 
+		{
+            if (chdir(cmd[1]) != 0) 
+			{
+                perror("cd");
+                return (1);
+            }
+        } 
+		else 
+		{
+            char *home_dir = getenv("HOME");
+            if (home_dir) 
+			{
+                if (chdir(home_dir) != 0) 
+				{
+                    perror("cd");
+                    return (1);
+                }
+            } 
+			else 
+			{
+                fprintf(stderr, "cd: HOME not set\n");
+                return (1);
+            }
+        }
+        return (0);
+    }
+    return (2);
 }
 
 //parent process
@@ -58,16 +114,18 @@ int kv_execute_command(t_shell *shell)
     int builtin_status;
 
     builtin_status = kv_execute_builtin(shell);
-    if (builtin_status != 0)
-        return (builtin_status);
-
-    if (shell->cmd_list->next) {
-        if (pipe(shell->cmd_list->pd) < 0) {
+    if (builtin_status == 0)
+        return (0);
+	else if (builtin_status == 1)
+        return (1);
+    if (shell->cmd_list->next) 
+	{
+        if (pipe(shell->cmd_list->pd) < 0) 
+		{
             perror("minishell: pipe error");
             return (1);
         }
     }
-
     pid = fork();
     if (pid == 0) 
 	{
@@ -76,14 +134,13 @@ int kv_execute_command(t_shell *shell)
         execve(shell->cmd_list->path, shell->cmd_list->cmd, shell->envp);
         perror("minishell: execve error");
         exit(EXIT_FAILURE);
-    } else if (pid < 0) {
+    } 
+	else if (pid < 0) 
+	{
         perror("minishell: fork error");
         return (1);
-    } else {
-        // Assuming kv_parent is a void function
+	}
+    else
         kv_parent(pid, shell);
-        // Handle parent process logic inside kv_parent if necessary
-    }
-
-    return (0); // Return a default value
+    return (0);
 }
