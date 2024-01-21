@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/21 10:04:09 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/21 14:54:42 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	kv_execute_builtin(t_shell *shell)
 			if (chdir(cmd[1]) != 0)
 			{
 				perror("cd");
-				return (-1);
+				return (1);
 			}
 		}
 		return (1);

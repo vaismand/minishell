@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/21 09:29:18 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/21 14:47:17 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	kv_get_exit_status(char *new_cmd, int *i, t_shell *shell)
 	return (j);
 }
 
-//expands the command with ? operator
+//expands the command with $ operator
 int kv_get_env_var_value(char *new_cmd, char *cmd, int *i, t_shell *shell)
 {
 	int k;
@@ -73,7 +73,7 @@ int kv_get_env_var_value(char *new_cmd, char *cmd, int *i, t_shell *shell)
 		perror("malloc error");
 	k = 0;
 	j = *i;
-	while (cmd[++j] && cmd[j] != ' ' && cmd[j] != '$')
+	while (cmd[++j] && cmd[j] != ' ' && cmd[j] != '$' && cmd[j] != '\'' && cmd[j] != '\"')
 	{
 		shell->env_var->v_name[k++] = cmd[j];
 		shell->env_var->v_name[k] = '\0';
@@ -102,7 +102,7 @@ char *kv_cmd_parser(char *cmd, t_shell *shell)
 	bool dquote = false;
 	char *new_cmd;
 
-	new_cmd = malloc(sizeof(char) * (ft_strlen(cmd) * 2));
+	new_cmd = malloc(sizeof(char) * (ft_strlen(cmd) * 3));
 	if (!new_cmd)
 		perror("malloc error");
 	i = -1;
@@ -115,7 +115,7 @@ char *kv_cmd_parser(char *cmd, t_shell *shell)
 			dquote = !dquote;
 		if (cmd[i] && cmd[i] == '$' && cmd[i + 1] == '?' && !quote)
 			k += kv_get_exit_status(&new_cmd[k], &i, shell);
-		else if (cmd[i] && cmd[i] == '$' && !quote)
+		else if (cmd[i] && cmd[i] == '$' && !quote && ft_isalpha(cmd[i + 1]))
 			k += kv_get_env_var_value(&new_cmd[k], cmd, &i, shell);
 		else
 		{
