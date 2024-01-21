@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:23:24 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/16 16:58:04 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/21 14:07:30 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ t_list	*kv_new_lst(char **argv, char **envp)
 		tmp->cmd[i] = ft_strdup(argv[i]);
 		tmp->cmd[i] = kv_strip_cmd(tmp->cmd[i]);
 	}
+	tmp->cmd[i] = NULL;
 	tmp->path = kv_path_creator(tmp->cmd);
 	tmp->next = NULL;
 	tmp->out = 0;
