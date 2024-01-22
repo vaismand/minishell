@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_quotes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:30:38 by dkohn             #+#    #+#             */
-/*   Updated: 2024/01/21 10:21:25 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/22 17:29:22 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,21 @@ char	**ft_split_ignore_quotes(char const *s, char c)
 	while (s[i]) 
 	{
 		if (s[i] == '\'' || s[i] == '"')
+		{
 			inside_quotes = !inside_quotes;
+			if (inside_quotes == s[i] || inside_quotes == 0)
+			{
+                if (inside_quotes) {
+					inside_quotes = 0;
+				} else {
+					inside_quotes = s[i];
+				}
+			}
+        }
 		else if (!inside_quotes && s[i] == c) {
 			if (i > j)
 			{
-				strs[k] = strndup(s + j, i - j);  // Duplicate the string from j to i
+				strs[k] = ft_substr(s, j, i - j);  // Duplicate the string from j to i
 				k++;
 			}
 			j = i + 1;  // Start of next string
@@ -75,7 +85,7 @@ char	**ft_split_ignore_quotes(char const *s, char c)
 	}
 	// Handle the last string
 	if (i > j) {
-		strs[k] = strndup(s + j, i - j);
+		strs[k] = ft_substr(s, j, i - j);
 		k++;
 	}
 	strs[k] = NULL;  // Null-terminate the array
@@ -103,30 +113,40 @@ int arr_len(char **arr)
 	return (i);
 }
 
+char *remove_outer_quotes(char *str) {
+    char *new_str;
+    char *i;
+    char *j;
+    char inside_quotes;
+
+	i = str;
+	inside_quotes = 0;
+	new_str = malloc(ft_strlen(str) + 1);
+	j = new_str;
+    while (*i != 0) {
+        if (*i == '\'' || *i == '"') {
+            if (inside_quotes == *i) {
+                inside_quotes = 0;
+            } else if (inside_quotes == 0) {
+                inside_quotes = *i;
+            } else {
+                *j++ = *i;
+            }
+        } else {
+            *j++ = *i;
+        }
+        i++;
+    }
+    *j = 0;
+
+    return new_str;
+}
+
 char    *kv_strip_cmd(char *cmd)
 {
-	int i;
-	int j;
-	char *tmp;
-
-	i = 0;
-	j = 0;
-	tmp = malloc(sizeof(char) * (ft_strlen(cmd) + 1));
-	if (!tmp)
-		return (NULL);
-	cmd = ft_strtrim(cmd, " ");
-	cmd = ft_strtrim(cmd, "\t");
-	cmd = ft_strtrim(cmd, "\n");
-	cmd = ft_strtrim(cmd, "\"");
-	cmd = ft_strtrim(cmd, "\'");
-	while (cmd[i])
-	{
-		while (cmd[i] == '"' || cmd[i] == '\'')
-			i++;
-		tmp[j] = cmd[i];
-		i++;
-		j++;
-	}
-	tmp[j] = '\0';
-	return (tmp);
+    char *new_cmd;
+	
+	new_cmd = remove_outer_quotes(cmd);
+    free(cmd);
+    return new_cmd;
 }
