@@ -13,39 +13,6 @@
 #include "../inc/minishell.h"
 
 //file for pipex
-
-//creating a new list for every command
-t_list	*kv_new_lst(char **argv, char **envp)
-{
-	int i;
-	t_list	*tmp;
-
-	if (!argv || !envp)
-		return (NULL);
-	i = -1;
-	tmp = malloc(sizeof(t_list));
-	if (!tmp)
-		perror("malloc error");
-	tmp->cmd = (char **)malloc(sizeof(char *) * (count_cmds(argv) + 1));
-	while (argv[++i])
-	{
-		if (strncmp(argv[i], ">>", 2) == 0 || strncmp(argv[i], "<<", 2) == 0
-			|| strncmp(argv[i], ">", 1) == 0 || strncmp(argv[i], "<", 1) == 0)
-			break ;
-		tmp->cmd[i] = ft_strdup(argv[i]);
-		tmp->cmd[i] = kv_strip_cmd(tmp->cmd[i]);
-	}
-	tmp->cmd[i] = NULL;
-	tmp->path = kv_path_creator(tmp->cmd);
-	tmp->next = NULL;
-	tmp->out = 0;
-	tmp->in = 0;
-	tmp->prev = NULL;
-	tmp->pd[0] = 0;
-	tmp->pd[1] = 0;
-	return (tmp);
-}
-
 //redirects the output of the first command
 static void	kv_first_child(t_list *pipex)
 {
@@ -53,9 +20,7 @@ static void	kv_first_child(t_list *pipex)
 	close(pipex->pd[1]);
 	close(pipex->pd[0]);
 	while (pipex->next)
-	{
 		pipex = pipex->next;
-	}
 }
 
 //redirects the input of the last command
