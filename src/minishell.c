@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/22 10:12:16 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/22 16:06:08 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,10 @@
 static sigjmp_buf	g_env;
 
 //check valid input of user
-bool	kv_valid_cmd(char *cmd, t_shell *shell)
+bool	kv_valid_cmd(char *cmd)
 {
 	if (cmd == NULL || ft_strlen(cmd) == 0)
 		return (false);
-	if (ft_strncmp(cmd, "exit", 4) == 0)
-		kv_free_exit(shell, 0);
 	return (true);
 }
 
@@ -61,7 +59,7 @@ static void	kv_run_shell_loop(t_shell *shell)
 			continue ;
 		}
 		cmd = kv_getinput();
-		if (!kv_valid_cmd(cmd, shell))
+		if (!kv_valid_cmd(cmd))
 			continue ;
 		add_history(cmd);
 		cmd = kv_cmd_parser(cmd, shell);
