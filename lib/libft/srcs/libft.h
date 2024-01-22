@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:04:04 by dkohn             #+#    #+#             */
-/*   Updated: 2024/01/07 23:03:08 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/22 09:59:43 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int		ft_isalpha(int c);
 int		ft_isascii(int c);
 int		ft_isdigit(int c);
 int		ft_isprint(int c);
+int		ft_strcmp(const char *s1, const char *s2);
 void	*ft_memchr(const void *str, int c, size_t n);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 void	*ft_memcpy(void *dest, const void *src, size_t n);

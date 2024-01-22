@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/21 23:00:30 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/22 10:26:10 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,24 +31,28 @@
 
 typedef struct s_env_var
 {
-	char	*v_name;
-	char	*v_value;
-}				t_env_var;
+    char *v_name;
+	char *v_value;
+    struct s_env_list *next;
+} t_env_var;
 
 typedef struct s_shell
 {
-	int		status;
-	int		exit_status;
-	char	**envp;
-	t_list	*cmd_list;
-	t_env_var	*env_var;
-}				t_shell;
+    int status;
+    int exit_status;
+    char **envp;
+    t_list *cmd_list;
+    t_env_var *env_var; // A list of environment variables
+} t_shell;
 
 int		kv_execute_command(t_shell *shell);
 int		kv_handle_heredoc(char *delimiter);
 int		ft_count(char const *s, char c);
 int		count_cmds(char **cmd);
 int 	arr_len(char **arr);
+int 	kv_print_env(t_shell *shell);
+int 	kv_execute_builtin(t_shell *shell);
+int 	kv_is_valid_env_name(const char *name);
 char    *kv_strip_cmd(char *cmd);
 char	*kv_path_creator(char **cmd);
 char	*kv_strip_cmd(char *cmd);
@@ -65,5 +69,6 @@ void	kv_free_paths(char **paths);
 void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd);
 void	kv_redir_open(char *argv, char *file, t_list *cmd_list);
 t_list	*kv_new_lst(char **argv, char **envp);
+
 
 #endif
