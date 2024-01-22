@@ -5,6 +5,7 @@ NAME      = minishell
 SRCS = src/minishell.c \
 		src/signal.c \
 		src/pipex.c \
+		src/pipex_utils.c \
 		src/free_exit.c \
 		src/parser.c \
 		src/execute.c \
