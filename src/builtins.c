@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/22 10:24:42 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/22 10:48:36 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,26 @@ static int kv_export_command(t_shell *shell)
     return (0);
 }
 
+static int kv_unset_command(t_shell *shell) 
+{
+    char **cmd;
+    int i;
+    int error_flag = 0;
+
+    cmd = shell->cmd_list->cmd;
+    i = 1;
+    while (cmd[i]) {
+        if (!kv_is_valid_env_name(cmd[i])) {
+            fprintf(stderr, "minishell: unset: `%s': not a valid identifier\n", cmd[i]);
+            error_flag = 1; // Set error flag but continue processing other variables
+        } else {
+            unsetenv(cmd[i]); // It's safe to call unsetenv even if the variable doesn't exist
+        }
+        i++;
+    }
+    return (error_flag);
+}
+
 //executes builtin commands
 int kv_execute_builtin(t_shell *shell) 
 {
@@ -146,5 +166,7 @@ int kv_execute_builtin(t_shell *shell)
         return (kv_pwd_command());
     if (ft_strncmp(cmd[0], "export", 7) == 0)
         return (kv_export_command(shell));
+    if (ft_strncmp(cmd[0], "unset", 6) == 0)
+        return (kv_unset_command(shell));
     return (2);
 }
