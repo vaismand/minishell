@@ -3,6 +3,7 @@
 CFLAGS    = -Wall -Wextra -Werror
 NAME      = minishell
 SRCS = src/minishell.c \
+		src/extra_utils.c \
 		src/signal.c \
 		src/pipex.c \
 		src/pipex_utils.c \

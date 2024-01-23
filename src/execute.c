@@ -31,40 +31,37 @@ static void	kv_parent(pid_t pid, t_shell *shell)
 		close(shell->cmd_list->out);
 }
 
-//executes the command
-int kv_execute_command(t_shell *shell) 
+void	kv_execute_child(t_shell *shell)
 {
-    pid_t pid;
-    int builtin_status;
+	signal(SIGINT, kv_child_handler);
+	kv_redirecting(shell->cmd_list);
+	execve(shell->cmd_list->path, shell->cmd_list->cmd, shell->envp);
+	perror("minishell: execve error");
+	exit(EXIT_FAILURE);
+}
 
-    builtin_status = kv_execute_builtin(shell);
-    if (builtin_status == 0)
-        return (0);
+//executes the command
+int	kv_execute_command(t_shell *shell)
+{
+	pid_t	pid;
+	int		builtin_status;
+
+	builtin_status = kv_execute_builtin(shell);
+	if (builtin_status == 0)
+		return (0);
 	else if (builtin_status == 1)
-        return (1);
-    if (shell->cmd_list->next) 
+		return (1);
+	if (shell->cmd_list->next)
 	{
-        if (pipe(shell->cmd_list->pd) < 0) 
-		{
-            perror("minishell: pipe error");
-            return (1);
-        }
-    }
-    pid = fork();
-    if (pid == 0) 
-	{
-        signal(SIGINT, kv_child_handler);
-        kv_redirecting(shell->cmd_list);
-        execve(shell->cmd_list->path, shell->cmd_list->cmd, shell->envp);
-        perror("minishell: execve error");
-        exit(EXIT_FAILURE);
-    } 
-	else if (pid < 0) 
-	{
-        perror("minishell: fork error");
-        return (1);
+		if (pipe(shell->cmd_list->pd) < 0)
+			return (perror("minishell: pipe error"), 1);
 	}
-    else
-        kv_parent(pid, shell);
-    return (0);
+	pid = fork();
+	if (pid == 0)
+		kv_execute_child(shell);
+	else if (pid < 0)
+		return (perror("minishell: fork error"), 1);
+	else
+		kv_parent(pid, shell);
+	return (0);
 }

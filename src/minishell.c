@@ -15,14 +15,6 @@
 //global variable for the signal
 static sigjmp_buf	g_env;
 
-//check valid input of user
-bool	kv_valid_cmd(char *cmd)
-{
-	if (cmd == NULL || ft_strlen(cmd) == 0)
-		return (false);
-	return (true);
-}
-
 //separate function for the input
 static char	*kv_getinput(void)
 {
@@ -45,6 +37,32 @@ static void	kv_init_shell(t_shell *shell, char **envp)
 	shell->env_var->v_name = NULL;
 	shell->env_var->v_value = NULL;
 	kv_set_signals();
+}
+
+//initializes the struct
+static void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
+{
+	t_list	*tmp;
+	char	**argv;
+	char	**tmp2;
+	int		args;
+	int		i;
+
+	i = -1;
+	argv = ft_split_ignore_quotes(cmd, '|');
+	if (!argv || !argv[0])
+		perror("malloc error");
+	while (argv[++i])
+	{
+		tmp2 = ft_split_ignore_quotes(argv[i], ' ');
+		tmp = kv_new_lst(tmp2, envp);
+		args = arr_len(tmp2);
+		if (!tmp || !tmp2)
+			perror("malloc error");
+		if (args > 2)
+			kv_redir_open(tmp2[args - 2], tmp2[args - 1], tmp);
+		ft_lstadd_back(cmd_list, tmp);
+	}
 }
 
 static void	kv_run_shell_loop(t_shell *shell)

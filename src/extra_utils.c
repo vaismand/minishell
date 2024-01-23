@@ -1,27 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins_utils.c                                   :+:      :+:    :+:   */
+/*   extra_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dvaisman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/22 09:29:54 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/22 10:25:24 by dvaisman         ###   ########.fr       */
+/*   Created: 2024/01/22 21:34:58 by dvaisman          #+#    #+#             */
+/*   Updated: 2024/01/22 21:34:58 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	kv_is_valid_env_name(const char *name)
+//check valid input of user
+bool	kv_valid_cmd(char *cmd)
 {
-	if (!name || !*name || (!ft_isalpha(*name) && *name != '_'))
-		return (0);
-	name++;
-	while (*name)
-	{
-		if (!ft_isalnum(*name) && *name != '_')
-			return (0);
-		name++;
-	}
-	return (1);
+	if (cmd == NULL || ft_strlen(cmd) == 0)
+		return (false);
+	return (true);
 }
