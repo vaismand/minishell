@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 15:05:03 by dkohn             #+#    #+#             */
-/*   Updated: 2024/01/16 17:06:06 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/23 15:42:22 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	kv_redir_open(char *argv, char *file, t_list *cmd_list)
 	int	fd;
 
 	fd = 0;
+	file = remove_outer_quotes(file);
 	if (argv && ft_strncmp(argv, ">>", 2) == 0)
 	{
 		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
