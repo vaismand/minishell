@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/22 17:31:50 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/23 09:31:12 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,23 @@ static int	kv_exit_command(t_shell *shell)
 	if (arr_len(cmd) > 2)
 	{
 		fprintf(stderr, "minishell: exit: too many arguments\n");
-		return (1);
+		exit(1);
 	}
 	if (!cmd[1])
 		exit_status = shell->exit_status;
 	else
 	{
 		exit_status = ft_atoi(cmd[1]);
-		if (exit_status < 0 || exit_status > 255)
-		{
-			fprintf(stderr, \
-				"minishell: exit: %s: numeric argument required\n", cmd[1]);
-			return (1);
-		}
+        if (ft_isalpha(cmd[1][0]))
+        {
+            fprintf(stderr, "minishell: exit: %s: numeric argument required\n", cmd[1]);
+            exit_status = 2;
+        }
+		else if (exit_status < 0 || exit_status > 255)
+            exit_status = exit_status % 256;
 	}
 	shell->exit_status = exit_status;
-	exit(shell->exit_status);
-	return (0);
+	return (exit(shell->exit_status), 0);
 }
 
 //cd command execution
