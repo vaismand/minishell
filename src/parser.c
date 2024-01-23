@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/22 10:12:24 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/23 09:16:30 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,18 +74,17 @@ static int	kv_get_env_var_value(char *new_cmd, char *cmd, \
 	j = *i;
 	while (cmd[++j] && cmd[j] != ' ' && cmd[j] != '$' \
 		&& cmd[j] != '\'' && cmd[j] != '\"')
-	{
 		shell->env_var->v_name[k++] = cmd[j];
-		shell->env_var->v_name[k] = '\0';
-	}
+	shell->env_var->v_name[k] = '\0';
 	shell->env_var->v_value = getenv(shell->env_var->v_name);
 	if (!shell->env_var->v_value)
 		shell->env_var->v_value = "";
 	k = 0;
-	while (shell->env_var->v_value[k++])
+	while (shell->env_var->v_value[k])
 	{
 		new_cmd[k] = shell->env_var->v_value[k];
 		new_cmd[k + 1] = '\0';
+		k++;
 	}
 	*i = j - 1;
 	return (k);
