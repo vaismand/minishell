@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/23 09:31:12 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/23 23:22:38 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,14 @@ static int	kv_exit_command(t_shell *shell)
 	else
 	{
 		exit_status = ft_atoi(cmd[1]);
-        if (ft_isalpha(cmd[1][0]))
-        {
-            fprintf(stderr, "minishell: exit: %s: numeric argument required\n", cmd[1]);
-            exit_status = 2;
-        }
+		if (ft_isalpha(cmd[1][0]))
+		{
+			fprintf(stderr, "minishell: exit: %s: \
+				numeric argument required\n", cmd[1]);
+			exit_status = 2;
+		}
 		else if (exit_status < 0 || exit_status > 255)
-            exit_status = exit_status % 256;
+			exit_status = exit_status % 256;
 	}
 	shell->exit_status = exit_status;
 	return (exit(shell->exit_status), 0);
@@ -98,26 +99,11 @@ static int	kv_export_command(t_shell *shell)
 			value = NULL;
 		}
 		if (!name || (equal_sign && !value))
-		{
-			perror("minishell: export");
-			free(name);
-			free(value);
-			return (1);
-		}
+			return (kv_free_perror(name, value, 0), 1);
 		if (!kv_is_valid_env_name(name))
-		{
-			fprintf(stderr, " not a valid identifier\n");
-			free(name);
-			free(value);
-			return (1);
-		}
+			return (kv_free_perror(name, value, 1), 1);
 		if (value && setenv(name, value, 1) < 0)
-		{
-			perror("minishell: export");
-			free(name);
-			free(value);
-			return (1);
-		}
+			return (kv_free_perror(name, value, 0), 1);
 		free(name);
 		free(value);
 		i++;
