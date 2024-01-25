@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/23 16:06:34 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/25 16:59:10 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,8 @@ char	*kv_cmd_parser(char *cmd, t_shell *shell)
 			k += kv_get_exit_status(&new_cmd[k], &i, shell);
 		else if (cmd[i] && cmd[i] == '$' && !quote && ft_isalpha(cmd[i + 1]))
 			k += kv_get_env_var_value(&new_cmd[k], cmd, &i, shell);
-		else if ((cmd[i] == '<' || cmd[i] == '>') && !dquote && !quote)
+		else if ((cmd[i] == '<' || cmd[i] == '>') && !dquote && !quote
+			&& cmd[i + 1] != ' ')
 		{
 			new_cmd[k++] = cmd[i];
 			if (cmd[i + 1] == '>' || cmd[i + 1] == '<')

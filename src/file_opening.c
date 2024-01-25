@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 15:05:03 by dkohn             #+#    #+#             */
-/*   Updated: 2024/01/23 15:42:22 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/25 16:46:44 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,6 @@ void	kv_redir_open(char *argv, char *file, t_list *cmd_list)
 		fd = open(file, O_RDONLY);
 		cmd_list->in = fd;
 	}
-	if (fd < 0)
-	{
-		perror("minishell");
-		exit(EXIT_FAILURE);
-	}
 }
 
 int	kv_open_file_write(char *file)
@@ -70,20 +65,21 @@ int	kv_handle_heredoc(char *delimiter)
 {
 	char	*line;
 	char	*tempfile;
-	size_t	len;
 	int		fd;
 
 	line = NULL;
-	len = 0;
 	tempfile = "/tmp/tmp_heredoc";
 	fd = kv_open_file_write(tempfile);
 	if (fd < 0)
 		return (-1);
-	while (getline(&line, &len, stdin) != -1)
+	line = readline("> ");
+	while (line != NULL)
 	{
-		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) == 0)
+		if (ft_strcmp(line, delimiter) == 0)
 			break ;
 		write(fd, line, strlen(line));
+		write(fd, "\n", 1);
+		line = readline("> ");
 	}
 	free(line);
 	close(fd);

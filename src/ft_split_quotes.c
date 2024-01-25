@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:30:38 by dkohn             #+#    #+#             */
-/*   Updated: 2024/01/22 17:29:22 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/25 17:16:38 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,6 @@ char	**ft_split_ignore_quotes(char const *s, char c)
 		if (s[i] == '\'' || s[i] == '"')
 		{
 			inside_quotes = !inside_quotes;
-			if (inside_quotes == s[i] || inside_quotes == 0)
-			{
-				if (inside_quotes)
-					inside_quotes = 0;
-				else
-					inside_quotes = s[i];
-			}
 		}
 		else if (!inside_quotes && s[i] == c)
 		{
