@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/26 15:43:58 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/26 20:04:37 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ static void	kv_init_shell(t_shell *shell, char **envp)
 	shell->env_var->v_value = NULL;
 	kv_set_signals();
 }
-
 //initializes the struct
 static void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
 {

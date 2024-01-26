@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/26 16:03:24 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/26 20:00:59 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	kv_execute_child(t_shell *shell)
 {
 	signal(SIGINT, kv_child_handler);
 	if (shell->cmd_list->file_error != 0)
-		exit(shell->cmd_list->file_error);
+		kv_exit_command(shell);
 	kv_redirecting(shell->cmd_list);
 	execve(shell->cmd_list->path, shell->cmd_list->cmd, shell->envp);
 	perror("minishell: execve error");
