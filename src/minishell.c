@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/25 17:11:26 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/26 15:43:58 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ static void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
 		perror("malloc error");
 	while (argv[++i])
 	{
-		ft_printf("argv[%d]: %s\n", i, argv[i]);
 		tmp2 = ft_split_ignore_quotes(argv[i], ' ');
 		tmp = kv_new_lst(tmp2, envp);
 		args = arr_len(tmp2);

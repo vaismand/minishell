@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/23 21:30:16 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/26 15:59:06 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_shell
 	t_env_var	*env_var;
 }	t_shell;
 
+int		kv_file_error_check(char *file);
 int		kv_execute_command(t_shell *shell);
 int		kv_handle_heredoc(char *delimiter);
 int		ft_count(char const *s, char c);
