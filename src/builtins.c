@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/26 20:03:26 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/27 16:57:24 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ int	kv_exit_command(t_shell *shell)
 		exit_status = ft_atoi(cmd[1]);
 		if (ft_isalpha(cmd[1][0]))
 		{
-			fprintf(stderr, "minishell: exit: %s: \
-				numeric argument required\n", cmd[1]);
+			fprintf(stderr, "minishell: exit: numeric argument required\n");
 			exit_status = 2;
 		}
 		else if (exit_status < 0 || exit_status > 255)
