@@ -3,13 +3,17 @@
 CFLAGS    = -Wall -Wextra -Werror
 NAME      = minishell
 SRCS = src/minishell.c \
+		src/extra_utils.c \
 		src/signal.c \
 		src/pipex.c \
+		src/pipex_utils.c \
 		src/free_exit.c \
 		src/parser.c \
 		src/execute.c \
 		src/file_opening.c \
 		src/ft_split_quotes.c \
+		src/builtins.c \
+		src/builtins_utils.c \
 
 
 OBJS := $(SRCS:.c=.o)

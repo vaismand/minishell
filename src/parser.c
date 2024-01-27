@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/20 14:23:39 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/25 16:59:10 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,40 +44,38 @@ char	*kv_path_creator(char **cmd)
 	return (path);
 }
 
-int	kv_get_exit_status(char *new_cmd, int *i, t_shell *shell)
+static int	kv_get_exit_status(char *new_cmd, int *i, t_shell *shell)
 {
-	int	j;
-	char *exit_status;
+	int		j;
+	int		k;
+	char	*exit_status;
 
-	*i += 2;
 	exit_status = ft_itoa(shell->exit_status);
 	j = 0;
+	k = 0;
 	while (exit_status[j])
-	{
-		new_cmd[j] = exit_status[j];
-		new_cmd[j + 1] = '\0';
-		j++;
-	}
+		new_cmd[k++] = exit_status[j++];
 	free(exit_status);
-	return (j);
+	*i += 1;
+	return (k);
 }
 
-//expands the command with ? operator
-int kv_get_env_var_value(char *new_cmd, char *cmd, int *i, t_shell *shell)
+//expands the command with $ operator
+static int	kv_get_env_var_value(char *new_cmd, char *cmd, \
+	int *i, t_shell *shell)
 {
-	int k;
-	int j;
+	int	k;
+	int	j;
 
 	shell->env_var->v_name = malloc(sizeof(char) * (ft_strlen(cmd) + 1));
 	if (!shell->env_var->v_name)
 		perror("malloc error");
 	k = 0;
 	j = *i;
-	while (cmd[++j] && cmd[j] != ' ' && cmd[j] != '$')
-	{
+	while (cmd[++j] && cmd[j] != ' ' && cmd[j] != '$' \
+		&& cmd[j] != '\'' && cmd[j] != '\"')
 		shell->env_var->v_name[k++] = cmd[j];
-		shell->env_var->v_name[k] = '\0';
-	}
+	shell->env_var->v_name[k] = '\0';
 	shell->env_var->v_value = getenv(shell->env_var->v_name);
 	if (!shell->env_var->v_value)
 		shell->env_var->v_value = "";
@@ -92,21 +90,27 @@ int kv_get_env_var_value(char *new_cmd, char *cmd, int *i, t_shell *shell)
 	return (k);
 }
 
-//receive the input and check for $
-//should add also $? here
-char *kv_cmd_parser(char *cmd, t_shell *shell)
+static int	kv_init_local_vars(int *i, int *k, bool *quote, bool *dquote)
 {
-	int i;
-	int k;
-	bool quote;
-	bool dquote;
-	char *new_cmd;
+	*i = -1;
+	*k = 0;
+	*quote = false;
+	*dquote = false;
+	return (0);
+}
 
-	new_cmd = malloc(sizeof(char) * (ft_strlen(cmd) * 2));
+char	*kv_cmd_parser(char *cmd, t_shell *shell)
+{
+	int		i;
+	int		k;
+	bool	quote;
+	bool	dquote;
+	char	*new_cmd;
+
+	new_cmd = malloc(sizeof(char) * (ft_strlen(cmd) * 4));
 	if (!new_cmd)
 		perror("malloc error");
-	i = -1;
-	k = 0;
+	kv_init_local_vars(&i, &k, &quote, &dquote);
 	while (cmd[++i])
 	{
 		if (cmd[i] == '\'' && !dquote)
@@ -115,40 +119,19 @@ char *kv_cmd_parser(char *cmd, t_shell *shell)
 			dquote = !dquote;
 		if (cmd[i] && cmd[i] == '$' && cmd[i + 1] == '?' && !quote)
 			k += kv_get_exit_status(&new_cmd[k], &i, shell);
-		else if (cmd[i] && cmd[i] == '$' && !quote)
+		else if (cmd[i] && cmd[i] == '$' && !quote && ft_isalpha(cmd[i + 1]))
 			k += kv_get_env_var_value(&new_cmd[k], cmd, &i, shell);
-		else
+		else if ((cmd[i] == '<' || cmd[i] == '>') && !dquote && !quote
+			&& cmd[i + 1] != ' ')
 		{
 			new_cmd[k++] = cmd[i];
-			new_cmd[k] = '\0';
+			if (cmd[i + 1] == '>' || cmd[i + 1] == '<')
+				new_cmd[k++] = cmd[++i];
+			new_cmd[k++] = ' ';
 		}
+		else
+			new_cmd[k++] = cmd[i];
 	}
-	free(cmd);
-	return (new_cmd);
-}
-
-//initializes the struct
-void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
-{
-	t_list	*tmp;
-	char	**argv;
-	char	**tmp2;
-	int 	args;
-	int		i;
-
-	i = -1;
-	argv = ft_split_ignore_quotes(cmd, '|');
-	if (!argv || !argv[0])
-		perror("malloc error");
-	while (argv[++i])
-	{
-		tmp2 = ft_split_ignore_quotes(argv[i], ' ');
-		tmp = kv_new_lst(tmp2, envp);
-		args = arr_len(tmp2);
-		if (!tmp || !tmp2)
-			perror("malloc error");
-		if (args > 2)
-			kv_redir_open(tmp2[args - 2], tmp2[args - 1], tmp);
-		ft_lstadd_back(cmd_list, tmp);
-	}
+	new_cmd[k] = '\0';
+	return (free(cmd), new_cmd);
 }
