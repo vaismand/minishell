@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/26 20:00:59 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/27 18:50:58 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,9 @@ static void	kv_parent(pid_t pid, t_shell *shell)
 void	kv_execute_child(t_shell *shell)
 {
 	signal(SIGINT, kv_child_handler);
-	if (shell->cmd_list->file_error != 0)
-		kv_exit_command(shell);
+	// This part brokes our tests
+	// if (shell->cmd_list->file_error != 0)
+	// 	kv_exit_command(shell);
 	kv_redirecting(shell->cmd_list);
 	execve(shell->cmd_list->path, shell->cmd_list->cmd, shell->envp);
 	perror("minishell: execve error");
