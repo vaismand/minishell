@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/27 16:57:24 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/27 18:58:07 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,32 @@ static int	kv_unset_command(t_shell *shell)
 	return (error_flag);
 }
 
+int	kv_echo_command(t_shell *shell)
+{
+	char	**cmd;
+	int		i;
+	int		n_flag;
+
+	cmd = shell->cmd_list->cmd;
+	i = 1;
+	n_flag = 0;
+	if (cmd[i] && ft_strncmp(cmd[i], "-n", 3) == 0)
+	{
+		n_flag = 1;
+		i++;
+	}
+	while (cmd[i])
+	{
+		printf("%s", cmd[i]);
+		if (cmd[i + 1])
+			printf(" ");
+		i++;
+	}
+	if (!n_flag)
+		printf("\n");
+	return (0);
+}
+
 //executes builtin commands
 int	kv_execute_builtin(t_shell *shell)
 {
@@ -150,5 +176,7 @@ int	kv_execute_builtin(t_shell *shell)
 		return (kv_export_command(shell));
 	if (ft_strncmp(cmd[0], "unset", 6) == 0)
 		return (kv_unset_command(shell));
+	if (ft_strncmp(cmd[0], "echo", 5) == 0)
+		return (kv_echo_command(shell));
 	return (2);
 }
