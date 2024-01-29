@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dvais <dvais@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/27 18:50:58 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/29 16:33:52 by dvais            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ static void	kv_parent(pid_t pid, t_shell *shell)
 	waitpid(pid, &shell->status, WUNTRACED);
 	while (!WIFEXITED(shell->status) && !WIFSIGNALED(shell->status))
 		waitpid(pid, &shell->status, WUNTRACED);
+	if (WIFEXITED(shell->status))
+			shell->exit_status = WEXITSTATUS(shell->status);
 	if (shell->cmd_list->next)
 		close(shell->cmd_list->pd[1]);
 	if (shell->cmd_list->in)
@@ -34,13 +36,15 @@ static void	kv_parent(pid_t pid, t_shell *shell)
 void	kv_execute_child(t_shell *shell)
 {
 	signal(SIGINT, kv_child_handler);
-	// This part brokes our tests
-	// if (shell->cmd_list->file_error != 0)
-	// 	kv_exit_command(shell);
 	kv_redirecting(shell->cmd_list);
-	execve(shell->cmd_list->path, shell->cmd_list->cmd, shell->envp);
-	perror("minishell: execve error");
-	exit(EXIT_FAILURE);
+	if (execve(shell->cmd_list->path, shell->cmd_list->cmd, shell->envp) == -1)
+	{
+		fprintf(stderr, "minishell: %s: command not found\n", shell->cmd_list->cmd[0]);
+        exit(127);
+	}
+	else
+		perror("minishell: execve error");
+	exit(shell->exit_status);
 }
 
 //executes the command
@@ -66,5 +70,5 @@ int	kv_execute_command(t_shell *shell)
 		return (perror("minishell: fork error"), 1);
 	else
 		kv_parent(pid, shell);
-	return (0);
+	return (shell->exit_status);
 }
