@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 15:05:03 by dkohn             #+#    #+#             */
-/*   Updated: 2024/01/26 19:47:32 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/29 17:50:57 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,25 +23,21 @@ void	kv_redir_open(char *argv, char *file, t_list *cmd_list)
 	{
 		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		cmd_list->out = fd;
-		cmd_list->file_error = kv_file_error_check(file);
 	}
 	else if (argv && ft_strncmp(argv, "<<", 2) == 0)
 	{
 		fd = kv_handle_heredoc(file);
 		cmd_list->in = fd;
-		cmd_list->file_error = kv_file_error_check(file);
 	}
 	else if (argv && ft_strncmp(argv, ">", 1) == 0)
 	{
 		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		cmd_list->out = fd;
-		cmd_list->file_error = kv_file_error_check(file);
 	}
 	else if (argv && ft_strncmp(argv, "<", 1) == 0)
 	{
 		fd = open(file, O_RDONLY);
 		cmd_list->in = fd;
-		cmd_list->file_error = kv_file_error_check(file);
 	}
 	
 }
@@ -92,19 +88,4 @@ int	kv_handle_heredoc(char *delimiter)
 	if (fd < 0)
 		return (-1);
 	return (fd);
-}
-
-int kv_file_error_check(char *file)
-{
-	if (access(file, F_OK) == -1)
-	{
-		perror("minishell");
-		return (1);
-	}
-	if (access(file, R_OK) == -1)
-	{
-		perror("minishell");
-		return (1);
-	}
-	return (0);
 }

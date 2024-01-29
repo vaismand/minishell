@@ -17,3 +17,5 @@ env | grep USER || grep lucas
 >> *
 < *
 << *
+
+cat ./test_files/infile_big | grep oi
