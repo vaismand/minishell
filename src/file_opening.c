@@ -6,40 +6,51 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 15:05:03 by dkohn             #+#    #+#             */
-/*   Updated: 2024/01/29 17:50:57 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/30 16:53:43 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // This part of the project responsible for opening files.
 #include "../inc/minishell.h"
 
-void	kv_redir_open(char *argv, char *file, t_list *cmd_list)
+void	kv_redir_open(char **argv, t_list *cmd_list)
 {
 	int	fd;
+	int i;
 
+	i = -1;
 	fd = 0;
-	file = remove_outer_quotes(file);
-	if (argv && ft_strncmp(argv, ">>", 2) == 0)
+	while (argv[++i])
 	{
-		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		cmd_list->out = fd;
+		if (cmd_list->file_error < 0)
+			break ;
+		if (ft_strncmp(argv[i], ">>", 2) == 0)
+		{
+			argv[i + 1] = remove_outer_quotes(argv[i + 1]);
+			fd = open(argv[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+			cmd_list->out = fd;
+		}
+		else if (ft_strncmp(argv[i], "<<", 2) == 0)
+		{
+			argv[i + 1] = remove_outer_quotes(argv[i + 1]);
+			fd = kv_handle_heredoc(argv[i + 1]);
+			cmd_list->in = fd;
+		}
+		else if (ft_strncmp(argv[i], ">", 1) == 0)
+		{
+			argv[i + 1] = remove_outer_quotes(argv[i + 1]);
+			fd = open(argv[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			cmd_list->out = fd;
+		}
+		else if (ft_strncmp(argv[i], "<", 1) == 0)
+		{
+			argv[i + 1] = remove_outer_quotes(argv[i + 1]);
+			fd = open(argv[i + 1], O_RDONLY);
+			cmd_list->in = fd;
+		}
+		if (fd < 0 && cmd_list->file_error == 0)
+			cmd_list->file_error = fd;
 	}
-	else if (argv && ft_strncmp(argv, "<<", 2) == 0)
-	{
-		fd = kv_handle_heredoc(file);
-		cmd_list->in = fd;
-	}
-	else if (argv && ft_strncmp(argv, ">", 1) == 0)
-	{
-		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		cmd_list->out = fd;
-	}
-	else if (argv && ft_strncmp(argv, "<", 1) == 0)
-	{
-		fd = open(file, O_RDONLY);
-		cmd_list->in = fd;
-	}
-	
 }
 
 int	kv_open_file_write(char *file)

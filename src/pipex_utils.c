@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:42:20 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/22 15:42:20 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/01/30 14:54:46 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,13 @@ static t_list	*kv_set_tmp_to_zero(t_list *tmp, int i)
 t_list	*kv_new_lst(char **argv, char **envp)
 {
 	int		i;
+	int		j;
 	t_list	*tmp;
 
 	if (!argv || !envp)
 		return (NULL);
 	i = -1;
+	j = -1;
 	tmp = malloc(sizeof(t_list));
 	if (!tmp)
 		perror("malloc error");
@@ -42,10 +44,13 @@ t_list	*kv_new_lst(char **argv, char **envp)
 	{
 		if (strncmp(argv[i], ">>", 2) == 0 || strncmp(argv[i], "<<", 2) == 0
 			|| strncmp(argv[i], ">", 1) == 0 || strncmp(argv[i], "<", 1) == 0)
-			break ;
-		tmp->cmd[i] = ft_strdup(argv[i]);
-		tmp->cmd[i] = kv_strip_cmd(tmp->cmd[i]);
+		{
+			i++;
+			continue ;
+		}
+		tmp->cmd[++j] = ft_strdup(argv[i]);
+		tmp->cmd[j] = kv_strip_cmd(tmp->cmd[j]);
 	}
-	tmp = kv_set_tmp_to_zero(tmp, i);
+	tmp = kv_set_tmp_to_zero(tmp, j + 1);
 	return (tmp);
 }

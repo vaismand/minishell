@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:30:38 by dkohn             #+#    #+#             */
-/*   Updated: 2024/01/25 17:16:38 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/30 14:47:51 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,6 @@ char	*kv_strip_cmd(char *cmd)
 	char	*new_cmd;
 
 	new_cmd = remove_outer_quotes(cmd);
-	free(cmd);
+//	free(cmd);
 	return (new_cmd);
 }

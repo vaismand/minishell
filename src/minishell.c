@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/26 20:04:37 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/30 17:30:46 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ static void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
 		if (!tmp || !tmp2)
 			perror("malloc error");
 		if (args > 2)
-			kv_redir_open(tmp2[args - 2], tmp2[args - 1], tmp);
+			kv_redir_open(tmp2, tmp);
 		ft_lstadd_back(cmd_list, tmp);
 	}
 }

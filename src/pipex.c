@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:23:24 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/29 18:18:45 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/01/30 15:05:16 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,9 @@ void	kv_redirecting(t_list *pipex)
 	if (pipex->prev == NULL && pipex->next == NULL)
 		return ;
 	else if (pipex->prev == NULL)
+	{
 		kv_first_child(pipex);
+	}
 	else if (pipex->next == NULL)
 		kv_last_child(pipex);
 	else
