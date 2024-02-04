@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/04 09:32:16 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/04 11:18:02 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	kv_exit_command(t_shell *shell)
 	int		exit_status;
 
 	cmd = shell->cmd_list->cmd;
-	if (arr_len(cmd) > 2)
+	if (kv_arr_len(cmd) > 2)
 	{
 		fprintf(stderr, "minishell: exit: too many arguments\n");
 		exit(1);
@@ -47,7 +47,7 @@ int	kv_cd_command(t_shell *shell)
 	char	*path;
 
 	cmd = shell->cmd_list->cmd;
-	if (arr_len(cmd) > 2)
+	if (kv_arr_len(cmd) > 2)
 		return (fprintf(stderr, "minishell: cd: too many arguments\n"), 1);
 	if (!cmd[1])
 	{

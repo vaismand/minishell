@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:42:20 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/30 19:40:42 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/04 11:15:52 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_list	*kv_new_lst(char **argv, char **envp)
 	tmp = malloc(sizeof(t_list));
 	if (!tmp)
 		perror("malloc error");
-	tmp->cmd = (char **)malloc(sizeof(char *) * (count_cmds(argv) + 1));
+	tmp->cmd = (char **)malloc(sizeof(char *) * (kv_count_cmds(argv) + 1));
 	while (argv[++i])
 	{
 		if (strncmp(argv[i], ">>", 2) == 0 || strncmp(argv[i], "<<", 2) == 0

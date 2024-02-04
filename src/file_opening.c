@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   file_opening.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 15:05:03 by dkohn             #+#    #+#             */
-/*   Updated: 2024/01/30 19:40:37 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/04 11:30:14 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 void	kv_redir_open(char **argv, t_list *cmd_list)
 {
 	int	fd;
-	int i;
+	int	i;
 
 	i = -1;
 	fd = 0;
@@ -26,25 +26,25 @@ void	kv_redir_open(char **argv, t_list *cmd_list)
 			break ;
 		if (ft_strncmp(argv[i], ">>", 2) == 0)
 		{
-			argv[i + 1] = remove_outer_quotes(argv[i + 1]);
+			argv[i + 1] = kv_remove_outer_quotes(argv[i + 1]);
 			fd = open(argv[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
 			cmd_list->out = fd;
 		}
 		else if (ft_strncmp(argv[i], "<<", 2) == 0)
 		{
-			argv[i + 1] = remove_outer_quotes(argv[i + 1]);
+			argv[i + 1] = kv_remove_outer_quotes(argv[i + 1]);
 			fd = kv_handle_heredoc(argv[i + 1]);
 			cmd_list->in = fd;
 		}
 		else if (ft_strncmp(argv[i], ">", 1) == 0)
 		{
-			argv[i + 1] = remove_outer_quotes(argv[i + 1]);
+			argv[i + 1] = kv_remove_outer_quotes(argv[i + 1]);
 			fd = open(argv[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 			cmd_list->out = fd;
 		}
 		else if (ft_strncmp(argv[i], "<", 1) == 0)
 		{
-			argv[i + 1] = remove_outer_quotes(argv[i + 1]);
+			argv[i + 1] = kv_remove_outer_quotes(argv[i + 1]);
 			fd = open(argv[i + 1], O_RDONLY);
 			cmd_list->in = fd;
 		}

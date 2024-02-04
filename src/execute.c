@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/04 10:45:27 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/04 11:29:33 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	kv_parent(pid_t pid, t_shell *shell)
 	while (!WIFEXITED(shell->status) && !WIFSIGNALED(shell->status))
 		waitpid(pid, &shell->status, WUNTRACED);
 	if (WIFEXITED(shell->status))
-			shell->exit_status = WEXITSTATUS(shell->status);
+		shell->exit_status = WEXITSTATUS(shell->status);
 	if (shell->cmd_list->next)
 		close(shell->cmd_list->pd[1]);
 	if (shell->cmd_list->in)
@@ -33,14 +33,41 @@ static void	kv_parent(pid_t pid, t_shell *shell)
 		close(shell->cmd_list->out);
 }
 
+void	kv_is_dir_exit(t_shell *shell)
+{
+	char	*cmd;
+
+	cmd = shell->cmd_list->cmd[0];
+	if (cmd[0] == '/' || cmd[0] == '.')
+	{
+		if (access(cmd, F_OK) == 0 && access(cmd, X_OK) < 0)
+			fprintf(stderr, "minishell: %s: is a directory\n", cmd);
+		else if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
+			fprintf(stderr, "minishell: %s: permission denied\n", cmd);
+		else if (access(shell->cmd_list->path, F_OK) == 0 \
+			&& access(shell->cmd_list->path, X_OK) < 0)
+			fprintf(stderr, "minishell: %s: is a directory\n", cmd);
+		else if (access(shell->cmd_list->path, F_OK) == 0 \
+			&& access(shell->cmd_list->path, X_OK) == 0)
+			fprintf(stderr, "minishell: %s: permission denied\n", cmd);
+		else
+			fprintf(stderr, "minishell: %s: No such file or directory\n", cmd);
+		exit(126);
+	}
+	else
+		fprintf(stderr, "minishell: %s: command not found\n", cmd);
+	exit(127);
+}
+
 void	kv_execute_child(t_shell *shell)
 {
-	int builtin_status;
-	
+	int	builtin_status;
+
 	signal(SIGINT, kv_child_handler);
 	if (shell->cmd_list->file_error < 0)
 	{
-		fprintf(stderr, "minishell: %s: %s\n", shell->cmd_list->cmd[0], strerror(errno));
+		fprintf(stderr, "minishell: %s: %s\n", \
+			shell->cmd_list->cmd[0], strerror(errno));
 		exit(1);
 	}
 	kv_redirecting(shell->cmd_list);
@@ -49,32 +76,14 @@ void	kv_execute_child(t_shell *shell)
 		exit(builtin_status);
 	if (execve(shell->cmd_list->path, shell->cmd_list->cmd, shell->envp) == -1)
 	{
-	
 		if (errno == ENOENT || errno == 14 || errno == 8)
 		{
-			fprintf(stderr, "minishell: %s: command not found\n", shell->cmd_list->cmd[0]);
+			fprintf(stderr, "minishell: %s: command not found\n", \
+			shell->cmd_list->cmd[0]);
 			exit(127);
 		}
 		else if (errno == EACCES)
-		{
-			if (shell->cmd_list->cmd[0][0] == '/' || shell->cmd_list->cmd[0][0] == '.')
-			{
-				if (access(shell->cmd_list->cmd[0], F_OK) == 0 && access(shell->cmd_list->cmd[0], X_OK) < 0)
-					fprintf(stderr, "minishell: %s: is a directory\n", shell->cmd_list->cmd[0]);
-				else if (access(shell->cmd_list->cmd[0], F_OK) == 0 && access(shell->cmd_list->cmd[0], X_OK) == 0)
-					fprintf(stderr, "minishell: %s: permission denied\n", shell->cmd_list->cmd[0]);
-				else if (access(shell->cmd_list->path, F_OK) == 0 && access(shell->cmd_list->path, X_OK) < 0)
-					fprintf(stderr, "minishell: %s: is a directory\n", shell->cmd_list->cmd[0]);
-				else if (access(shell->cmd_list->path, F_OK) == 0 && access(shell->cmd_list->path, X_OK) == 0)
-					fprintf(stderr, "minishell: %s: permission denied\n", shell->cmd_list->cmd[0]);
-				else
-					fprintf(stderr, "minishell: %s: No such file or directory\n", shell->cmd_list->cmd[0]);
-				exit(126);
-			}
-			else
-				fprintf(stderr, "minishell: %s: command not found\n", shell->cmd_list->cmd[0]);
-			exit(127);
-		}
+			kv_is_dir_exit(shell);
 		else
 			perror("minishell: execve error");
 	}

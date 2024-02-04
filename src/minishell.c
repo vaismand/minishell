@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/30 19:40:40 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/04 11:22:29 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static void	kv_init_shell(t_shell *shell, char **envp)
 	shell->env_var->v_value = NULL;
 	kv_set_signals();
 }
+
 //initializes the struct
 static void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
 {
@@ -48,14 +49,14 @@ static void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
 	int		i;
 
 	i = -1;
-	argv = ft_split_ignore_quotes(cmd, '|');
+	argv = kv_split_ignore_quotes(cmd, '|');
 	if (!argv || !argv[0])
 		perror("malloc error");
 	while (argv[++i])
 	{
-		tmp2 = ft_split_ignore_quotes(argv[i], ' ');
+		tmp2 = kv_split_ignore_quotes(argv[i], ' ');
 		tmp = kv_new_lst(tmp2, envp);
-		args = arr_len(tmp2);
+		args = kv_arr_len(tmp2);
 		if (!tmp || !tmp2)
 			perror("malloc error");
 		if (args > 2)

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_quotes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:30:38 by dkohn             #+#    #+#             */
-/*   Updated: 2024/01/30 19:40:39 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/04 11:17:22 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	ft_count(char const *s, char c)
+int	kv_count(char const *s, char c)
 {
 	int	count;
 	int	i;
@@ -33,7 +33,7 @@ int	ft_count(char const *s, char c)
 	return (count);
 }
 
-char	**ft_split_ignore_quotes(char const *s, char c)
+char	**kv_split_ignore_quotes(char const *s, char c)
 {
 	char	**strs;
 	int		i;
@@ -45,15 +45,13 @@ char	**ft_split_ignore_quotes(char const *s, char c)
 	i = 0;
 	j = 0;
 	inside_quotes = 0;
-	strs = (char **)malloc(sizeof(char *) * (ft_count(s, c) + 1));
+	strs = (char **)malloc(sizeof(char *) * (kv_count(s, c) + 1));
 	if (!strs || !s)
 		return (NULL);
 	while (s[i])
 	{
 		if (s[i] == '\'' || s[i] == '"')
-		{
 			inside_quotes = !inside_quotes;
-		}
 		else if (!inside_quotes && s[i] == c)
 		{
 			if (i > j)
@@ -74,7 +72,7 @@ char	**ft_split_ignore_quotes(char const *s, char c)
 	return (strs);
 }
 
-int	count_cmds(char **cmd)
+int	kv_count_cmds(char **cmd)
 {
 	int	i;
 
@@ -85,7 +83,7 @@ int	count_cmds(char **cmd)
 	return (i);
 }
 
-int	arr_len(char **arr)
+int	kv_arr_len(char **arr)
 {
 	int	i;
 
@@ -95,7 +93,7 @@ int	arr_len(char **arr)
 	return (i);
 }
 
-char	*remove_outer_quotes(char *str)
+char	*kv_remove_outer_quotes(char *str)
 {
 	char	*new_str;
 	char	*i;
@@ -129,7 +127,6 @@ char	*kv_strip_cmd(char *cmd)
 {
 	char	*new_cmd;
 
-	new_cmd = remove_outer_quotes(cmd);
-//	free(cmd);
+	new_cmd = kv_remove_outer_quotes(cmd);
 	return (new_cmd);
 }

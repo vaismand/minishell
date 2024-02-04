@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/04 10:46:48 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/04 11:15:30 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ typedef struct s_shell
 int		kv_file_error_check(char *file);
 int		kv_execute_command(t_shell *shell);
 int		kv_handle_heredoc(char *delimiter);
-int		ft_count(char const *s, char c);
-int		count_cmds(char **cmd);
-int		arr_len(char **arr);
+int		kv_count(char const *s, char c);
+int		kv_count_cmds(char **cmd);
+int		kv_arr_len(char **arr);
 int		kv_print_env(t_shell *shell);
 int		kv_execute_builtin(t_shell *shell);
 int		kv_is_valid_env_name(const char *name);
@@ -61,8 +61,8 @@ char	*kv_strip_cmd(char *cmd);
 char	*kv_path_creator(char **cmd);
 char	*kv_strip_cmd(char *cmd);
 char	*kv_cmd_parser(char *cmd, t_shell *shell);
-char	*remove_outer_quotes(char *str);
-char	**ft_split_ignore_quotes(char const *s, char c);
+char	*kv_remove_outer_quotes(char *str);
+char	**kv_split_ignore_quotes(char const *s, char c);
 void	kv_close_pipes(t_list *pipex);
 void	kv_redirecting(t_list *pipex);
 void	kv_set_signals(void);
