@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dvais <dvais@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/04 11:29:33 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/04 22:17:39 by dvais            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,17 @@ void	kv_is_dir_exit(t_shell *shell)
 	cmd = shell->cmd_list->cmd[0];
 	if (cmd[0] == '/' || cmd[0] == '.')
 	{
+		printf("cmd[0] %c", cmd[0]);
 		if (access(cmd, F_OK) == 0 && access(cmd, X_OK) < 0)
-			fprintf(stderr, "minishell: %s: is a directory\n", cmd);
+			fprintf(stderr, "minishell: %s: Permission denied\n", cmd);
 		else if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
-			fprintf(stderr, "minishell: %s: permission denied\n", cmd);
+			fprintf(stderr, "minishell: %s: Is a directory\n", cmd);
 		else if (access(shell->cmd_list->path, F_OK) == 0 \
 			&& access(shell->cmd_list->path, X_OK) < 0)
-			fprintf(stderr, "minishell: %s: is a directory\n", cmd);
+			fprintf(stderr, "minishell: %s: Is a directory\n", cmd);
 		else if (access(shell->cmd_list->path, F_OK) == 0 \
 			&& access(shell->cmd_list->path, X_OK) == 0)
-			fprintf(stderr, "minishell: %s: permission denied\n", cmd);
+			fprintf(stderr, "minishell: %s: Permission denied\n", cmd);
 		else
 			fprintf(stderr, "minishell: %s: No such file or directory\n", cmd);
 		exit(126);
@@ -78,8 +79,12 @@ void	kv_execute_child(t_shell *shell)
 	{
 		if (errno == ENOENT || errno == 14 || errno == 8)
 		{
-			fprintf(stderr, "minishell: %s: command not found\n", \
-			shell->cmd_list->cmd[0]);
+			if (shell->cmd_list->cmd[0][0] == '/' || shell->cmd_list->cmd[0][0] == '.')
+				fprintf(stderr, "minishell: %s: No such file or directory\n", \
+				shell->cmd_list->cmd[0]);
+			else
+				fprintf(stderr, "minishell: %s: command not found\n", \
+				shell->cmd_list->cmd[0]);
 			exit(127);
 		}
 		else if (errno == EACCES)
