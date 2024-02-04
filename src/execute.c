@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvais <dvais@student.42.fr>                +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/04 22:17:39 by dvais            ###   ########.fr       */
+/*   Updated: 2024/02/04 22:28:58 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	kv_parent(pid_t pid, t_shell *shell)
 		close(shell->cmd_list->out);
 }
 
-void	kv_is_dir_exit(t_shell *shell)
+static void	kv_is_dir_exit(t_shell *shell)
 {
 	char	*cmd;
 
@@ -60,7 +60,21 @@ void	kv_is_dir_exit(t_shell *shell)
 	exit(127);
 }
 
-void	kv_execute_child(t_shell *shell)
+static void	kv_command_not_found(t_shell *shell)
+{
+	{
+		if (shell->cmd_list->cmd[0][0] == '/' \
+			|| shell->cmd_list->cmd[0][0] == '.')
+			fprintf(stderr, "minishell: %s: No such file or directory\n", \
+			shell->cmd_list->cmd[0]);
+		else
+			fprintf(stderr, "minishell: %s: command not found\n", \
+			shell->cmd_list->cmd[0]);
+		exit(127);
+	}
+}
+
+static void	kv_execute_child(t_shell *shell)
 {
 	int	builtin_status;
 
@@ -78,15 +92,7 @@ void	kv_execute_child(t_shell *shell)
 	if (execve(shell->cmd_list->path, shell->cmd_list->cmd, shell->envp) == -1)
 	{
 		if (errno == ENOENT || errno == 14 || errno == 8)
-		{
-			if (shell->cmd_list->cmd[0][0] == '/' || shell->cmd_list->cmd[0][0] == '.')
-				fprintf(stderr, "minishell: %s: No such file or directory\n", \
-				shell->cmd_list->cmd[0]);
-			else
-				fprintf(stderr, "minishell: %s: command not found\n", \
-				shell->cmd_list->cmd[0]);
-			exit(127);
-		}
+			kv_command_not_found(shell);
 		else if (errno == EACCES)
 			kv_is_dir_exit(shell);
 		else

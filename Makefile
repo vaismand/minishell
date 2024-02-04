@@ -9,6 +9,7 @@ SRCS = src/minishell.c \
 		src/pipex_utils.c \
 		src/free_exit.c \
 		src/parser.c \
+		src/parser_utils.c \
 		src/execute.c \
 		src/file_opening.c \
 		src/ft_split_quotes.c \

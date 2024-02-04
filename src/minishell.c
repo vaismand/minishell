@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/04 11:22:29 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/04 22:22:04 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ static void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
 
 	i = -1;
 	argv = kv_split_ignore_quotes(cmd, '|');
-	if (!argv || !argv[0])
-		perror("malloc error");
 	while (argv[++i])
 	{
 		tmp2 = kv_split_ignore_quotes(argv[i], ' ');

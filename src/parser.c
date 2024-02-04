@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/04 11:21:16 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/04 23:13:06 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,37 +19,24 @@
 char	*kv_path_creator(char **cmd)
 {
 	char	**paths;
-	char	*path_env;
 	char	*path;
-	char	*tmp;
+	char	*path_env;
 	int		i;
 
 	path_env = getenv("PATH");
 	if (access(cmd[0], F_OK) == 0)
-	{
-		path = ft_strdup(cmd[0]);
-		return (path);
-	}
+		return (ft_strdup(cmd[0]));
 	if (!path_env)
 		return (fprintf(stderr, "PATH not found\n"), NULL);
 	paths = ft_split(path_env, ':');
 	if (!paths)
 		return (NULL);
-	i = -1;
 	path = NULL;
-	while (paths[++i])
+	i = 0;
+	while (paths[i] && !path)
 	{
-		tmp = ft_strjoin(paths[i], "/");
-		if (!tmp)
-			return (kv_free_paths(paths), NULL);
-		path = ft_strjoin(tmp, cmd[0]);
-		free(tmp);
-		if (!path)
-			break ;
-		if (access(path, F_OK) == 0)
-			return (kv_free_paths(paths), path);
-		free(path);
-		path = NULL;
+		path = build_and_check_path(paths[i], cmd[0]);
+		i++;
 	}
 	return (kv_free_paths(paths), path);
 }
@@ -99,12 +86,12 @@ static int	kv_get_env_var_value(char *new_cmd, char *cmd, \
 	return (k);
 }
 
-static int	kv_init_local_vars(int *i, int *k, bool *quote, bool *dquote)
+static int	kv_init_local_vars(int *i, int *k, t_shell *shell)
 {
 	*i = -1;
 	*k = 0;
-	*quote = false;
-	*dquote = false;
+	shell->quote = false;
+	shell->dquote = false;
 	return (0);
 }
 
@@ -112,25 +99,23 @@ char	*kv_cmd_parser(char *cmd, t_shell *shell)
 {
 	int		i;
 	int		k;
-	bool	quote;
-	bool	dquote;
 	char	*new_cmd;
 
 	new_cmd = malloc(sizeof(char) * (ft_strlen(cmd) * 100));
 	if (!new_cmd)
 		perror("malloc error");
-	kv_init_local_vars(&i, &k, &quote, &dquote);
+	kv_init_local_vars(&i, &k, shell);
 	while (cmd[++i])
 	{
-		if (cmd[i] == '\'' && !dquote)
-			quote = !quote;
-		if (cmd[i] == '\"' && !quote)
-			dquote = !dquote;
-		if (cmd[i] && cmd[i] == '$' && cmd[i + 1] == '?' && !quote)
+		if (cmd[i] == '\'' && !shell->dquote)
+			shell->quote = !shell->quote;
+		if (cmd[i] == '\"' && !shell->quote)
+			shell->dquote = !shell->dquote;
+		if (cmd[i] && cmd[i] == '$' && cmd[i + 1] == '?' && !shell->quote)
 			k += kv_get_exit_status(&new_cmd[k], &i, shell);
-		else if (cmd[i] && cmd[i] == '$' && !quote && ft_isalpha(cmd[i + 1]))
+		else if (cmd[i] && cmd[i] == '$' && !shell->quote && ft_isalpha(cmd[i + 1]))
 			k += kv_get_env_var_value(&new_cmd[k], cmd, &i, shell);
-		else if ((cmd[i] == '<' || cmd[i] == '>') && !dquote && !quote
+		else if ((cmd[i] == '<' || cmd[i] == '>') && !shell->dquote && !shell->quote
 			&& cmd[i + 1] != ' ')
 		{
 			new_cmd[k++] = cmd[i];

@@ -6,105 +6,53 @@
 /*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/04 11:18:02 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/04 22:40:29 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	kv_exit_command(t_shell *shell)
+static int	process_env_var(char *env_var)
 {
-	char	**cmd;
-	int		exit_status;
+	char	*name;
+	char	*value;
+	char	*equal_sign;
 
-	cmd = shell->cmd_list->cmd;
-	if (kv_arr_len(cmd) > 2)
+	equal_sign = ft_strchr(env_var, '=');
+	if (equal_sign)
 	{
-		fprintf(stderr, "minishell: exit: too many arguments\n");
-		exit(1);
-	}
-	if (!cmd[1])
-		exit_status = shell->exit_status;
-	else
-	{
-		exit_status = ft_atoi(cmd[1]);
-		if (ft_isalpha(cmd[1][0]))
-		{
-			fprintf(stderr, "minishell: exit: numeric argument required\n");
-			exit_status = 2;
-		}
-		else if (exit_status < 0 || exit_status > 255)
-			exit_status = exit_status % 256;
-	}
-	shell->exit_status = exit_status;
-	return (exit(shell->exit_status), 0);
-}
-
-//cd command execution
-int	kv_cd_command(t_shell *shell)
-{
-	char	**cmd;
-	char	*path;
-
-	cmd = shell->cmd_list->cmd;
-	if (kv_arr_len(cmd) > 2)
-		return (fprintf(stderr, "minishell: cd: too many arguments\n"), 1);
-	if (!cmd[1])
-	{
-		path = getenv("HOME");
-		if (!path)
-			return (fprintf(stderr, "minishell: cd: HOME not set\n"), 1);
+		name = ft_substr(env_var, 0, equal_sign - env_var);
+		value = ft_substr(equal_sign + 1, 0, ft_strlen(equal_sign + 1));
 	}
 	else
-		path = cmd[1];
-	if (chdir(path) < 0)
-		return (perror("minishell: cd"), 1);
-	return (0);
-}
-
-static int	kv_pwd_command(void)
-{
-	char	*path;
-
-	path = getcwd(NULL, 0);
-	if (!path)
-		return (perror("minishell: pwd"), 1);
-	printf("%s\n", path);
-	free(path);
+	{
+		name = ft_strdup(env_var);
+		value = NULL;
+	}
+	if (!name || (equal_sign && !value))
+		return (kv_free_perror(name, value, 0), 1);
+	if (!kv_is_valid_env_name(name))
+		return (kv_free_perror(name, value, 1), 1);
+	if (value && setenv(name, value, 1) < 0)
+		return (kv_free_perror(name, value, 0), 1);
+	free(name);
+	free(value);
 	return (0);
 }
 
 static int	kv_export_command(t_shell *shell)
 {
 	char	**cmd;
-	char	*name;
-	char	*value;
-	char	*equal_sign;
 	int		i;
+	int		status;
 
-	cmd = shell->cmd_list->cmd;
 	i = 1;
+	cmd = shell->cmd_list->cmd;
 	while (cmd[i])
 	{
-		equal_sign = ft_strchr(cmd[i], '=');
-		if (equal_sign)
-		{
-			name = ft_substr(cmd[i], 0, equal_sign - cmd[i]);
-			value = ft_substr(equal_sign + 1, 0, ft_strlen(equal_sign + 1));
-		}
-		else
-		{
-			name = ft_strdup(cmd[i]);
-			value = NULL;
-		}
-		if (!name || (equal_sign && !value))
-			return (kv_free_perror(name, value, 0), 1);
-		if (!kv_is_valid_env_name(name))
-			return (kv_free_perror(name, value, 1), 1);
-		if (value && setenv(name, value, 1) < 0)
-			return (kv_free_perror(name, value, 0), 1);
-		free(name);
-		free(value);
+		status = process_env_var(cmd[i]);
+		if (status != 0)
+			return (status);
 		i++;
 	}
 	return (0);
