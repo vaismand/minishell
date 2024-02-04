@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/30 15:46:38 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/04 10:46:48 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int		kv_print_env(t_shell *shell);
 int		kv_execute_builtin(t_shell *shell);
 int		kv_is_valid_env_name(const char *name);
 int		kv_exit_command(t_shell *shell);
+int		kv_cd_command(t_shell *shell);
 bool	kv_valid_cmd(char *cmd);
 char	*kv_strip_cmd(char *cmd);
 char	*kv_path_creator(char **cmd);

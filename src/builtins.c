@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/30 19:40:33 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/04 09:32:16 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	kv_exit_command(t_shell *shell)
 }
 
 //cd command execution
-static int	kv_cd_command(t_shell *shell)
+int	kv_cd_command(t_shell *shell)
 {
 	char	**cmd;
 	char	*path;
@@ -134,7 +134,7 @@ static int	kv_unset_command(t_shell *shell)
 	return (error_flag);
 }
 
-int	kv_echo_command(t_shell *shell)
+static int	kv_echo_command(t_shell *shell)
 {
 	char	**cmd;
 	int		i;

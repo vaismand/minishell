@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/30 19:40:34 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/04 10:45:27 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,34 @@ void	kv_execute_child(t_shell *shell)
 		exit(builtin_status);
 	if (execve(shell->cmd_list->path, shell->cmd_list->cmd, shell->envp) == -1)
 	{
-		fprintf(stderr, "minishell: %s: command not found\n", shell->cmd_list->cmd[0]);
-        exit(127);
+	
+		if (errno == ENOENT || errno == 14 || errno == 8)
+		{
+			fprintf(stderr, "minishell: %s: command not found\n", shell->cmd_list->cmd[0]);
+			exit(127);
+		}
+		else if (errno == EACCES)
+		{
+			if (shell->cmd_list->cmd[0][0] == '/' || shell->cmd_list->cmd[0][0] == '.')
+			{
+				if (access(shell->cmd_list->cmd[0], F_OK) == 0 && access(shell->cmd_list->cmd[0], X_OK) < 0)
+					fprintf(stderr, "minishell: %s: is a directory\n", shell->cmd_list->cmd[0]);
+				else if (access(shell->cmd_list->cmd[0], F_OK) == 0 && access(shell->cmd_list->cmd[0], X_OK) == 0)
+					fprintf(stderr, "minishell: %s: permission denied\n", shell->cmd_list->cmd[0]);
+				else if (access(shell->cmd_list->path, F_OK) == 0 && access(shell->cmd_list->path, X_OK) < 0)
+					fprintf(stderr, "minishell: %s: is a directory\n", shell->cmd_list->cmd[0]);
+				else if (access(shell->cmd_list->path, F_OK) == 0 && access(shell->cmd_list->path, X_OK) == 0)
+					fprintf(stderr, "minishell: %s: permission denied\n", shell->cmd_list->cmd[0]);
+				else
+					fprintf(stderr, "minishell: %s: No such file or directory\n", shell->cmd_list->cmd[0]);
+				exit(126);
+			}
+			else
+				fprintf(stderr, "minishell: %s: command not found\n", shell->cmd_list->cmd[0]);
+			exit(127);
+		}
+		else
+			perror("minishell: execve error");
 	}
 	else
 		perror("minishell: execve error");
@@ -61,7 +87,11 @@ void	kv_execute_child(t_shell *shell)
 int	kv_execute_command(t_shell *shell)
 {
 	pid_t	pid;
+	char	**cmd;
 
+	cmd = shell->cmd_list->cmd;
+	if (ft_strncmp(cmd[0], "cd", 3) == 0)
+		return (kv_cd_command(shell));
 	if (shell->cmd_list->next)
 	{
 		if (pipe(shell->cmd_list->pd) < 0)
