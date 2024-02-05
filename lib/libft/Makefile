@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+         #
+#    By: dkohn <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/11 17:29:31 by dkohn             #+#    #+#              #
-#    Updated: 2024/02/04 11:05:44 by dvaisman         ###   ########.fr        #
+#    Updated: 2024/02/05 20:22:29 by dkohn            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -72,7 +72,7 @@ SOURCES = srcs/ft_atoi.c \
 			srcs/get_next_line.c \
 
 # Generate object file names in the "obj" directory from source files
-OBJECTS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SOURCES))
+OBJECTS	= $(SOURCES:.c=.o)
 
 # Phony targets
 .PHONY: all clean fclean re
@@ -95,11 +95,12 @@ $(NAME): $(OBJECTS)
 
 # Clean target to remove object files
 clean:
-	rm -rf $(OBJDIR)
+	rm -rf $(OBJDIR) $(OBJECTS)
 
 # Full clean target to remove object files and the library
 fclean: clean
 	rm -f $(NAME)
+
 
 # Rebuild the library
 re: fclean all

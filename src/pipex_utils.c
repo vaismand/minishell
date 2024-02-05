@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:42:20 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/04 11:15:52 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/05 20:13:58 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,14 @@
 static t_list	*kv_set_tmp_to_zero(t_list *tmp, int i)
 {
 	tmp->cmd[i] = NULL;
-	tmp->path = kv_path_creator(tmp->cmd);
 	tmp->next = NULL;
 	tmp->out = 0;
 	tmp->in = 0;
+	tmp->file_error = 0;
 	tmp->prev = NULL;
 	tmp->pd[0] = 0;
 	tmp->pd[1] = 0;
+	tmp->path = kv_path_creator(tmp->cmd);
 	return (tmp);
 }
 

@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:10:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/30 19:40:38 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/05 19:56:33 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	kv_free_paths(char **paths)
 	int	i;
 
 	i = 0;
+	if (!paths)
+		return ;
 	while (paths[i])
 		free(paths[i++]);
 	free(paths);
@@ -37,12 +39,7 @@ void	kv_freepipex(t_list *pipex)
 		if (pipex->pd[1])
 			close(pipex->pd[1]);
 		if (pipex->cmd)
-		{
-			pipex->index = 0;
-			while (pipex->cmd[pipex->index])
-				free(pipex->cmd[pipex->index++]);
-			free(pipex->cmd);
-		}
+			kv_free_paths(pipex->cmd);
 		if (pipex->path)
 			free(pipex->path);
 		tmp = pipex;
@@ -54,6 +51,9 @@ void	kv_freepipex(t_list *pipex)
 //free and exit
 void	kv_free_exit(t_shell *shell, int exit_code)
 {
+	t_list *tmp;
+
+	rl_clear_history();
 	if (shell->env_var)
 	{
 		if (shell->env_var->v_name)
@@ -62,7 +62,12 @@ void	kv_free_exit(t_shell *shell, int exit_code)
 			free(shell->env_var->v_value);
 		free(shell->env_var);
 	}
-	if (shell->cmd_list)
-		kv_freepipex(shell->cmd_list);
+	while (shell->cmd_list)
+	{
+		tmp = shell->cmd_list;
+		shell->cmd_list = shell->cmd_list->next;
+		kv_freepipex(tmp);
+	}
+	free(shell);
 	exit(exit_code);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/04 22:22:04 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/05 19:51:20 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,15 @@ static void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
 		if (args > 2)
 			kv_redir_open(tmp2, tmp);
 		ft_lstadd_back(cmd_list, tmp);
+		kv_free_paths(tmp2);
 	}
+	kv_free_paths(argv);
 }
 
 static void	kv_run_shell_loop(t_shell *shell)
 {
 	char	*cmd;
+	t_list	*tmp;
 
 	while (1)
 	{
@@ -80,12 +83,14 @@ static void	kv_run_shell_loop(t_shell *shell)
 		add_history(cmd);
 		cmd = kv_cmd_parser(cmd, shell);
 		kv_cmd_list_init(&shell->cmd_list, shell->envp, cmd);
+		tmp = shell->cmd_list;
 		while (shell->cmd_list)
 		{
 			shell->exit_status = kv_execute_command(shell);
 			shell->cmd_list = shell->cmd_list->next;
 		}
-		kv_freepipex(shell->cmd_list);
+		kv_freepipex(tmp);
+		free(cmd);
 	}
 }
 

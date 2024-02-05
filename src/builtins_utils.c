@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:29:54 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/04 22:33:13 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/05 15:45:17 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int	kv_exit_command(t_shell *shell)
 			exit_status = exit_status % 256;
 	}
 	shell->exit_status = exit_status;
-	return (exit(shell->exit_status), 0);
+	return (kv_free_exit(shell, exit_status), 0);
 }
 
 int	kv_pwd_command(void)

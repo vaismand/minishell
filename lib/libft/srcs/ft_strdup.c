@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 18:25:12 by dkohn             #+#    #+#             */
-/*   Updated: 2023/09/13 00:40:50 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/05 18:50:15 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,3 @@ char	*ft_strdup(const char *src)
 	return (target);
 }
 
-/* int main(void)
-{
-	char *src = " ";
-	char *target = ft_strdup(src);
-	printf("%s", target);
-} */
