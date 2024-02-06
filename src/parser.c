@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/05 16:41:13 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/06 14:44:02 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ char	*kv_path_creator(char **cmd)
 		path = build_and_check_path(paths[i], cmd[0]);
 		i++;
 	}
-	return (kv_free_paths(paths), path);
+	kv_free_paths(paths);
+	return (path);
 }
 
 static int	kv_get_exit_status(char *new_cmd, int *i, t_shell *shell)

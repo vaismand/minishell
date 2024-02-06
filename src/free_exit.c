@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:10:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/05 19:56:33 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/06 15:11:49 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,11 @@ void	kv_free_paths(char **paths)
 	i = 0;
 	if (!paths)
 		return ;
-	while (paths[i])
-		free(paths[i++]);
+	while (paths[i] != NULL)
+	{
+		free(paths[i]);
+		paths[i++] = NULL;
+	}
 	free(paths);
 }
 

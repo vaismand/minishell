@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:30:38 by dkohn             #+#    #+#             */
-/*   Updated: 2024/02/05 19:56:10 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/06 15:09:19 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,9 +77,16 @@ int	kv_count_cmds(char **cmd)
 	int	i;
 
 	i = 0;
-	while (cmd[i] != NULL && ft_strncmp(cmd[i], ">", 1) != 0 \
-		&& ft_strncmp(cmd[i], "<", 1) != 0)
-		i++;
+	while (*cmd != NULL)
+	{
+		if (ft_strncmp(*cmd, ">", 1) == 0 || ft_strncmp(*cmd, "<", 1) == 0)
+		{
+			cmd++;
+		}
+		else
+			i++;
+		cmd++;
+	}
 	return (i);
 }
 

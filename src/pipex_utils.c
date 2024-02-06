@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:42:20 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/05 20:13:58 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/06 14:39:03 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,10 @@ t_list	*kv_new_lst(char **argv, char **envp)
 		return (NULL);
 	i = -1;
 	j = -1;
-	tmp = malloc(sizeof(t_list));
-	if (!tmp)
-		perror("malloc error");
+	tmp = (t_list *)malloc(sizeof(t_list));
 	tmp->cmd = (char **)malloc(sizeof(char *) * (kv_count_cmds(argv) + 1));
+	if (!tmp->cmd || !tmp)
+		perror("malloc error");
 	while (argv[++i])
 	{
 		if (strncmp(argv[i], ">>", 2) == 0 || strncmp(argv[i], "<<", 2) == 0

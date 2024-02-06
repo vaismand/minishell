@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   file_opening.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 15:05:03 by dkohn             #+#    #+#             */
-/*   Updated: 2024/02/05 11:43:46 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/06 14:57:36 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static void	handle_redirection(char *redir_type, char *filename, \
 	}
 	if (fd < 0 && cmd_list->file_error == 0)
 		cmd_list->file_error = fd;
+	free(filename);
 }
 
 void	kv_redir_open(char **argv, t_list *cmd_list)
