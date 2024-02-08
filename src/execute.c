@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/08 19:15:42 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/08 19:37:52 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,21 +42,21 @@ static void	kv_is_dir_exit(t_shell *shell)
 	{
 		printf("cmd[0] %c", cmd[0]);
 		if (access(cmd, F_OK) == 0 && access(cmd, X_OK) < 0)
-			fprintf(stderr, "minishell: %s: Permission denied\n", cmd);
+			perror("minishell: Is a directory");
 		else if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
-			fprintf(stderr, "minishell: %s: Is a directory\n", cmd);
+			perror("minishell: Permission denied");
 		else if (access(shell->cmd_list->path, F_OK) == 0 \
 			&& access(shell->cmd_list->path, X_OK) < 0)
-			fprintf(stderr, "minishell: %s: Is a directory\n", cmd);
+			perror("minishell: Is a directory");
 		else if (access(shell->cmd_list->path, F_OK) == 0 \
 			&& access(shell->cmd_list->path, X_OK) == 0)
-			fprintf(stderr, "minishell: %s: Permission denied\n", cmd);
+			perror("minishell: Permission denied");
 		else
-			fprintf(stderr, "minishell: %s: No such file or directory\n", cmd);
+			perror("minishell: No such file or directory");
 		exit(126);
 	}
 	else
-		fprintf(stderr, "minishell: %s: command not found\n", cmd);
+		perror("minishell: Permission denied");
 	exit(127);
 }
 
@@ -65,11 +65,9 @@ static void	kv_command_not_found(t_shell *shell)
 	{
 		if (shell->cmd_list->cmd[0][0] == '/' \
 			|| shell->cmd_list->cmd[0][0] == '.')
-			fprintf(stderr, "minishell: %s: No such file or directory\n", \
-			shell->cmd_list->cmd[0]);
+			perror("minishell: No such file or directory");
 		else
-			fprintf(stderr, "minishell: %s: command not found\n", \
-			shell->cmd_list->cmd[0]);
+			perror("minishell: command not found");
 		exit(127);
 	}
 }
@@ -81,8 +79,7 @@ static void	kv_execute_child(t_shell *shell)
 	signal(SIGINT, kv_child_handler);
 	if (shell->cmd_list->file_error < 0)
 	{
-		fprintf(stderr, "minishell: %s: %s\n", \
-			shell->cmd_list->cmd[0], strerror(errno));
+		perror("minishell: file error");
 		exit(1);
 	}
 	kv_redirecting(shell->cmd_list);

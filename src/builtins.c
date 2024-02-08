@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/08 19:15:55 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/08 19:36:28 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,8 +160,7 @@ static int	kv_unset_command(t_shell *shell)
 	{
 		if (!kv_is_valid_env_name(cmd[i]))
 		{
-			fprintf(stderr, "minishell: unset: `%s': \
-				not a valid identifier\n", cmd[i]);
+			perror("minishell: unset: not a valid identifier");
 			error_flag = 1;
 		}
 		else
