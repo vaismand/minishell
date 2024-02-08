@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/06 14:14:46 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/08 19:15:42 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,10 @@ int	kv_execute_command(t_shell *shell)
 		return (kv_cd_command(shell));
 	if (ft_strncmp(cmd[0], "exit", 5) == 0)
 		return (kv_exit_command(shell));
+	if (ft_strncmp(cmd[0], "export", 7) == 0)
+		return (kv_export_command(shell));
+	if (ft_strncmp(cmd[0], "echo", 5) == 0)
+		return (kv_echo_command(shell));
 	if (shell->cmd_list->next)
 	{
 		if (pipe(shell->cmd_list->pd) < 0)

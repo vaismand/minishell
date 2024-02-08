@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/05 11:09:03 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/08 19:16:09 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ int		kv_is_valid_env_name(const char *name);
 int		kv_exit_command(t_shell *shell);
 int		kv_cd_command(t_shell *shell);
 int		kv_pwd_command(void);
+int		kv_export_command(t_shell *shell);
+int		kv_echo_command(t_shell *shell);
 int		process_char_sequence(char *new_cmd, char *cmd, int *i, int *k, \
     t_shell *shell);
 bool	kv_valid_cmd(char *cmd);
