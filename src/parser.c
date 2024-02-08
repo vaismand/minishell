@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/06 14:44:02 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/08 18:16:05 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*kv_path_creator(char **cmd)
 	if (access(cmd[0], F_OK) == 0)
 		return (ft_strdup(cmd[0]));
 	if (!path_env)
-		return (fprintf(stderr, "PATH not found\n"), NULL);
+		return (perror("PATH not found"), NULL);
 	paths = ft_split(path_env, ':');
 	if (!paths)
 		return (NULL);

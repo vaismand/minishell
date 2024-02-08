@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/04 22:40:29 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/08 18:14:46 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,7 @@ static int	kv_unset_command(t_shell *shell)
 	{
 		if (!kv_is_valid_env_name(cmd[i]))
 		{
-			fprintf(stderr, "minishell: unset: `%s': \
-				not a valid identifier\n", cmd[i]);
+			perror("minishell: unset: not a valid identifier");
 			error_flag = 1;
 		}
 		else

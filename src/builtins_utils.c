@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:29:54 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/05 15:45:17 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/08 18:14:30 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	kv_free_perror(char *name, char *value, int error_msg)
 	if (error_msg == 0)
 		perror("minishell: export");
 	else
-		fprintf(stderr, " not a valid identifier\n");
+		perror("minishell: export: not a valid identifier");
 	free(name);
 	free(value);
 }
@@ -44,12 +44,18 @@ int	kv_cd_command(t_shell *shell)
 
 	cmd = shell->cmd_list->cmd;
 	if (kv_arr_len(cmd) > 2)
-		return (fprintf(stderr, "minishell: cd: too many arguments\n"), 1);
+		return (perror("minishell: cd"), 1);
 	if (!cmd[1])
 	{
 		path = getenv("HOME");
 		if (!path)
-			return (fprintf(stderr, "minishell: cd: HOME not set\n"), 1);
+			return (perror("minishell: cd"), 1);
+	}
+	else if (ft_strcmp(cmd[1], "-") == 0)
+	{
+		path = getenv("OLDPWD");
+		if (!path)
+			return (perror("minishell: cd"), 1);
 	}
 	else
 		path = cmd[1];
@@ -66,7 +72,7 @@ int	kv_exit_command(t_shell *shell)
 	cmd = shell->cmd_list->cmd;
 	if (kv_arr_len(cmd) > 2)
 	{
-		fprintf(stderr, "minishell: exit: too many arguments\n");
+		perror("minishell: exit");
 		exit(1);
 	}
 	if (!cmd[1])
@@ -76,7 +82,7 @@ int	kv_exit_command(t_shell *shell)
 		exit_status = ft_atoi(cmd[1]);
 		if (ft_isalpha(cmd[1][0]))
 		{
-			fprintf(stderr, "minishell: exit: numeric argument required\n");
+			perror("minishell: exit");
 			exit_status = 2;
 		}
 		else if (exit_status < 0 || exit_status > 255)
