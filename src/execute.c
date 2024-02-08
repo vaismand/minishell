@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/08 19:37:52 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/08 19:49:02 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,8 @@ int	kv_execute_command(t_shell *shell)
 		return (kv_export_command(shell));
 	if (ft_strncmp(cmd[0], "echo", 5) == 0)
 		return (kv_echo_command(shell));
+	if (ft_strncmp(cmd[0], "unset", 6) == 0)
+		return (kv_unset_command(shell));
 	if (shell->cmd_list->next)
 	{
 		if (pipe(shell->cmd_list->pd) < 0)

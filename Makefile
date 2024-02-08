@@ -15,6 +15,7 @@ SRCS = src/minishell.c \
 		src/ft_split_quotes.c \
 		src/builtins.c \
 		src/builtins_utils.c \
+		src/envp_actions.c \
 
 
 OBJS := $(SRCS:.c=.o)

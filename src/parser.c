@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/08 18:16:05 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/08 19:41:51 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int	kv_get_env_var_value(char *new_cmd, char *cmd, \
 		&& cmd[j] != '\'' && cmd[j] != '\"')
 		shell->env_var->v_name[k++] = cmd[j];
 	shell->env_var->v_name[k] = '\0';
-	shell->env_var->v_value = getenv(shell->env_var->v_name);
+	shell->env_var->v_value = kv_getenv(shell, shell->env_var->v_name);
 	if (!shell->env_var->v_value)
 		shell->env_var->v_value = "";
 	k = 0;

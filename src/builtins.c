@@ -6,128 +6,11 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/08 19:36:28 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/08 19:52:32 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-static int kv_setenv(t_shell *shell, const char *name, const char *value) 
-{
-	char	*env_var;
-	char	**new_envp;
-	int		i;
-	int		len;
-
-	while (shell->envp && shell->envp[len])
-		len++;
-	new_envp = malloc(sizeof(char *) * (len + 2));
-	if (!new_envp)
-		return (-1);
-	i = 0;
-	while(shell->envp[i])
-	{
-		new_envp[i] = ft_strdup(shell->envp[i]);
-		if (!new_envp[i])
-		{
-			while (i > 0)
-				free(new_envp[i--]);
-			free(new_envp);
-			return (-1);
-		}
-		i++;
-	}
-	printf("test\n");
-	env_var = ft_strjoin(name, "=");
-	if (!env_var)
-	{
-		while (i > 0)
-			free(new_envp[i--]);
-		free(new_envp);
-		return (-1);
-	}
-	new_envp[i] = ft_strjoin(env_var, value);
-	if (!new_envp[i])
-	{
-		free(env_var);
-		while (i > 0)
-			free(new_envp[i--]);
-		free(new_envp);
-		return (-1);
-	}
-	new_envp[i + 1] = NULL;
-	shell->envp = new_envp;
-	return (0);
-}
-
-static int	kv_unsetenv(t_shell *shell, const char *name)
-{
-	int		i;
-	int		j;
-	int		len;
-	char	**new_envp;
-
-	len = 0;
-	while (shell->envp[len])
-		len++;
-	new_envp = malloc(sizeof(char *) * len);
-	if (!new_envp)
-		return (-1);
-	i = 0;
-	j = 0;
-	while (shell->envp[i])
-	{
-		if (ft_strncmp(shell->envp[i], name, ft_strlen(name)) != 0)
-		{
-			new_envp[j] = ft_strdup(shell->envp[i]);
-			if (!new_envp[j])
-			{
-				while (j > 0)
-					free(new_envp[j--]);
-				free(new_envp);
-				return (-1);
-			}
-			j++;
-		}
-		i++;
-	}
-	new_envp[j] = NULL;
-	free(shell->envp);
-	shell->envp = new_envp;
-	return (0);
-
-	
-}
-
-static int	kv_process_env_var(t_shell *shell, char *env_var)
-{
-	int		result;
-	char	*name;
-	char	*value;
-	char	*equal_sign;
-
-	equal_sign = ft_strchr(env_var, '=');
-	if (equal_sign)
-	{
-		name = ft_substr(env_var, 0, equal_sign - env_var);
-		value = ft_substr(equal_sign + 1, 0, ft_strlen(equal_sign + 1));
-		if (!name || !value) 
-		{
-			free(name); // Ensure to free any allocated memory on error
-			free(value);
-			return (-1);
-		}
-		printf("name: %s\n", name);
-		printf("value: %s\n", value);
-		result = kv_setenv(shell, name, value);
-		free(name);
-		free(value);
-		printf("test\n");
-		return (result);
-	}
-	else
-        return (kv_unsetenv(shell, env_var));
-}
 
 int	kv_export_command(t_shell *shell)
 {
@@ -147,7 +30,7 @@ int	kv_export_command(t_shell *shell)
 	return (0);
 }
 
-static int	kv_unset_command(t_shell *shell)
+int	kv_unset_command(t_shell *shell)
 {
 	char	**cmd;
 	int		i;
@@ -164,7 +47,7 @@ static int	kv_unset_command(t_shell *shell)
 			error_flag = 1;
 		}
 		else
-			unsetenv(cmd[i]);
+			kv_unsetenv(shell, cmd[i]);
 		i++;
 	}
 	return (error_flag);

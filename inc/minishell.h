@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/08 19:16:09 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/08 20:15:09 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,14 @@ int		kv_cd_command(t_shell *shell);
 int		kv_pwd_command(void);
 int		kv_export_command(t_shell *shell);
 int		kv_echo_command(t_shell *shell);
+int		kv_setenv(t_shell *shell, const char *name, const char *value);
+int		kv_unsetenv(t_shell *shell, const char *name);
+int		kv_unset_command(t_shell *shell);
+int		kv_process_env_var(t_shell *shell, char *env_var);
 int		process_char_sequence(char *new_cmd, char *cmd, int *i, int *k, \
     t_shell *shell);
 bool	kv_valid_cmd(char *cmd);
+char    *kv_getenv(t_shell *shell, const char *name);
 char	*kv_strip_cmd(char *cmd);
 char	*kv_path_creator(char **cmd);
 char	*kv_strip_cmd(char *cmd);
