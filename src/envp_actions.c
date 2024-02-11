@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 19:38:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/08 20:51:31 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/11 12:35:41 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	kv_is_valid_env_name(const char *name)
 	if (!name || !*name || (!ft_isalpha(*name) && *name != '_'))
 		return (0);
 	name++;
-	while (*name)
+	while (*name && *name != '=')
 	{
 		if (!ft_isalnum(*name) && *name != '_')
 			return (0);

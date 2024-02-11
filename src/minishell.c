@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/09 21:56:07 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/11 13:04:23 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void	kv_init_shell(t_shell *shell, char **envp)
 }
 
 //initializes the struct
-static void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
+static void	kv_cmd_list_init(t_shell *shell, t_list **cmd_list, char *cmd)
 {
 	t_list	*tmp;
 	char	**argv;
@@ -59,7 +59,7 @@ static void	kv_cmd_list_init(t_list **cmd_list, char **envp, char *cmd)
 			perror("malloc error");
 		if (!tmp2[0])
 			return ;
-		tmp = kv_new_lst(tmp2, envp);
+		tmp = kv_new_lst(shell, tmp2);
 		args = kv_arr_len(tmp2);
 		if (!tmp || !tmp2)
 			perror("malloc error");
@@ -88,7 +88,8 @@ static void	kv_run_shell_loop(t_shell *shell)
 			continue ;
 		add_history(cmd);
 		cmd = kv_cmd_parser(cmd, shell);
-		kv_cmd_list_init(&shell->cmd_list, shell->envp, cmd);
+		kv_cmd_list_init(shell, &shell->cmd_list, cmd);
+		free(cmd);
 		tmp = shell->cmd_list;
 		while (shell->cmd_list)
 		{
@@ -96,7 +97,6 @@ static void	kv_run_shell_loop(t_shell *shell)
 			shell->cmd_list = shell->cmd_list->next;
 		}
 		kv_freepipex(tmp);
-		free(cmd);
 	}
 }
 

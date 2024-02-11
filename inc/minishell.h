@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/08 20:15:09 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/11 12:30:42 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <unistd.h>
+# include <sys/stat.h>
 # include <sys/wait.h>
 # include <setjmp.h>
 # include "../lib/libft/srcs/libft.h"
@@ -43,6 +44,7 @@ typedef struct s_shell
 	int			i;
 	bool		quote;
 	bool		dquote;
+	char		*error_msg;
 	char		**envp;
 	t_list		*cmd_list;
 	t_env_var	*env_var;
@@ -71,7 +73,7 @@ int		process_char_sequence(char *new_cmd, char *cmd, int *i, int *k, \
 bool	kv_valid_cmd(char *cmd);
 char    *kv_getenv(t_shell *shell, const char *name);
 char	*kv_strip_cmd(char *cmd);
-char	*kv_path_creator(char **cmd);
+char	*kv_path_creator(t_shell *shell, char **cmd);
 char	*kv_strip_cmd(char *cmd);
 char	*kv_cmd_parser(char *cmd, t_shell *shell);
 char	kv_new_cmd_parser(char *new_cmd, char *cmd, int *k, t_shell *shell);
@@ -88,6 +90,6 @@ void	kv_freepipex(t_list *pipex);
 void	kv_free_paths(char **paths);
 void	kv_free_perror(char *name, char *value, int error_msg);
 void	kv_redir_open(char **argv, t_list *cmd_list);
-t_list	*kv_new_lst(char **argv, char **envp);
+t_list	*kv_new_lst(t_shell *shell, char **argv);
 
 #endif

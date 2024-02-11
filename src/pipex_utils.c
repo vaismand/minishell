@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:42:20 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/06 14:39:03 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/10 21:31:44 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static t_list	*kv_set_tmp_to_zero(t_list *tmp, int i)
+static t_list	*kv_set_tmp_to_zero(t_shell *shell, t_list *tmp, int i)
 {
 	tmp->cmd[i] = NULL;
 	tmp->next = NULL;
@@ -22,18 +22,18 @@ static t_list	*kv_set_tmp_to_zero(t_list *tmp, int i)
 	tmp->prev = NULL;
 	tmp->pd[0] = 0;
 	tmp->pd[1] = 0;
-	tmp->path = kv_path_creator(tmp->cmd);
+	tmp->path = kv_path_creator(shell, tmp->cmd);
 	return (tmp);
 }
 
 //creating a new list for every command
-t_list	*kv_new_lst(char **argv, char **envp)
+t_list	*kv_new_lst(t_shell *shell, char **argv)
 {
 	int		i;
 	int		j;
 	t_list	*tmp;
 
-	if (!argv || !envp)
+	if (!argv || !shell->envp)
 		return (NULL);
 	i = -1;
 	j = -1;
@@ -52,6 +52,6 @@ t_list	*kv_new_lst(char **argv, char **envp)
 		tmp->cmd[++j] = ft_strdup(argv[i]);
 		tmp->cmd[j] = kv_strip_cmd(tmp->cmd[j]);
 	}
-	tmp = kv_set_tmp_to_zero(tmp, j + 1);
+	tmp = kv_set_tmp_to_zero(shell, tmp, j + 1);
 	return (tmp);
 }

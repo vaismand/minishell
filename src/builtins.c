@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/08 19:52:32 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/11 12:32:58 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,14 @@ int	kv_export_command(t_shell *shell)
 
 	i = 1;
 	cmd = shell->cmd_list->cmd;
+	shell->error_msg = "minishell: export: not a valid identifier\n";
 	while (cmd[i])
 	{
+		if (!kv_is_valid_env_name(cmd[i]))
+		{
+			write(2, shell->error_msg, ft_strlen(shell->error_msg));
+			return (1);
+		}
 		status = kv_process_env_var(shell, cmd[i]);
 		if (status != 0)
 			return (status);

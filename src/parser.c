@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/08 19:41:51 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/11 13:07:01 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,21 @@
 // first we should check for special characters like |, <, >, >>, <<, ;
 
 //creates the path for the command
-char	*kv_path_creator(char **cmd)
+char	*kv_path_creator(t_shell *shell, char **cmd)
 {
 	char	**paths;
 	char	*path;
 	char	*path_env;
 	int		i;
 
-	path_env = getenv("PATH");
+	path_env = kv_getenv(shell, "PATH");
+	if (!path_env)
+		return (NULL);
 	if (access(cmd[0], F_OK) == 0)
 		return (ft_strdup(cmd[0]));
-	if (!path_env)
-		return (perror("PATH not found"), NULL);
 	paths = ft_split(path_env, ':');
 	if (!paths)
-		return (NULL);
+		return (free(path_env), NULL);
 	path = NULL;
 	i = 0;
 	while (paths[i] && !path)
@@ -39,7 +39,7 @@ char	*kv_path_creator(char **cmd)
 		i++;
 	}
 	kv_free_paths(paths);
-	return (path);
+	return (free(path_env), path);
 }
 
 static int	kv_get_exit_status(char *new_cmd, int *i, t_shell *shell)
