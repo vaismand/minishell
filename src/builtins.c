@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/12 18:12:34 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/12 18:40:30 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,15 @@ int	kv_export_command(t_shell *shell)
 		if (!kv_is_valid_env_name(cmd[i]))
 		{
 			write(2, shell->error_msg, ft_strlen(shell->error_msg));
-			return (1);
+			status = 1;
 		}
-		status = kv_process_env_var(shell, cmd[i]);
+		else
+			status = kv_process_env_var(shell, cmd[i]);
 		if (status != 0)
-			return (status);
+			break ;
 		i++;
 	}
-	return (0);
+	return (status);
 }
 
 int	kv_unset_command(t_shell *shell)

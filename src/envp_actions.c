@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp_actions.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 19:38:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/12 18:20:52 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/12 18:36:51 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,19 @@
 
 int	kv_is_valid_env_name(const char *name)
 {
-	if (!name || !*name || (!ft_isalpha(*name) && *name != '_'))
-		return (0);
-	name++;
-	while (*name && *name != '=')
-	{
-		if (!ft_isalnum(*name) && *name != '_')
-			return (0);
-		name++;
-	}
-	return (1);
+    if (!name || !*name || (!ft_isalpha(*name) && *name != '_'))
+        return (0);
+    while (*name && *name != '=')
+    {
+        if (!ft_isalnum(*name) && *name != '_' && *name != ' ')
+            return (0); // Only alnum, '_', and space are valid before '='
+        if (*name == ' ') // If there's a space, it's invalid
+            return (0);
+        name++;
+    }
+    if (*name == '=')
+        name++;
+    return (1);
 }
 
 int kv_setenv(t_shell *shell, const char *name, const char *value)
