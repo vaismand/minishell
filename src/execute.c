@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/12 19:43:36 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/12 21:56:56 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,9 +117,12 @@ int	kv_execute_command(t_shell *shell)
 	cmd = shell->cmd_list->cmd;
 	if (!cmd || !cmd[0])
 		return (0);
-	builtin = kv_parent_builtin(shell);
-	if (builtin != 2)
-		return (builtin);
+	if (!shell->cmd_list->next && !shell->cmd_list->prev)
+	{
+		builtin = kv_parent_builtin(shell);
+		if (builtin != 2)
+			return (builtin);
+	}
 	if (shell->cmd_list->next)
 	{
 		if (pipe(shell->cmd_list->pd) < 0)
