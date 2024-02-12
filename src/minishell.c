@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/12 17:40:32 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/12 20:34:11 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-//global variable for the signal
-static sigjmp_buf	g_env;
 
 //separate function for the input
 static char	*kv_getinput(void)
@@ -23,6 +20,8 @@ static char	*kv_getinput(void)
 	input = readline("supershell$ ");
 	if (input == NULL)
 		exit(0);
+	if (*input)
+		add_history(input);
 	return (input);
 }
 
@@ -84,15 +83,9 @@ static void	kv_run_shell_loop(t_shell *shell)
 
 	while (1)
 	{
-		if (sigsetjmp(g_env, 1) == 42)
-		{
-			printf("\n");
-			continue ;
-		}
 		cmd = kv_getinput();
 		if (!kv_valid_cmd(cmd))
 			continue ;
-		add_history(cmd);
 		cmd = kv_cmd_parser(cmd, shell);
 		kv_cmd_list_init(shell, &shell->cmd_list, cmd);
 		free(cmd);
