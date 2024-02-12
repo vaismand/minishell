@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/12 17:11:08 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/12 19:46:32 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,7 @@ int		kv_count(char const *s, char c);
 int		kv_count_cmds(char **cmd);
 int		kv_arr_len(char **arr);
 int		kv_print_env(t_shell *shell);
-int		kv_parent_builtin(t_shell *shell);
-int		kv_child_buildin(t_shell *shell);
+int		kv_builtin(t_shell *shell);
 int		kv_is_valid_env_name(const char *name);
 int		kv_exit_command(t_shell *shell);
 int		kv_cd_command(t_shell *shell);

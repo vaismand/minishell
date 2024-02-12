@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/12 19:03:15 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/12 20:02:46 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,15 +82,13 @@ static void	kv_execute_child(t_shell *shell)
 	int builtin;
 
 	signal(SIGINT, kv_child_handler);
-	if (shell->cmd_list->file_error < 0)
-	{
-		perror("minishell: file error");
-		exit(1);
-	}
 	kv_redirecting(shell->cmd_list);
-	builtin = kv_child_buildin(shell);
-	if (builtin != 2)
-		exit(builtin);
+	if (shell->cmd_list->pd[0] != 0 && shell->cmd_list->pd[1] != 0)
+	{
+		builtin = kv_builtin(shell);
+		if (builtin != 2)
+			exit(builtin);
+	}
 	if (shell->cmd_list->path == NULL)
 		kv_command_not_found(shell);
 	if (execve(shell->cmd_list->path, shell->cmd_list->cmd, shell->envp) == -1)
@@ -117,13 +115,21 @@ int	kv_execute_command(t_shell *shell)
 	cmd = shell->cmd_list->cmd;
 	if (!cmd || !cmd[0])
 		return (0);
-	builtin = kv_parent_builtin(shell);
-	if (builtin != 2)
-		return (builtin);
+	if (shell->cmd_list->file_error < 0)
+	{
+		perror("minishell: file error");
+		return (1);
+	}
 	if (shell->cmd_list->next)
 	{
 		if (pipe(shell->cmd_list->pd) < 0)
 			return (perror("minishell: pipe error"), 1);
+	}
+	if (shell->cmd_list->pd[0] == 0 && shell->cmd_list->pd[1] == 0)
+	{
+		builtin = kv_builtin(shell);
+		if (builtin != 2)
+			return (builtin);
 	}
 	pid = fork();
 	if (pid == 0)

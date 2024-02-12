@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/12 18:40:30 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/12 19:46:02 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	kv_echo_command(t_shell *shell)
 }
 
 //executes builtin commands
-int	kv_parent_builtin(t_shell *shell)
+int	kv_builtin(t_shell *shell)
 {
 	char	**cmd;
 
@@ -100,14 +100,6 @@ int	kv_parent_builtin(t_shell *shell)
 		return (kv_export_command(shell));
 	if (ft_strncmp(cmd[0], "unset", 6) == 0)
 		return (kv_unset_command(shell));
-	return (2);
-}
-
-int	kv_child_buildin(t_shell *shell)
-{
-	char	**cmd;
-
-	cmd = shell->cmd_list->cmd;
 	if (ft_strncmp(cmd[0], "echo", 5) == 0)
 		return (kv_echo_command(shell));
 	if (ft_strncmp(cmd[0], "pwd", 4) == 0)
@@ -116,3 +108,4 @@ int	kv_child_buildin(t_shell *shell)
 		return (kv_env_command(shell));
 	return (2);
 }
+

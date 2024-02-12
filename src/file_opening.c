@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 15:05:03 by dkohn             #+#    #+#             */
-/*   Updated: 2024/02/06 14:57:36 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/12 20:16:07 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	kv_redir_open(char **argv, t_list *cmd_list)
 	int	fd;
 
 	i = -1;
-	fd = -1;
+	fd = 0;
 	while (argv[++i])
 	{
 		if (cmd_list->file_error < 0)
