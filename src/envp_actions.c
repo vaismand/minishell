@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 19:38:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/11 21:34:37 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/12 10:08:50 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	kv_unsetenv(t_shell *shell, const char *name)
 	}
 	new_envp[j] = NULL;
 	shell->envp = new_envp;
-	return (free(new_envp), 0);
+	return (0);
 }
 
 int	kv_process_env_var(t_shell *shell, char *env_var)
