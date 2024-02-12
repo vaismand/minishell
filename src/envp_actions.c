@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp_actions.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 19:38:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/12 10:08:50 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/12 18:20:52 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,11 @@ int kv_setenv(t_shell *shell, const char *name, const char *value)
         return (-1);
     while (shell->envp && shell->envp[len]) 
     {
-        if (strncmp(shell->envp[len], name, strlen(name)) == 0 \
+        if (strncmp(shell->envp[len], name, ft_strlen(name)) == 0 \
             && shell->envp[len][strlen(name)] == '=') 
         {
-            shell->envp[len] = new_value;
+            shell->envp[len] = ft_strdup(new_value);
+			free(new_value);
             return (0);
         }
         len++;
@@ -57,9 +58,10 @@ int kv_setenv(t_shell *shell, const char *name, const char *value)
     i = 0;
     while (i < len) 
     {
-        new_envp[i] = shell->envp[i];
+        new_envp[i] = ft_strdup(shell->envp[i]);
         i++;
     }
+	kv_free_paths(shell->envp);
     new_envp[len] = new_value;
     new_envp[len + 1] = NULL;
     shell->envp = new_envp;
@@ -98,6 +100,7 @@ int	kv_unsetenv(t_shell *shell, const char *name)
 		i++;
 	}
 	new_envp[j] = NULL;
+	kv_free_paths(shell->envp);
 	shell->envp = new_envp;
 	return (0);
 }

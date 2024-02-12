@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:10:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/06 15:11:49 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/12 17:34:05 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	kv_free_paths(char **paths)
 	i = 0;
 	if (!paths)
 		return ;
-	while (paths[i] != NULL)
+	while (paths[i])
 	{
 		free(paths[i]);
 		paths[i++] = NULL;
@@ -65,6 +65,8 @@ void	kv_free_exit(t_shell *shell, int exit_code)
 			free(shell->env_var->v_value);
 		free(shell->env_var);
 	}
+	if (shell->envp)
+		kv_free_paths(shell->envp);
 	while (shell->cmd_list)
 	{
 		tmp = shell->cmd_list;

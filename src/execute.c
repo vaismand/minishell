@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/11 12:59:02 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/12 17:57:38 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,12 +74,12 @@ static void	kv_command_not_found(t_shell *shell)
 	}
 	else
 		write(2, shell->error_msg, ft_strlen(shell->error_msg));
-	exit(127);
+	kv_free_exit(shell, 127);
 }
 
 static void	kv_execute_child(t_shell *shell)
 {
-	int	builtin_status;
+	int builtin;
 
 	signal(SIGINT, kv_child_handler);
 	if (shell->cmd_list->file_error < 0)
@@ -88,9 +88,9 @@ static void	kv_execute_child(t_shell *shell)
 		exit(1);
 	}
 	kv_redirecting(shell->cmd_list);
-	builtin_status = kv_execute_builtin(shell);
-	if (builtin_status != 2)
-		exit(builtin_status);
+	builtin = kv_child_buildin(shell);
+	if (builtin != 2)
+		exit(builtin);
 	if (shell->cmd_list->path == NULL)
 		kv_command_not_found(shell);
 	if (execve(shell->cmd_list->path, shell->cmd_list->cmd, shell->envp) == -1)
@@ -112,20 +112,14 @@ int	kv_execute_command(t_shell *shell)
 {
 	pid_t	pid;
 	char	**cmd;
+	int		builtin;
 
 	cmd = shell->cmd_list->cmd;
 	if (!cmd || !cmd[0])
 		return (0);
-	if (ft_strncmp(cmd[0], "cd", 3) == 0)
-		return (kv_cd_command(shell));
-	if (ft_strncmp(cmd[0], "exit", 5) == 0)
-		return (kv_exit_command(shell));
-	if (ft_strncmp(cmd[0], "export", 7) == 0)
-		return (kv_export_command(shell));
-	if (ft_strncmp(cmd[0], "echo", 5) == 0)
-		return (kv_echo_command(shell));
-	if (ft_strncmp(cmd[0], "unset", 6) == 0)
-		return (kv_unset_command(shell));
+	builtin = kv_parent_builtin(shell);
+	if (builtin != 2)
+		return (shell->exit_status);
 	if (shell->cmd_list->next)
 	{
 		if (pipe(shell->cmd_list->pd) < 0)

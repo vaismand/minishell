@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/11 13:04:23 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/12 17:40:32 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,13 @@ static char	*kv_getinput(void)
 
 static void	kv_init_shell(t_shell *shell, char **envp)
 {
-	shell->envp = envp;
+	int i;
+
+	i = -1;
+	shell->envp = (char **)malloc(sizeof(char *) * (kv_arr_len(envp) + 1));
+	while (envp[++i])
+		shell->envp[i] = ft_strdup(envp[i]);
+	shell->envp[i] = NULL;
 	shell->cmd_list = NULL;
 	shell->exit_status = 0;
 	shell->env_var = malloc(sizeof(t_env_var));

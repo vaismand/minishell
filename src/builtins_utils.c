@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:29:54 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/11 12:39:26 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/12 18:12:18 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,4 +124,16 @@ int	kv_pwd_command(void)
 	printf("%s\n", path);
 	free(path);
 	return (0);
+}
+
+int kv_env_command(t_shell *shell)
+{
+    int i;
+
+    i = -1;
+    while (shell->envp[++i])
+    {
+        printf("%s\n", shell->envp[i]);
+    }
+    return (0);
 }

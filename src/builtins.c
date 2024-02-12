@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/11 12:32:58 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/12 18:12:34 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int	kv_echo_command(t_shell *shell)
 }
 
 //executes builtin commands
-int	kv_execute_builtin(t_shell *shell)
+int	kv_parent_builtin(t_shell *shell)
 {
 	char	**cmd;
 
@@ -95,13 +95,23 @@ int	kv_execute_builtin(t_shell *shell)
 		kv_exit_command(shell);
 	if (ft_strncmp(cmd[0], "cd", 3) == 0)
 		return (kv_cd_command(shell));
-	if (ft_strncmp(cmd[0], "pwd", 4) == 0)
-		return (kv_pwd_command());
 	if (ft_strncmp(cmd[0], "export", 7) == 0)
 		return (kv_export_command(shell));
 	if (ft_strncmp(cmd[0], "unset", 6) == 0)
 		return (kv_unset_command(shell));
+	return (2);
+}
+
+int	kv_child_buildin(t_shell *shell)
+{
+	char	**cmd;
+
+	cmd = shell->cmd_list->cmd;
 	if (ft_strncmp(cmd[0], "echo", 5) == 0)
 		return (kv_echo_command(shell));
+	if (ft_strncmp(cmd[0], "pwd", 4) == 0)
+		return (kv_pwd_command());
+	if (ft_strncmp(cmd[0], "env", 4) == 0)
+		return (kv_env_command(shell));
 	return (2);
 }
