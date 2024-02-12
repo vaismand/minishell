@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:21:45 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/08 18:16:15 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/12 20:26:16 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void	kv_set_signals(void)
 	sigint_act.sa_handler = kv_sigint_handler;
 	sigint_act.sa_flags = SA_RESTART;
 	sigemptyset(&sigint_act.sa_mask);
-	sigaddset(&sigint_act.sa_mask, SIGINT);
 	sigaction(SIGINT, &sigint_act, NULL);
 	sigquit_act.sa_handler = SIG_IGN;
 	sigquit_act.sa_flags = 0;
