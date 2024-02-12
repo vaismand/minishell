@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/12 21:56:56 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/12 22:07:51 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,15 +82,13 @@ static void	kv_execute_child(t_shell *shell)
 	int builtin;
 
 	signal(SIGINT, kv_child_handler);
-	if (shell->cmd_list->file_error < 0)
-	{
-		perror("minishell: file error");
-		exit(1);
-	}
 	kv_redirecting(shell->cmd_list);
-	builtin = kv_child_buildin(shell);
-	if (builtin != 2)
-		exit(builtin);
+	if (shell->cmd_list->pd[0] != 0 && shell->cmd_list->pd[1] != 0)
+	{
+		builtin = kv_builtin(shell);
+		if (builtin != 2)
+			exit(builtin);
+	}
 	if (shell->cmd_list->path == NULL)
 		kv_command_not_found(shell);
 	if (execve(shell->cmd_list->path, shell->cmd_list->cmd, shell->envp) == -1)
