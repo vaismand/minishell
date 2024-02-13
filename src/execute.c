@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/12 21:24:48 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/13 17:08:46 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ static void	kv_parent(pid_t pid, t_shell *shell)
 	if (WIFEXITED(shell->status))
 		shell->exit_status = WEXITSTATUS(shell->status);
 	if (shell->cmd_list->next)
+	{
 		close(shell->cmd_list->pd[1]);
+	}
 	if (shell->cmd_list->in)
 	{
 		close(shell->cmd_list->in);
@@ -83,12 +85,9 @@ static void	kv_execute_child(t_shell *shell)
 
 	signal(SIGINT, kv_child_handler);
 	kv_redirecting(shell->cmd_list);
-	if (shell->cmd_list->pd[0] != 0 && shell->cmd_list->pd[1] != 0)
-	{
-		builtin = kv_builtin(shell);
-		if (builtin != 2)
-			exit(builtin);
-	}
+	builtin = kv_child_builtin(shell);
+	if (builtin != 2)
+		exit(builtin);
 	if (shell->cmd_list->path == NULL)
 		kv_command_not_found(shell);
 	if (execve(shell->cmd_list->path, shell->cmd_list->cmd, shell->envp) == -1)
@@ -115,21 +114,23 @@ int	kv_execute_command(t_shell *shell)
 	cmd = shell->cmd_list->cmd;
 	if (!cmd || !cmd[0])
 		return (0);
-	if (shell->cmd_list->file_error < 0)
-	{
-		perror("minishell: file error");
-		return (1);
-	}
 	if (shell->cmd_list->next)
 	{
 		if (pipe(shell->cmd_list->pd) < 0)
 			return (perror("minishell: pipe error"), 1);
 	}
-	if (shell->cmd_list->pd[0] == 0 && shell->cmd_list->pd[1] == 0)
+	if (shell->cmd_list->file_error < 0)
 	{
-		builtin = kv_builtin(shell);
-		if (builtin != 2)
-			return (builtin);
+		if (shell->cmd_list->next)
+			close(shell->cmd_list->pd[1]);
+		perror("minishell: file error");
+		return (1);
+	}
+	if (!shell->cmd_list->next && !shell->cmd_list->prev)
+	{
+			builtin = kv_parent_builtin(shell);
+			if (builtin != 2)
+				return (builtin);
 	}
 	pid = fork();
 	if (pid == 0)

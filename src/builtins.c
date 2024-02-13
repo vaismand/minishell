@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/12 21:24:30 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/13 15:53:19 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	kv_echo_command(t_shell *shell)
 }
 
 //executes builtin commands
-int	kv_builtin(t_shell *shell)
+int	kv_child_builtin(t_shell *shell)
 {
 	char	**cmd;
 
@@ -109,6 +109,22 @@ int	kv_builtin(t_shell *shell)
 		return (kv_pwd_command());
 	if (ft_strncmp(cmd[0], "env", 4) == 0)
 		return (kv_env_command(shell));
+	return (2);
+}
+
+int	kv_parent_builtin(t_shell *shell)
+{
+		char	**cmd;
+
+	cmd = shell->cmd_list->cmd;
+	if (ft_strncmp(cmd[0], "exit", 5) == 0)
+		kv_exit_command(shell);
+	if (ft_strncmp(cmd[0], "cd", 3) == 0)
+		return (kv_cd_command(shell));
+	if (ft_strncmp(cmd[0], "export", 7) == 0)
+		return (kv_export_command(shell));
+	if (ft_strncmp(cmd[0], "unset", 6) == 0)
+		return (kv_unset_command(shell));
 	return (2);
 }
 

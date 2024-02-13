@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:21:45 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/12 20:26:16 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/13 16:15:49 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	kv_sigint_handler(int signo)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 		rl_on_new_line();
 		rl_replace_line("", 0);
-		rl_redisplay();
 	}
 }
 

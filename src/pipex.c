@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:23:24 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/01/30 19:40:43 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/13 16:45:58 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,44 +16,51 @@
 //redirects the output of the first command
 static void	kv_first_child(t_list *pipex)
 {
-	if (pipex->out != 0)
-		dup2(pipex->out, 1);
-	else if (pipex->next)
+	if (pipex->next && pipex->out == 0)
 		dup2(pipex->pd[1], 1);
-	close(pipex->pd[1]);
-	close(pipex->pd[0]);
+	if (pipex->pd[1] != 0)
+		close(pipex->pd[1]);
+	if (pipex->pd[0] != 0)
+		close(pipex->pd[0]);
 	while (pipex->next)
+	{
 		pipex = pipex->next;
+		if (pipex->pd[0] != 0 && pipex->pd[1] != 0)
+		{
+			close(pipex->pd[0]);
+			close(pipex->pd[1]);
+		}
+	}
 }
 
 //redirects the input of the last command
 static void	kv_last_child(t_list *pipex)
 {
-	if (pipex->in != 0)
-		dup2(pipex->in, 0);
-	else if (pipex->prev)
+	if (pipex->prev && pipex->in == 0 && pipex->prev->pd[0] != 0)
+	{
 		dup2(pipex->prev->pd[0], 0);
-	if (pipex->prev)
+	}
+	if (pipex->prev && pipex->prev->pd[0] != 0 && pipex->prev->pd[1] != 0)
 	{
 		close(pipex->prev->pd[0]);
-		close(pipex->prev->pd[1]);
 	}
 	while (pipex->prev)
 	{
 		pipex = pipex->prev;
+		if (pipex->pd[0] != 0 && pipex->pd[1] != 0)
+		{
+			close(pipex->pd[0]);
+			close(pipex->pd[1]);
+		}
 	}
 }
 
 //redirects the input and output of the middle commands
 static void	kv_middle_child(t_list *pipex)
 {
-	if (pipex->out != 0)
-		dup2(pipex->out, 1);
-	else if (pipex->next)
+	if (pipex->next && pipex->out == 0)
 		dup2(pipex->pd[1], 1);
-	if (pipex->in != 0)
-		dup2(pipex->in, 0);
-	else if (pipex->prev)
+	if (pipex->prev && pipex->in == 0)
 		dup2(pipex->prev->pd[0], 0);
 	while (pipex->prev)
 	{
@@ -62,18 +69,23 @@ static void	kv_middle_child(t_list *pipex)
 	while (pipex->next)
 	{
 		pipex = pipex->next;
+		if (pipex->pd[0] != 0 && pipex->pd[1] != 0)
+		{
+			close(pipex->pd[0]);
+			close(pipex->pd[1]);
+		}
 	}
 }
 
 //redirects the input and output of the commands depending on their position
 void	kv_redirecting(t_list *pipex)
 {
-	if (pipex->out != 0)
+	if (pipex->out > 0)
 	{
 		dup2(pipex->out, 1);
 		close(pipex->out);
 	}
-	if (pipex->in != 0)
+	if (pipex->in > 0)
 	{
 		dup2(pipex->in, 0);
 		close(pipex->in);
