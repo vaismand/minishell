@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/14 21:39:44 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/15 18:14:55 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ static int	kv_get_env_var_value(char *new_cmd, char *cmd, \
 		new_cmd[k] = shell->env_var->v_value[k];
 		k++;
 	}
+	if (shell->env_var->v_value && shell->env_var->v_value[0] != '\0')
+		free(shell->env_var->v_value);
 	*i = j - 1;
 	return (free(shell->env_var->v_name), k);
 }
