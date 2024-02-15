@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:10:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/14 21:34:00 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/15 18:41:35 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,7 @@ void	kv_free_exit(t_shell *shell, int exit_code)
 
 	rl_clear_history();
 	if (shell->env_var)
-	{
-		if (shell->env_var->v_name)
-			free(shell->env_var->v_name);
-		if (shell->env_var->v_value)
-			free(shell->env_var->v_value);
 		free(shell->env_var);
-	}
 	if (shell->envp)
 		kv_free_paths(shell->envp);
 	while (shell->cmd_list)

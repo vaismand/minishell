@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp_actions.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 19:38:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/12 21:23:57 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/15 18:52:06 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,13 @@ int	kv_unsetenv(t_shell *shell, const char *name)
 	int		i;
 	int		j;
 	int		len;
+    char    *tmp;
 	char	**new_envp;
 
 	len = 0;
-	if (!kv_getenv(shell, name))
-		return (0);
+    tmp = kv_getenv(shell, name);
+	if (!tmp)
+		return (free(tmp), 0);
 	while (shell->envp[len])
 		len++;
 	new_envp = malloc(sizeof(char *) * len);
@@ -108,6 +110,7 @@ int	kv_unsetenv(t_shell *shell, const char *name)
 	new_envp[j] = NULL;
 	kv_free_paths(shell->envp);
 	shell->envp = new_envp;
+    free(tmp);
 	return (0);
 }
 
