@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/15 18:14:55 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/16 02:00:46 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ char	*kv_path_creator(t_shell *shell, char **cmd)
 	char	*path_env;
 	int		i;
 
+	if (access(cmd[0], F_OK) == 0)
+		return (ft_strdup(cmd[0]));
 	path_env = kv_getenv(shell, "PATH");
 	if (!path_env)
 		return (NULL);
-	if (access(cmd[0], F_OK) == 0)
-		return (ft_strdup(cmd[0]));
 	paths = ft_split(path_env, ':');
 	if (!paths)
 		return (free(path_env), NULL);

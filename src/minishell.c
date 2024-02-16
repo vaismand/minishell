@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/15 19:02:34 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/16 03:03:47 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,11 @@ static void	kv_cmd_list_init(t_shell *shell, t_list **cmd_list, char *cmd)
 		if (!tmp2)
 			perror("malloc error");
 		if (!tmp2[0])
+		{
+			kv_free_paths(argv);
+			kv_free_paths(tmp2);
 			return ;
+		}
 		tmp = kv_new_lst(shell, tmp2);
 		args = kv_arr_len(tmp2);
 		if (!tmp || !tmp2)

@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:30:38 by dkohn             #+#    #+#             */
-/*   Updated: 2024/02/06 15:09:19 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/16 01:45:04 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,14 @@ char	**kv_split_ignore_quotes(char const *s, char c)
 	int		k;
 	int		inside_quotes;
 
+	if (!s)
+		return (NULL);
 	k = 0;
 	i = 0;
 	j = 0;
 	inside_quotes = 0;
 	strs = (char **)malloc(sizeof(char *) * (kv_count(s, c) + 1));
-	if (!strs || !s)
+	if (!strs)
 		return (NULL);
 	while (s[i])
 	{

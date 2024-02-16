@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/13 15:53:19 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/16 02:10:47 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int	kv_parent_builtin(t_shell *shell)
 
 	cmd = shell->cmd_list->cmd;
 	if (ft_strncmp(cmd[0], "exit", 5) == 0)
-		kv_exit_command(shell);
+		return(kv_exit_command(shell));
 	if (ft_strncmp(cmd[0], "cd", 3) == 0)
 		return (kv_cd_command(shell));
 	if (ft_strncmp(cmd[0], "export", 7) == 0)
