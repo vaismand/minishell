@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/17 20:50:14 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/17 21:26:01 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static char	*kv_getinput(void)
 
 static void	kv_init_shell(t_shell *shell, char **envp)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	shell->envp = (char **)malloc(sizeof(char *) * (kv_arr_len(envp) + 1));
@@ -57,22 +57,20 @@ static void	kv_cmd_list_init(t_shell *shell, t_list **cmd_list, char *cmd)
 	char	**argv;
 	char	**tmp2;
 	int		args;
-	int		i;
 
-	i = -1;
+	shell->i = -1;
 	argv = kv_split_ignore_quotes(cmd, '|');
 	if (!argv || !argv[0])
 		return ;
-	while (argv[++i])
+	while (argv[++shell->i])
 	{
-		tmp2 = kv_split_ignore_quotes(argv[i], ' ');
+		tmp2 = kv_split_ignore_quotes(argv[shell->i], ' ');
 		if (!tmp2)
 			perror("malloc error");
 		if (!tmp2[0])
 		{
 			kv_free_paths(argv);
-			kv_free_paths(tmp2);
-			return ;
+			return (kv_free_paths(tmp2));
 		}
 		tmp = kv_new_lst(shell, tmp2);
 		args = kv_arr_len(tmp2);
@@ -114,6 +112,8 @@ int	main(int ac, char **av, char **envp)
 	t_shell	*shell;
 
 	shell = malloc(sizeof(t_shell));
+	if (!shell)
+		return (1);
 	if (av && ac > 1)
 		exit(0);
 	kv_init_shell(shell, envp);

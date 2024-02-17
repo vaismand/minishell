@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/17 20:36:49 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/17 21:37:29 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static void	kv_command_not_found(t_shell *shell)
 
 static void	kv_execute_child(t_shell *shell)
 {
-	int builtin;
+	int	builtin;
 
 	signal(SIGINT, kv_child_handler);
 	kv_redirecting(shell->cmd_list);
@@ -128,9 +128,9 @@ int	kv_execute_command(t_shell *shell)
 	}
 	if (!shell->cmd_list->next && !shell->cmd_list->prev)
 	{
-			builtin = kv_parent_builtin(shell);
-			if (builtin != 2)
-				return (builtin);
+		builtin = kv_parent_builtin(shell);
+		if (builtin != 2)
+			return (builtin);
 	}
 	pid = fork();
 	if (pid == 0)

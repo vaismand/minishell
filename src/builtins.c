@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/16 02:10:47 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/17 21:30:57 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	kv_export_command(t_shell *shell)
 			return (1);
 		}
 		else if (status == 2)
-			return (0);		
+			return (0);
 		else
 			status = kv_process_env_var(shell, cmd[i]);
 		if (status != 0)
@@ -114,11 +114,11 @@ int	kv_child_builtin(t_shell *shell)
 
 int	kv_parent_builtin(t_shell *shell)
 {
-		char	**cmd;
+	char	**cmd;
 
 	cmd = shell->cmd_list->cmd;
 	if (ft_strncmp(cmd[0], "exit", 5) == 0)
-		return(kv_exit_command(shell));
+		return (kv_exit_command(shell));
 	if (ft_strncmp(cmd[0], "cd", 3) == 0)
 		return (kv_cd_command(shell));
 	if (ft_strncmp(cmd[0], "export", 7) == 0)
@@ -127,4 +127,3 @@ int	kv_parent_builtin(t_shell *shell)
 		return (kv_unset_command(shell));
 	return (2);
 }
-
