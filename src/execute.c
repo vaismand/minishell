@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/13 17:34:23 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/17 19:58:36 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ static void	kv_execute_child(t_shell *shell)
 	kv_redirecting(shell->cmd_list);
 	builtin = kv_child_builtin(shell);
 	if (builtin != 2)
-		exit(builtin);
+		kv_free_exit(shell, builtin);
 	if (shell->cmd_list->path == NULL)
 		kv_command_not_found(shell);
 	if (execve(shell->cmd_list->path, shell->cmd_list->cmd, shell->envp) == -1)

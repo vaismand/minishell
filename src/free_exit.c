@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_exit.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:10:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/15 18:41:35 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/17 19:56:17 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	kv_free_paths(char **paths)
 		paths[i++] = NULL;
 	}
 	free(paths);
+	paths = NULL;
 }
 
 //frees the list
@@ -44,10 +45,14 @@ void	kv_freepipex(t_list *pipex)
 		if (pipex->cmd)
 			kv_free_paths(pipex->cmd);
 		if (pipex->path)
+		{
 			free(pipex->path);
+			pipex->path = NULL;
+		}
 		tmp = pipex;
 		pipex = pipex->next;
 		free(tmp);
+		tmp = NULL;
 	}
 }
 
@@ -58,7 +63,10 @@ void	kv_free_exit(t_shell *shell, int exit_code)
 
 	rl_clear_history();
 	if (shell->env_var)
+	{
 		free(shell->env_var);
+		shell->env_var = NULL;
+	}
 	if (shell->envp)
 		kv_free_paths(shell->envp);
 	while (shell->cmd_list)
@@ -68,5 +76,6 @@ void	kv_free_exit(t_shell *shell, int exit_code)
 		kv_freepipex(tmp);
 	}
 	free(shell);
+	shell = NULL;
 	exit(exit_code);
 }
