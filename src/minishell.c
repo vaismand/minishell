@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/16 03:03:47 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/17 20:08:55 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ static void	kv_init_shell(t_shell *shell, char **envp)
 
 	i = -1;
 	shell->envp = (char **)malloc(sizeof(char *) * (kv_arr_len(envp) + 1));
+	if (!shell->envp)
+		exit(1);
 	while (envp[++i])
 		shell->envp[i] = ft_strdup(envp[i]);
 	shell->envp[i] = NULL;
