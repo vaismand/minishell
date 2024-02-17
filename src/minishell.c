@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/17 20:08:55 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/17 20:50:14 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,19 @@ static void	kv_init_shell(t_shell *shell, char **envp)
 	i = -1;
 	shell->envp = (char **)malloc(sizeof(char *) * (kv_arr_len(envp) + 1));
 	if (!shell->envp)
-		exit(1);
+		kv_free_exit(shell, 1);
 	while (envp[++i])
+	{
 		shell->envp[i] = ft_strdup(envp[i]);
+		if (!shell->envp[i])
+			kv_free_exit(shell, 1);
+	}
 	shell->envp[i] = NULL;
 	shell->cmd_list = NULL;
 	shell->exit_status = 0;
 	shell->env_var = malloc(sizeof(t_env_var));
 	if (!shell->env_var)
-		exit(1);
+		kv_free_exit(shell, 1);
 	shell->env_var->v_name = NULL;
 	shell->env_var->v_value = NULL;
 	kv_set_signals();
