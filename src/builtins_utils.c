@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:29:54 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/16 02:11:15 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/17 17:23:04 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int kv_exit_command(t_shell *shell)
 	if (kv_arr_len(cmd) > 2)
 	{
 		write(2, "minishell: exit: too many arguments\n", 36);
-		return (1);
+		return (kv_free_exit(shell, 1), 1);
 	}
 	if (!cmd[1])
 		exit_status = shell->exit_status;
