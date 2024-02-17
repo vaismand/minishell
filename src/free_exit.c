@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:10:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/17 19:56:17 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/17 20:45:58 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,7 @@ void	kv_free_paths(char **paths)
 //frees the list
 void	kv_freepipex(t_list *pipex)
 {
-	t_list	*tmp;
-
+ 	t_list *tmp;
 	while (pipex)
 	{
 		if (pipex->pd[0])
@@ -51,7 +50,7 @@ void	kv_freepipex(t_list *pipex)
 		}
 		tmp = pipex;
 		pipex = pipex->next;
-		free(tmp);
+ 		free(tmp);
 		tmp = NULL;
 	}
 }
@@ -59,7 +58,6 @@ void	kv_freepipex(t_list *pipex)
 //free and exit
 void	kv_free_exit(t_shell *shell, int exit_code)
 {
-	t_list *tmp;
 
 	rl_clear_history();
 	if (shell->env_var)
@@ -69,12 +67,8 @@ void	kv_free_exit(t_shell *shell, int exit_code)
 	}
 	if (shell->envp)
 		kv_free_paths(shell->envp);
-	while (shell->cmd_list)
-	{
-		tmp = shell->cmd_list;
-		shell->cmd_list = shell->cmd_list->next;
-		kv_freepipex(tmp);
-	}
+	if (shell->cmd_list)
+		kv_freepipex(shell->cmd_list);
 	free(shell);
 	shell = NULL;
 	exit(exit_code);
