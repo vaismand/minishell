@@ -6,24 +6,11 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/17 21:26:01 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/18 11:18:05 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-//separate function for the input
-static char	*kv_getinput(void)
-{
-	char	*input;
-
-	input = readline("supershell$ ");
-	if (input == NULL)
-		exit(0);
-	if (*input)
-		add_history(input);
-	return (input);
-}
 
 static void	kv_init_shell(t_shell *shell, char **envp)
 {
@@ -50,37 +37,43 @@ static void	kv_init_shell(t_shell *shell, char **envp)
 	kv_set_signals();
 }
 
-//initializes the struct
-static void	kv_cmd_list_init(t_shell *shell, t_list **cmd_list, char *cmd)
+static void	process_command(t_shell *shell, t_list **cmd_list, char *command)
 {
-	t_list	*tmp;
-	char	**argv;
-	char	**tmp2;
 	int		args;
+	t_list	*tmp;
+	char	**tmp2;
 
-	shell->i = -1;
-	argv = kv_split_ignore_quotes(cmd, '|');
-	if (!argv || !argv[0])
-		return ;
-	while (argv[++shell->i])
+	tmp2 = kv_split_ignore_quotes(command, ' ');
+	if (!tmp2 || !tmp2[0])
 	{
-		tmp2 = kv_split_ignore_quotes(argv[shell->i], ' ');
 		if (!tmp2)
 			perror("malloc error");
-		if (!tmp2[0])
-		{
-			kv_free_paths(argv);
-			return (kv_free_paths(tmp2));
-		}
-		tmp = kv_new_lst(shell, tmp2);
-		args = kv_arr_len(tmp2);
-		if (!tmp || !tmp2)
-			perror("malloc error");
-		if (args > 2)
-			kv_redir_open(tmp2, tmp);
-		ft_lstadd_back(cmd_list, tmp);
 		kv_free_paths(tmp2);
+		return ;
 	}
+	tmp = kv_new_lst(shell, tmp2);
+	args = kv_arr_len(tmp2);
+	if (!tmp || !tmp2)
+		perror("malloc error");
+	if (args > 2)
+		kv_redir_open(tmp2, tmp);
+	ft_lstadd_back(cmd_list, tmp);
+	kv_free_paths(tmp2);
+}
+
+static void	kv_cmd_list_init(t_shell *shell, t_list **cmd_list, char *cmd)
+{
+	char	**argv;
+
+	argv = kv_split_ignore_quotes(cmd, '|');
+	if (!argv || !argv[0])
+	{
+		kv_free_paths(argv);
+		return ;
+	}
+	shell->i = -1;
+	while (argv[++shell->i])
+		process_command(shell, cmd_list, argv[shell->i]);
 	kv_free_paths(argv);
 }
 

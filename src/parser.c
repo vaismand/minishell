@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/16 02:00:46 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/18 11:47:48 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,38 +98,39 @@ static int	kv_init_local_vars(int *i, int *k, t_shell *shell)
 	return (0);
 }
 
+static void	handle_quotes(char c, t_shell *shell)
+{
+	if (c == '\'' && !shell->dquote)
+		shell->quote = !shell->quote;
+	if (c == '\"' && !shell->quote)
+		shell->dquote = !shell->dquote;
+}
+
 char	*kv_cmd_parser(char *cmd, t_shell *shell)
 {
-	int		i;
-	int		k;
-	char	*new_cmd;
+	t_parser_state	state;
+	int				i;
 
-	new_cmd = malloc(sizeof(char) * (ft_strlen(cmd) * 100));
-	if (!new_cmd)
-		perror("malloc error");
-	kv_init_local_vars(&i, &k, shell);
+	state.new_cmd = ft_calloc(ft_strlen(cmd) + 100, sizeof(char));
+	kv_init_local_vars(&i, &state.k, shell);
 	while (cmd[++i])
 	{
-		if (cmd[i] == '\'' && !shell->dquote)
-			shell->quote = !shell->quote;
-		if (cmd[i] == '\"' && !shell->quote)
-			shell->dquote = !shell->dquote;
+		handle_quotes(cmd[i], shell);
 		if (cmd[i] && cmd[i] == '$' && cmd[i + 1] == '?' && !shell->quote)
-			k += kv_get_exit_status(&new_cmd[k], &i, shell);
+			state.k += kv_get_exit_status(&state.new_cmd[state.k], &i, shell);
 		else if (cmd[i] && cmd[i] == '$' && !shell->quote && ft_isalpha(cmd[i + 1]))
-			k += kv_get_env_var_value(&new_cmd[k], cmd, &i, shell);
+			state.k += kv_get_env_var_value(&state.new_cmd[state.k], cmd, &i, shell);
 		else if ((cmd[i] == '<' || cmd[i] == '>') && !shell->dquote && !shell->quote
 			&& cmd[i + 1] != ' ')
 		{
-			new_cmd[k++] = cmd[i];
+			state.new_cmd[state.k++] = cmd[i];
 			if (cmd[i + 1] == '>' || cmd[i + 1] == '<')
-				new_cmd[k++] = cmd[++i];
-			new_cmd[k++] = ' ';
+				state.new_cmd[state.k++] = cmd[++i];
+			state.new_cmd[state.k++] = ' ';
 		}
 		else
-			new_cmd[k++] = cmd[i];
+			state.new_cmd[state.k++] = cmd[i];
 	}
-	new_cmd[k] = '\0';
-	free(cmd);
-	return (new_cmd);
+	state.new_cmd[state.k] = '\0';
+	return (free(cmd), state.new_cmd);
 }

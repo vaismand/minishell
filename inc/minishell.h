@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/13 15:53:44 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/18 11:53:17 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,13 @@
 # include <sys/wait.h>
 # include <setjmp.h>
 # include "../lib/libft/srcs/libft.h"
+
+typedef struct s_parser_state
+{
+	int	 	i;
+	int	 	k;
+	char	*new_cmd;
+} t_parser_state;
 
 typedef struct s_env_var
 {
@@ -73,6 +80,7 @@ int		kv_process_env_var(t_shell *shell, char *env_var);
 int		process_char_sequence(char *new_cmd, char *cmd, int *i, int *k, \
     t_shell *shell);
 bool	kv_valid_cmd(char *cmd);
+char	*kv_getinput(void);
 char    *kv_getenv(t_shell *shell, const char *name);
 char	*kv_strip_cmd(char *cmd);
 char	*kv_path_creator(t_shell *shell, char **cmd);
@@ -92,6 +100,7 @@ void	kv_freepipex(t_list *pipex);
 void	kv_free_paths(char **paths);
 void	kv_free_perror(char *name, char *value, int error_msg);
 void	kv_redir_open(char **argv, t_list *cmd_list);
+void	kv_is_dir_exit(t_shell *shell);
 t_list	*kv_new_lst(t_shell *shell, char **argv);
 
 #endif
