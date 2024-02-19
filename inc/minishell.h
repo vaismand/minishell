@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/18 11:53:17 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/19 12:57:01 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@
 
 typedef struct s_parser_state
 {
-	int	 	i;
-	int	 	k;
+	int		i;
+	int		k;
 	char	*new_cmd;
-} t_parser_state;
+}	t_parser_state;
 
 typedef struct s_env_var
 {
@@ -43,6 +43,14 @@ typedef struct s_env_var
 	char				*v_value;
 	struct s_env_list	*next;
 }	t_env_var;
+
+typedef struct s_split_state
+{
+	int		i;
+	int		j;
+	int		k;
+	int		inside_quotes;
+}	t_split_state;
 
 typedef struct s_shell
 {
@@ -78,10 +86,10 @@ int		kv_unsetenv(t_shell *shell, const char *name);
 int		kv_unset_command(t_shell *shell);
 int		kv_process_env_var(t_shell *shell, char *env_var);
 int		process_char_sequence(char *new_cmd, char *cmd, int *i, int *k, \
-    t_shell *shell);
+		t_shell *shell);
 bool	kv_valid_cmd(char *cmd);
 char	*kv_getinput(void);
-char    *kv_getenv(t_shell *shell, const char *name);
+char	*kv_getenv(t_shell *shell, const char *name);
 char	*kv_strip_cmd(char *cmd);
 char	*kv_path_creator(t_shell *shell, char **cmd);
 char	*kv_strip_cmd(char *cmd);
@@ -101,6 +109,9 @@ void	kv_free_paths(char **paths);
 void	kv_free_perror(char *name, char *value, int error_msg);
 void	kv_redir_open(char **argv, t_list *cmd_list);
 void	kv_is_dir_exit(t_shell *shell);
+void	handle_redirection_parser(char *cmd, int *i, t_parser_state *state);
+void	handle_quotes(char c, t_shell *shell);
+int		kv_init_local_vars(int *i, int *k, t_shell *shell);
 t_list	*kv_new_lst(t_shell *shell, char **argv);
 
 #endif

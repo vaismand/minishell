@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_quotes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:30:38 by dkohn             #+#    #+#             */
-/*   Updated: 2024/02/18 12:39:54 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/19 12:22:22 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,73 +33,53 @@ int	kv_count(char const *s, char c)
 	return (count);
 }
 
+void	update_state(t_split_state *state, char const *s, char c, char **strs)
+{
+	if (s[state->i] == '\'' || s[state->i] == '"')
+	{
+		state->inside_quotes = !state->inside_quotes;
+	}
+	else if (!state->inside_quotes && s[state->i] == c)
+	{
+		if (state->i > state->j)
+		{
+			strs[state->k] = ft_substr(s, state->j, state->i - state->j);
+			if (!strs[state->k])
+				exit(EXIT_FAILURE);
+			state->k++;
+		}
+		state->j = state->i + 1;
+	}
+	state->i++;
+}
+
 char	**kv_split_ignore_quotes(char const *s, char c)
 {
-	char	**strs;
-	int		i;
-	int		j;
-	int		k;
-	int		inside_quotes;
+	char			**strs;
+	t_split_state	state;
 
+	state.i = 0;
+	state.j = 0;
+	state.k = 0;
+	state.inside_quotes = 0;
 	if (!s)
 		return (NULL);
-	k = 0;
-	i = 0;
-	j = 0;
-	inside_quotes = 0;
 	strs = (char **)malloc(sizeof(char *) * (kv_count(s, c) + 1));
 	if (!strs)
 		return (NULL);
-	while (s[i])
+	while (s[state.i])
 	{
-		if (s[i] == '\'' || s[i] == '"')
-			inside_quotes = !inside_quotes;
-		else if (!inside_quotes && s[i] == c)
-		{
-			if (i > j)
-			{
-				strs[k] = ft_substr(s, j, i - j);
-				k++;
-			}
-			j = i + 1;
-		}
-		i++;
+		update_state(&state, s, c, strs);
 	}
-	if (i > j)
+	if (state.i > state.j)
 	{
-		strs[k] = ft_substr(s, j, i - j);
-		k++;
+		strs[state.k] = ft_substr(s, state.j, state.i - state.j);
+		if (!strs[state.k])
+			return (NULL);
+		state.k++;
 	}
-	strs[k] = NULL;
+	strs[state.k] = NULL;
 	return (strs);
-}
-
-int	kv_count_cmds(char **cmd)
-{
-	int	i;
-
-	i = 0;
-	while (*cmd != NULL)
-	{
-		if (ft_strncmp(*cmd, ">", 1) == 0 || ft_strncmp(*cmd, "<", 1) == 0)
-		{
-			cmd++;
-		}
-		else
-			i++;
-		cmd++;
-	}
-	return (i);
-}
-
-int	kv_arr_len(char **arr)
-{
-	int	i;
-
-	i = 0;
-	while (arr[i])
-		i++;
-	return (i);
 }
 
 char	*kv_remove_outer_quotes(char *str)
@@ -115,28 +95,14 @@ char	*kv_remove_outer_quotes(char *str)
 	j = new_str;
 	while (*i != 0)
 	{
-		if (*i == '\'' || *i == '"')
-		{
-			if (inside_quotes == *i)
-				inside_quotes = 0;
-			else if (inside_quotes == 0)
-				inside_quotes = *i;
-			else
-				*j++ = *i;
-		}
+		if ((*i == '\'' || *i == '"') && inside_quotes == *i)
+			inside_quotes = 0;
+		else if ((*i == '\'' || *i == '"') && inside_quotes == 0)
+			inside_quotes = *i;
 		else
 			*j++ = *i;
 		i++;
 	}
 	*j = 0;
 	return (new_str);
-}
-
-char	*kv_strip_cmd(char *cmd)
-{
-	char	*new_cmd;
-
-	new_cmd = kv_remove_outer_quotes(cmd);
-	free(cmd);
-	return (new_cmd);
 }
