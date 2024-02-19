@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/18 11:18:05 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/19 22:36:03 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static void	kv_init_shell(t_shell *shell, char **envp)
 	kv_set_signals();
 }
 
-static void	process_command(t_shell *shell, t_list **cmd_list, char *command)
+static void	kv_process_command(t_shell *shell, t_list **cmd_list, char *command)
 {
 	int		args;
 	t_list	*tmp;
@@ -73,7 +73,7 @@ static void	kv_cmd_list_init(t_shell *shell, t_list **cmd_list, char *cmd)
 	}
 	shell->i = -1;
 	while (argv[++shell->i])
-		process_command(shell, cmd_list, argv[shell->i]);
+		kv_process_command(shell, cmd_list, argv[shell->i]);
 	kv_free_paths(argv);
 }
 

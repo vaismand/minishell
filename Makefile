@@ -3,20 +3,20 @@
 CFLAGS    = -Wall -Wextra -Werror
 NAME      = minishell
 SRCS = src/minishell.c \
-		src/extra_utils.c \
-		src/signal.c \
-		src/pipex.c \
-		src/pipex_utils.c \
-		src/free_exit.c \
-		src/parser.c \
-		src/parser_utils.c \
-		src/execute.c \
-		src/file_opening.c \
-		src/ft_split_quotes.c \
-		src/builtins.c \
-		src/builtins_utils.c \
-		src/envp_actions.c \
-		src/ft_split_utils.c
+		src/kv_signal.c \
+		src/kv_parser.c \
+		src/kv_parser_utils.c \
+		src/kv_envp_actions.c \
+		src/kv_execute.c \
+		src/kv_builtins.c \
+		src/kv_builtins2.c \
+		src/kv_pipex.c \
+		src/kv_pipex_utils.c \
+		src/kv_file_opening.c \
+		src/kv_split_quotes.c \
+		src/kv_utils.c \
+		src/kv_utils2.c \
+		src/kv_free_exit.c \
 
 
 OBJS := $(SRCS:.c=.o)

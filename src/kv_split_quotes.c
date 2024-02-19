@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split_quotes.c                                  :+:      :+:    :+:   */
+/*   kv_split_quotes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:30:38 by dkohn             #+#    #+#             */
-/*   Updated: 2024/02/19 12:22:22 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/19 22:27:31 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ int	kv_count(char const *s, char c)
 	return (count);
 }
 
-void	update_state(t_split_state *state, char const *s, char c, char **strs)
+static void	kv_update_state(t_split_state *state, char const *s, \
+	char c, char **strs)
 {
 	if (s[state->i] == '\'' || s[state->i] == '"')
 	{
@@ -68,9 +69,7 @@ char	**kv_split_ignore_quotes(char const *s, char c)
 	if (!strs)
 		return (NULL);
 	while (s[state.i])
-	{
-		update_state(&state, s, c, strs);
-	}
+		kv_update_state(&state, s, c, strs);
 	if (state.i > state.j)
 	{
 		strs[state.k] = ft_substr(s, state.j, state.i - state.j);

@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   file_opening.c                                     :+:      :+:    :+:   */
+/*   kv_file_opening.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 15:05:03 by dkohn             #+#    #+#             */
-/*   Updated: 2024/02/18 12:36:11 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/19 22:35:30 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // This part of the project responsible for opening files.
 #include "../inc/minishell.h"
 
-static void	handle_redirection(char *redir_type, char *filename, \
+static void	kv_handle_redirection(char *redir_type, char *filename, \
 	t_list *cmd_list, int fd)
 {
 	filename = kv_remove_outer_quotes(filename);
@@ -58,7 +58,7 @@ void	kv_redir_open(char **argv, t_list *cmd_list)
 			ft_strncmp(argv[i], ">", 1) == 0 || \
 			ft_strncmp(argv[i], "<", 1) == 0)
 		{
-			handle_redirection(argv[i], argv[i + 1], cmd_list, fd);
+			kv_handle_redirection(argv[i], argv[i + 1], cmd_list, fd);
 			i++;
 		}
 	}

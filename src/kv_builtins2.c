@@ -6,78 +6,56 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:29:54 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/17 21:36:07 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/19 22:11:13 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	kv_free_perror(char *name, char *value, int error_msg)
+static char	*kv_change_dir(t_shell *shell, t_cd_state *state, char **cmd)
 {
-	if (error_msg == 0)
-		perror("minishell: export");
+	if (!cmd[1])
+	{
+		state->path = kv_getenv(shell, "HOME");
+		if (!state->path)
+			return (NULL);
+	}
+	else if (ft_strcmp(cmd[1], "-") == 0)
+	{
+		state->path = kv_getenv(shell, "OLDPWD");
+		if (!state->path)
+			return (NULL);
+	}
 	else
-		perror("minishell: export: not a valid identifier");
-	free(name);
-	free(value);
-}
-
-int	kv_free_cd_paths(char *path, char *oldpwd, char *err_msg)
-{
-	int	len;
-
-	len = ft_strlen(err_msg);
-	write(2, err_msg, len);
-	if (path)
-		free(path);
-	if (oldpwd)
-		free(oldpwd);
-	return (1);
+		state->path = ft_strdup(cmd[1]);
+	return (state->path);
 }
 
 int	kv_cd_command(t_shell *shell)
 {
-	char	**cmd;
-	char	*path;
-	char	*oldpwd;
-	char	*newpwd;
+	t_cd_state	state;
+	char		**cmd;
 
 	cmd = shell->cmd_list->cmd;
-	shell->error_msg = "minishell: cd: too many arguments\n";
 	if (kv_arr_len(cmd) > 2)
-		return (write(2, shell->error_msg, ft_strlen(shell->error_msg)), 1);
-	oldpwd = getcwd(NULL, 0);
-	if (!oldpwd)
-		return (kv_free_cd_paths(NULL, NULL, "minishell: cd: getcwd failed"));
-	if (!cmd[1])
-	{
-		path = kv_getenv(shell, "HOME");
-		if (!path)
-			return (kv_free_cd_paths(NULL, oldpwd, "minishell: cd: HOME not set\n"));
-	}
-	else if (ft_strcmp(cmd[1], "-") == 0)
-	{
-		path = kv_getenv(shell, "OLDPWD");
-		if (!path)
-			return (kv_free_cd_paths(NULL, oldpwd, "minishell: cd: OLDPWD not set\n"));
-		printf("%s\n", path);
-	}
-	else
-		path = ft_strdup(cmd[1]);
-	if (chdir(path) < 0)
-		return (kv_free_cd_paths(path, oldpwd, "minishell: cd: No such file or directory\n"));
-	if (kv_setenv(shell, "OLDPWD", oldpwd) != 0)
-		return (kv_free_cd_paths(path, oldpwd, "minishell: cd: failed to update OLDPWD\n"));
-	newpwd = getcwd(NULL, 0);
-	if (!newpwd)
-		return (kv_free_cd_paths(path, oldpwd, "minishell: cd: getcwd failed\n"));
-	if (kv_setenv(shell, "PWD", newpwd) != 0)
-		return (kv_free_cd_paths(newpwd, oldpwd, "minishell: cd: failed to update PWD\n"));
-	free(oldpwd);
-	free(newpwd);
-	if (path)
-		free(path);
-	return (0);
+		return (write(2, "minishell: cd: too many arguments\n", 34), 1);
+	state.oldpwd = getcwd(NULL, 0);
+	if (!state.oldpwd)
+		return (kv_free_cd_paths(NULL, NULL, "getcwd failed"));
+	state.path = kv_change_dir(shell, &state, cmd);
+	if (chdir(state.path) < 0)
+		return (kv_free_cd_paths(state.path, state.oldpwd, \
+		"No such file or directory\n"));
+	if (kv_setenv(shell, "OLDPWD", state.oldpwd) < 0)
+		return (kv_free_cd_paths(state.path, state.oldpwd, "setenv failed\n"));
+	state.newpwd = getcwd(NULL, 0);
+	if (!state.newpwd)
+		return (kv_free_cd_paths(state.path, state.oldpwd, "getcwd failed\n"));
+	if (kv_setenv(shell, "PWD", state.newpwd) < 0)
+		return (kv_free_cd_paths(state.path, state.oldpwd, "setenv failed\n"));
+	free(state.oldpwd);
+	free(state.newpwd);
+	return (free(state.path), 0);
 }
 
 int	kv_exit_command(t_shell *shell)

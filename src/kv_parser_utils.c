@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*   kv_parser_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:51:53 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/19 12:56:47 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/19 22:36:59 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-char	*build_and_check_path(const char *base, const char *cmd)
+char	*kv_build_and_check_path(const char *base, const char *cmd)
 {
 	char	*tmp;
 	char	*full_path;
@@ -33,7 +33,7 @@ char	*build_and_check_path(const char *base, const char *cmd)
 	}
 }
 
-void	handle_redirection_parser(char *cmd, int *i, t_parser_state *state)
+void	kv_handle_redirection_parser(char *cmd, int *i, t_parser_state *state)
 {
 	if (state->k > 0 && state->new_cmd[state->k - 1] != ' ')
 		state->new_cmd[state->k++] = ' ';
@@ -43,16 +43,7 @@ void	handle_redirection_parser(char *cmd, int *i, t_parser_state *state)
 	state->new_cmd[state->k++] = ' ';
 }
 
-int	kv_init_local_vars(int *i, int *k, t_shell *shell)
-{
-	*i = -1;
-	*k = 0;
-	shell->quote = false;
-	shell->dquote = false;
-	return (0);
-}
-
-void	handle_quotes(char c, t_shell *shell)
+void	kv_handle_quotes(char c, t_shell *shell)
 {
 	if (c == '\'' && !shell->dquote)
 		shell->quote = !shell->quote;

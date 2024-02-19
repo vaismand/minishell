@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins.c                                         :+:      :+:    :+:   */
+/*   kv_builtins.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/17 21:30:57 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/19 22:29:49 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	kv_export_command(t_shell *shell)
+static int	kv_export_command(t_shell *shell)
 {
 	char	**cmd;
 	int		i;
@@ -40,7 +40,7 @@ int	kv_export_command(t_shell *shell)
 	return (status);
 }
 
-int	kv_unset_command(t_shell *shell)
+static int	kv_unset_command(t_shell *shell)
 {
 	char	**cmd;
 	int		i;
@@ -63,7 +63,7 @@ int	kv_unset_command(t_shell *shell)
 	return (error_flag);
 }
 
-int	kv_echo_command(t_shell *shell)
+static int	kv_echo_command(t_shell *shell)
 {
 	char	**cmd;
 	int		i;

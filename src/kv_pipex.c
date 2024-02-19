@@ -1,19 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   kv_pipex.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:23:24 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/13 16:45:58 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/19 22:33:01 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-//file for pipex
-//redirects the output of the first command
 static void	kv_first_child(t_list *pipex)
 {
 	if (pipex->next && pipex->out == 0)
@@ -33,7 +31,6 @@ static void	kv_first_child(t_list *pipex)
 	}
 }
 
-//redirects the input of the last command
 static void	kv_last_child(t_list *pipex)
 {
 	if (pipex->prev && pipex->in == 0 && pipex->prev->pd[0] != 0)
@@ -55,7 +52,6 @@ static void	kv_last_child(t_list *pipex)
 	}
 }
 
-//redirects the input and output of the middle commands
 static void	kv_middle_child(t_list *pipex)
 {
 	if (pipex->next && pipex->out == 0)
@@ -77,7 +73,6 @@ static void	kv_middle_child(t_list *pipex)
 	}
 }
 
-//redirects the input and output of the commands depending on their position
 void	kv_redirecting(t_list *pipex)
 {
 	if (pipex->out > 0)

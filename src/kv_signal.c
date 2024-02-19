@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   kv_signal.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:21:45 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/14 21:05:28 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/19 22:22:01 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	kv_child_handler(int signo)
 }
 
 // handles the signal
-void	kv_sigint_handler(int signo)
+static void	kv_sigint_handler(int signo)
 {
 	if (signo == SIGINT)
 	{

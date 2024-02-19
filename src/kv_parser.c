@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   kv_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/19 12:56:55 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/19 22:37:51 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*kv_path_creator(t_shell *shell, char **cmd)
 	i = 0;
 	while (paths[i] && !path)
 	{
-		path = build_and_check_path(paths[i], cmd[0]);
+		path = kv_build_and_check_path(paths[i], cmd[0]);
 		i++;
 	}
 	kv_free_paths(paths);
@@ -89,6 +89,15 @@ static int	kv_env_var_v(char *new_cmd, char *cmd, \
 	return (free(shell->env_var->v_name), k);
 }
 
+static int	kv_init_local_vars(int *i, int *k, t_shell *shell)
+{
+	*i = -1;
+	*k = 0;
+	shell->quote = false;
+	shell->dquote = false;
+	return (0);
+}
+
 char	*kv_cmd_parser(char *cmd, t_shell *shell)
 {
 	t_parser_state	state;
@@ -98,7 +107,7 @@ char	*kv_cmd_parser(char *cmd, t_shell *shell)
 	kv_init_local_vars(&i, &state.k, shell);
 	while (cmd[++i])
 	{
-		handle_quotes(cmd[i], shell);
+		kv_handle_quotes(cmd[i], shell);
 		if (cmd[i] && cmd[i] == '$' && cmd[i + 1] == '?' && !shell->quote)
 			state.k += kv_get_exit_status(&state.new_cmd[state.k], &i, shell);
 		else if (cmd[i] && cmd[i] == '$' && !shell->quote
@@ -106,7 +115,7 @@ char	*kv_cmd_parser(char *cmd, t_shell *shell)
 			state.k += kv_env_var_v(&state.new_cmd[state.k], cmd, &i, shell);
 		else if ((cmd[i] == '<' || cmd[i] == '>') && !shell->dquote
 			&& !shell->quote && cmd[i + 1] != ' ')
-			handle_redirection_parser(cmd, &i, &state);
+			kv_handle_redirection_parser(cmd, &i, &state);
 		else
 			state.new_cmd[state.k++] = cmd[i];
 	}

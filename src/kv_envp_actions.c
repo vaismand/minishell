@@ -1,18 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   envp_actions.c                                     :+:      :+:    :+:   */
+/*   kv_envp_actions.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 19:38:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/18 12:18:32 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/19 22:34:34 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static int	add_new_env_var(t_shell *shell, char *new_value)
+char	*kv_getenv(t_shell *shell, const char *name)
+{
+	int		i;
+	int		len;
+	char	*env_var;
+
+	i = 0;
+	len = ft_strlen(name);
+	while (shell->envp[i])
+	{
+		if (ft_strncmp(shell->envp[i], name, len) == 0 \
+			&& shell->envp[i][len] == '=')
+		{
+			env_var = ft_strdup(shell->envp[i] + len + 1);
+			if (!env_var)
+				return (NULL);
+			return (env_var);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
+static int	kv_add_new_env_var(t_shell *shell, char *new_value)
 {
 	int		i;
 	int		len;
@@ -64,7 +87,7 @@ int	kv_setenv(t_shell *shell, const char *name, const char *value)
 		}
 		i++;
 	}
-	return (add_new_env_var(shell, new_value));
+	return (kv_add_new_env_var(shell, new_value));
 }
 
 static char	**remove_env_var(char **envp, const char *name, int len)
@@ -109,27 +132,4 @@ int	kv_unsetenv(t_shell *shell, const char *name)
 		return (-1);
 	shell->envp = new_envp;
 	return (free(tmp), 0);
-}
-
-char	*kv_getenv(t_shell *shell, const char *name)
-{
-	int		i;
-	int		len;
-	char	*env_var;
-
-	i = 0;
-	len = ft_strlen(name);
-	while (shell->envp[i])
-	{
-		if (ft_strncmp(shell->envp[i], name, len) == 0 \
-			&& shell->envp[i][len] == '=')
-		{
-			env_var = ft_strdup(shell->envp[i] + len + 1);
-			if (!env_var)
-				return (NULL);
-			return (env_var);
-		}
-		i++;
-	}
-	return (NULL);
 }
