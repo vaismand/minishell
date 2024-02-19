@@ -1,20 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute.c                                          :+:      :+:    :+:   */
+/*   kv_execute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/18 11:53:03 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/19 22:42:35 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//file for executing commands including builtin commands
-
 #include "../inc/minishell.h"
 
-//parent process
 static void	kv_parent(pid_t pid, t_shell *shell)
 {
 	waitpid(pid, &shell->status, WUNTRACED);

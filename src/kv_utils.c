@@ -1,18 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   extra_utils.c                                      :+:      :+:    :+:   */
+/*   kv_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 21:34:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/18 12:18:36 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/19 22:41:25 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-//check valid input of user
 bool	kv_valid_cmd(char *cmd)
 {
 	if (cmd == NULL || ft_strlen(cmd) == 0)

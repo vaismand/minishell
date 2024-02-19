@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/19 22:29:49 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/19 22:42:51 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,6 @@ static int	kv_echo_command(t_shell *shell)
 	return (0);
 }
 
-//executes builtin commands
 int	kv_child_builtin(t_shell *shell)
 {
 	char	**cmd;

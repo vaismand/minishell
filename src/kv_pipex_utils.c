@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_utils.c                                      :+:      :+:    :+:   */
+/*   kv_pipex_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:42:20 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/10 21:31:44 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/19 22:42:10 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static t_list	*kv_set_tmp_to_zero(t_shell *shell, t_list *tmp, int i)
 	return (tmp);
 }
 
-//creating a new list for every command
 t_list	*kv_new_lst(t_shell *shell, char **argv)
 {
 	int		i;

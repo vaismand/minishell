@@ -6,14 +6,12 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:21:45 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/19 22:22:01 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/19 22:41:43 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-//file for initializing and handling the signals
-// getting doulle ($supershell$) prompt after CTRL-C in cat
 void	kv_child_handler(int signo)
 {
 	if (signo == SIGINT)
@@ -23,7 +21,6 @@ void	kv_child_handler(int signo)
 	}
 }
 
-// handles the signal
 static void	kv_sigint_handler(int signo)
 {
 	if (signo == SIGINT)
@@ -35,7 +32,6 @@ static void	kv_sigint_handler(int signo)
 	}
 }
 
-// sets the signals for SIGINT and SIGQUIT(CTRL-\ ignored)
 void	kv_set_signals(void)
 {
 	struct sigaction	sigint_act;

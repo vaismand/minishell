@@ -1,20 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_exit.c                                        :+:      :+:    :+:   */
+/*   kv_free_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:10:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/17 21:29:39 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/19 22:42:25 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-//free all the allocated memory and exit the program
-
-//frees the paths array from path_finder
 void	kv_free_paths(char **paths)
 {
 	int	i;
@@ -31,7 +28,6 @@ void	kv_free_paths(char **paths)
 	paths = NULL;
 }
 
-//frees the list
 void	kv_freepipex(t_list *pipex)
 {
 	t_list	*tmp;
@@ -56,7 +52,6 @@ void	kv_freepipex(t_list *pipex)
 	}
 }
 
-//free and exit
 void	kv_free_exit(t_shell *shell, int exit_code)
 {
 	rl_clear_history();

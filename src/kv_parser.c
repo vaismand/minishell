@@ -6,16 +6,12 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/19 22:37:51 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/19 22:41:10 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-// This part of the project responsible for taking input from the user
-// and parsing it into a list of commands.
-// first we should check for special characters like |, <, >, >>, <<, ;
 
-//creates the path for the command
 char	*kv_path_creator(t_shell *shell, char **cmd)
 {
 	char	**paths;
@@ -58,7 +54,6 @@ static int	kv_get_exit_status(char *new_cmd, int *i, t_shell *shell)
 	return (k);
 }
 
-//expands the command with $ operator
 static int	kv_env_var_v(char *new_cmd, char *cmd, \
 	int *i, t_shell *shell)
 {
