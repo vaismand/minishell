@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/19 22:41:10 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/20 19:34:34 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ char	*kv_cmd_parser(char *cmd, t_shell *shell)
 	int				i;
 
 	state.new_cmd = ft_calloc(ft_strlen(cmd) + 100, sizeof(char));
+	if (!state.new_cmd)
+		return (NULL);
 	kv_init_local_vars(&i, &state.k, shell);
 	while (cmd[++i])
 	{

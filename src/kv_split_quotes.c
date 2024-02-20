@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:30:38 by dkohn             #+#    #+#             */
-/*   Updated: 2024/02/19 22:27:31 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/20 19:40:48 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ char	*kv_remove_outer_quotes(char *str)
 	i = str;
 	inside_quotes = 0;
 	new_str = malloc(ft_strlen(str) + 1);
+	if (!new_str)
+		return (NULL);
 	j = new_str;
 	while (*i != 0)
 	{

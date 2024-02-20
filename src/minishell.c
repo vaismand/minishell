@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/19 22:36:03 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/20 19:47:27 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static void	kv_run_shell_loop(t_shell *shell)
 
 	while (1)
 	{
-		cmd = kv_getinput();
+		cmd = kv_getinput(shell);
 		if (!kv_valid_cmd(cmd))
 			continue ;
 		cmd = kv_cmd_parser(cmd, shell);

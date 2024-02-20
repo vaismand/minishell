@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 21:34:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/19 22:41:25 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/20 19:58:05 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,20 @@ bool	kv_valid_cmd(char *cmd)
 	return (true);
 }
 
-char	*kv_getinput(void)
+char	*kv_getinput(t_shell *shell)
 {
 	char	*input;
 
 	input = readline("supershell$ ");
-	if (input == NULL)
-		exit(0);
-	if (*input)
+	if (!input)
+		kv_free_exit(shell, 0);
+	else if (*input)
 		add_history(input);
+	else
+	{
+		free(input);
+		input = NULL;
+	}
 	return (input);
 }
 
