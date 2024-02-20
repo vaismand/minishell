@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_pipex_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:42:20 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/19 22:42:10 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/20 13:31:48 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,7 @@ t_list	*kv_new_lst(t_shell *shell, char **argv)
 		return (NULL);
 	i = -1;
 	j = -1;
-	tmp = (t_list *)malloc(sizeof(t_list));
-	tmp->cmd = (char **)malloc(sizeof(char *) * (kv_count_cmds(argv) + 1));
-	if (!tmp->cmd || !tmp)
-		perror("malloc error");
+	tmp = malloc_tmp_lst(shell, argv);
 	while (argv[++i])
 	{
 		if (strncmp(argv[i], ">>", 2) == 0 || strncmp(argv[i], "<<", 2) == 0
@@ -49,8 +46,21 @@ t_list	*kv_new_lst(t_shell *shell, char **argv)
 			continue ;
 		}
 		tmp->cmd[++j] = ft_strdup(argv[i]);
+		if (!tmp->cmd[j])
+			kv_free_exit(shell, 1);
 		tmp->cmd[j] = kv_strip_cmd(tmp->cmd[j]);
 	}
 	tmp = kv_set_tmp_to_zero(shell, tmp, j + 1);
+	return (tmp);
+}
+
+t_list	*malloc_tmp_lst(t_shell *shell, char **argv)
+{
+	t_list	*tmp;
+
+	tmp = (t_list *)malloc(sizeof(t_list));
+	tmp->cmd = (char **)malloc(sizeof(char *) * (kv_count_cmds(argv) + 1));
+	if (!tmp->cmd || !tmp)
+		kv_free_exit(shell, 1);
 	return (tmp);
 }
