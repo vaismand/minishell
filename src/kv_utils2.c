@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_utils2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 12:15:44 by dkohn             #+#    #+#             */
-/*   Updated: 2024/02/19 22:43:59 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/21 19:36:20 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	kv_free_cd_paths(char *path, char *oldpwd, char *err_msg)
 		free(path);
 	if (oldpwd)
 		free(oldpwd);
+	free(new_err_msg);
 	return (1);
 }
 
@@ -42,11 +43,12 @@ int	kv_count_cmds(char **cmd)
 	int	i;
 
 	i = 0;
-	while (*cmd != NULL)
+	while (*cmd)
 	{
 		if (ft_strncmp(*cmd, ">", 1) == 0 || ft_strncmp(*cmd, "<", 1) == 0)
 		{
 			cmd++;
+			continue ;
 		}
 		else
 			i++;

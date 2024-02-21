@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_file_opening.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 15:05:03 by dkohn             #+#    #+#             */
-/*   Updated: 2024/02/19 22:35:30 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/21 19:45:56 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,16 @@ void	kv_redir_open(char **argv, t_list *cmd_list)
 			ft_strncmp(argv[i], ">", 1) == 0 || \
 			ft_strncmp(argv[i], "<", 1) == 0)
 		{
+			if (!argv[i + 1])
+			{
+				cmd_list->file_error = -1;
+				break ;
+			}
 			kv_handle_redirection(argv[i], argv[i + 1], cmd_list, fd);
 			i++;
 		}
 	}
+	return ;
 }
 
 static int	kv_open_file_write(char *file)

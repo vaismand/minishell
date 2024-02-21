@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_pipex_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:42:20 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/20 19:39:11 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/21 19:35:08 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_list	*kv_new_lst(t_shell *shell, char **argv)
 	int		j;
 	t_list	*tmp;
 
-	if (!argv || !shell->envp)
+	if (!argv || !shell->envp || !*argv)
 		return (NULL);
 	i = -1;
 	j = -1;
@@ -56,7 +56,9 @@ t_list	*kv_new_lst(t_shell *shell, char **argv)
 			|| strncmp(argv[i], ">", 1) == 0 || strncmp(argv[i], "<", 1) == 0)
 		{
 			i++;
-			continue ;
+			if (!argv[i])
+				break ;
+			continue;
 		}
 		tmp->cmd[++j] = ft_strdup(argv[i]);
 		if (!tmp->cmd[j])

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/20 19:47:27 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/21 19:42:45 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ static void	kv_process_command(t_shell *shell, t_list **cmd_list, char *command)
 	args = kv_arr_len(tmp2);
 	if (!tmp || !tmp2)
 		perror("malloc error");
-	if (args > 2)
+	if (args >= 2)
 		kv_redir_open(tmp2, tmp);
 	ft_lstadd_back(cmd_list, tmp);
 	kv_free_paths(tmp2);
