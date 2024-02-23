@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_free_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:10:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/19 22:42:25 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/23 11:38:31 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void	kv_freepipex(t_list *pipex)
 {
 	t_list	*tmp;
 
+	while (pipex && pipex->prev)
+		pipex = pipex->prev;
 	while (pipex)
 	{
 		if (pipex->pd[0])
