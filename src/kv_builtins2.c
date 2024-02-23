@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:29:54 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/19 22:44:25 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/21 21:35:54 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static char	*kv_change_dir(t_shell *shell, t_cd_state *state, char **cmd)
 		state->path = kv_getenv(shell, "OLDPWD");
 		if (!state->path)
 			return (NULL);
+		printf("%s\n", state->path);
 	}
 	else
 		state->path = ft_strdup(cmd[1]);
