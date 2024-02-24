@@ -6,11 +6,25 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/19 22:42:51 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/24 15:42:04 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+//function to print export env when no arguments are passed
+static int	kv_print_export(t_shell *shell)
+{
+	int	i;
+
+	i = 0;
+	while (shell->envp[i])
+	{
+		printf("declare -x %s\n", shell->envp[i]);
+		i++;
+	}
+	return (0);
+}
 
 static int	kv_export_command(t_shell *shell)
 {
@@ -21,6 +35,8 @@ static int	kv_export_command(t_shell *shell)
 	i = 1;
 	cmd = shell->cmd_list->cmd;
 	shell->error_msg = "minishell: export: not a valid identifier\n";
+	if (kv_arr_len(cmd) == 1)
+		return (kv_print_export(shell));
 	while (cmd[i])
 	{
 		status = kv_is_valid_env_name(cmd[i]);

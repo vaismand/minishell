@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/02/24 14:23:01 by dvaisman          #+#    #+#              #
+#    Updated: 2024/02/24 14:50:46 by dvaisman         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 .SILENT:
 
 CFLAGS    = -Wall -Wextra -Werror
@@ -21,7 +33,7 @@ SRCS = src/minishell.c \
 
 OBJS := $(SRCS:.c=.o)
 LIBFT     = ./lib/libft/libft.a
-CC        = cc -g
+CC        = cc
 RM        = rm -f
 
 RED       = \033[0;91m

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_file_opening.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 15:05:03 by dkohn             #+#    #+#             */
-/*   Updated: 2024/02/21 19:45:56 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/24 16:06:00 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,15 @@ int	kv_handle_heredoc(char *delimiter)
 	char	*line;
 	char	*tempfile;
 	int		fd;
+	static int		i;
 
+	i = 0;
 	line = NULL;
-	tempfile = "/tmp/tmp_heredoc";
+	tempfile = ft_strjoin("/tmp/tmp_heredoc", ft_itoa(i));
+	i++;
+	if (!tempfile)
+		return (-1);
+	printf("%s\n", tempfile);
 	fd = kv_open_file_write(tempfile);
 	if (fd < 0)
 		return (-1);
@@ -106,7 +112,7 @@ int	kv_handle_heredoc(char *delimiter)
 	{
 		if (ft_strcmp(line, delimiter) == 0)
 			break ;
-		write(fd, line, strlen(line));
+		write(fd, line, ft_strlen(line));
 		write(fd, "\n", 1);
 		line = readline("> ");
 	}

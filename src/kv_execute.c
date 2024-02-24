@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_execute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/23 11:26:11 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/24 16:07:18 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static void	kv_parent(pid_t pid, t_shell *shell)
 	}
 	if (shell->cmd_list->out)
 		close(shell->cmd_list->out);
+	g_sigstat = false;
 }
 
 static void	kv_command_not_found(t_shell *shell)
@@ -106,6 +107,7 @@ int	kv_execute_command(t_shell *shell)
 			return (builtin);
 	}
 	pid = fork();
+	g_sigstat = true;
 	if (pid == 0)
 		kv_execute_child(shell);
 	else if (pid < 0)

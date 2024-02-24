@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_pipex_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:42:20 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/21 19:35:08 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/24 14:54:19 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,12 @@ t_list	*kv_new_lst(t_shell *shell, char **argv)
 	tmp = malloc_tmp_lst(shell, argv);
 	while (argv[++i])
 	{
-		if (strncmp(argv[i], ">>", 2) == 0 || strncmp(argv[i], "<<", 2) == 0
-			|| strncmp(argv[i], ">", 1) == 0 || strncmp(argv[i], "<", 1) == 0)
+		if (ft_strncmp(argv[i], ">>", 2) == 0 || ft_strncmp(argv[i], "<<", 2) == 0
+			|| ft_strncmp(argv[i], ">", 1) == 0 || ft_strncmp(argv[i], "<", 1) == 0)
 		{
-			i++;
-			if (!argv[i])
+			if (!argv[++i])
 				break ;
-			continue;
+			continue ;
 		}
 		tmp->cmd[++j] = ft_strdup(argv[i]);
 		if (!tmp->cmd[j])

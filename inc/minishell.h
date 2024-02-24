@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/20 19:48:02 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/24 15:46:39 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_env_var
 {
 	char				*v_name;
 	char				*v_value;
+	bool				exported;
 	struct s_env_list	*next;
 }	t_env_var;
 
@@ -70,6 +71,8 @@ typedef struct s_shell
 	t_list		*cmd_list;
 	t_env_var	*env_var;
 }	t_shell;
+
+extern int	g_sigstat;
 
 int		kv_execute_command(t_shell *shell);
 int		kv_handle_heredoc(char *delimiter);
