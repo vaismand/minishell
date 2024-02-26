@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/24 15:46:39 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/26 17:36:42 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ typedef struct s_shell
 extern int	g_sigstat;
 
 int		kv_execute_command(t_shell *shell);
-int		kv_handle_heredoc(char *delimiter);
+int		kv_handle_heredoc(char *delimiter, t_list *cmd_list);
 int		kv_count(char const *s, char c);
 int		kv_count_cmds(char **cmd);
 int		kv_arr_len(char **arr);
@@ -112,6 +112,7 @@ void	kv_is_dir_exit(t_shell *shell);
 void	kv_handle_redirection_parser(char *cmd, int *i, t_parser_state *state);
 void	kv_handle_quotes(char c, t_shell *shell);
 void	kv_free_perror(char *name, char *value, int error_msg);
+void	readline_heredoc(char *heredoc, int fd);
 t_list	*kv_new_lst(t_shell *shell, char **argv);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_execute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/24 16:07:18 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/26 17:27:20 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ static void	kv_parent(pid_t pid, t_shell *shell)
 	if (shell->cmd_list->in)
 	{
 		close(shell->cmd_list->in);
-		unlink("/tmp/tmp_heredoc");
 	}
 	if (shell->cmd_list->out)
 		close(shell->cmd_list->out);

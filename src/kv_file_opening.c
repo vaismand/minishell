@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_file_opening.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 15:05:03 by dkohn             #+#    #+#             */
-/*   Updated: 2024/02/24 16:06:00 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/26 17:38:22 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	kv_handle_redirection(char *redir_type, char *filename, \
 	}
 	else if (ft_strncmp(redir_type, "<<", 2) == 0)
 	{
-		fd = kv_handle_heredoc(filename);
+		fd = kv_handle_heredoc(filename, cmd_list);
 		cmd_list->in = fd;
 	}
 	else if (ft_strncmp(redir_type, ">", 1) == 0)
@@ -90,35 +90,23 @@ static int	kv_open_file_read(char *file)
 	return (fd);
 }
 
-int	kv_handle_heredoc(char *delimiter)
+int	kv_handle_heredoc(char *delimiter, t_list *cmd_list)
 {
-	char	*line;
-	char	*tempfile;
-	int		fd;
-	static int		i;
+	int			fd;
+	static int	i;
+	char		*heredoc_i;
 
-	i = 0;
-	line = NULL;
-	tempfile = ft_strjoin("/tmp/tmp_heredoc", ft_itoa(i));
-	i++;
-	if (!tempfile)
+	heredoc_i = ft_itoa(i++);
+	cmd_list->heredoc = ft_strjoin("/tmp/tmp_heredoc", heredoc_i);
+	free(heredoc_i);
+	if (!cmd_list->heredoc)
 		return (-1);
-	printf("%s\n", tempfile);
-	fd = kv_open_file_write(tempfile);
+	fd = kv_open_file_write(cmd_list->heredoc);
 	if (fd < 0)
 		return (-1);
-	line = readline("> ");
-	while (line != NULL)
-	{
-		if (ft_strcmp(line, delimiter) == 0)
-			break ;
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
-		line = readline("> ");
-	}
-	free(line);
+	readline_heredoc(delimiter, fd);
 	close(fd);
-	fd = kv_open_file_read(tempfile);
+	fd = kv_open_file_read(cmd_list->heredoc);
 	if (fd < 0)
 		return (-1);
 	return (fd);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/24 15:35:23 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/26 17:51:59 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ static void	kv_run_shell_loop(t_shell *shell)
 		if (!kv_valid_cmd(cmd))
 			continue ;
 		cmd = kv_cmd_parser(cmd, shell);
+		if (!cmd)
+			continue ;
 		kv_cmd_list_init(shell, &shell->cmd_list, cmd);
 		free(cmd);
 		tmp = shell->cmd_list;

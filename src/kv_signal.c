@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   kv_signal.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:21:45 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/24 15:53:03 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/26 17:37:58 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
 
 void	kv_child_handler(int signo)
 {

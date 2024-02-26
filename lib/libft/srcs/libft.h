@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:04:04 by dkohn             #+#    #+#             */
-/*   Updated: 2024/01/26 15:57:34 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/26 16:43:01 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ typedef struct s_list
 	int				file_error;
 	char			**cmd;
 	char			*path;
+	char			*heredoc;
 	struct s_list	*prev;
 	struct s_list	*next;
 }	t_list;

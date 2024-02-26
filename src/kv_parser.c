@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/24 14:23:34 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/02/26 17:54:44 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,12 @@ char	*kv_cmd_parser(char *cmd, t_shell *shell)
 			kv_handle_redirection_parser(cmd, &i, &state);
 		else
 			state.new_cmd[state.k++] = cmd[i];
+	}
+	if (shell->dquote || shell->quote)
+	{
+		free(state.new_cmd);
+		printf("minishell: syntax error\n");
+		return (NULL);
 	}
 	state.new_cmd[state.k] = '\0';
 	return (free(cmd), state.new_cmd);

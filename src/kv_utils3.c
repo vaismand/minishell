@@ -1,36 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
+/*   kv_utils3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/15 03:42:51 by dkohn             #+#    #+#             */
-/*   Updated: 2024/02/26 17:22:21 by dkohn            ###   ########.fr       */
+/*   Created: 2024/02/26 17:31:37 by dkohn             #+#    #+#             */
+/*   Updated: 2024/02/26 17:39:04 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../inc/minishell.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+void	readline_heredoc(char *heredoc, int fd)
 {
-	t_list	*temp;
+	char	*line;
 
-	if (!new)
-		return ;
-	if (lst && *lst)
+	line = readline("> ");
+	while (line)
 	{
-		temp = ft_lstlast(*lst);
-		if (temp)
+		if (ft_strcmp(line, heredoc) == 0)
 		{
-			temp->next = new;
-			new->prev = temp;
+			free(line);
+			break ;
 		}
-	}
-	else
-	{
-		*lst = new;
-		(*lst)->prev = NULL;
-		(*lst)->next = NULL;
+		write(fd, line, ft_strlen(line));
+		write(fd, "\n", 1);
+		free(line);
+		line = readline("> ");
 	}
 }
