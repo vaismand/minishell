@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/26 17:36:42 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/26 18:02:43 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ int		kv_setenv(t_shell *shell, const char *name, const char *value);
 int		kv_unsetenv(t_shell *shell, const char *name);
 int		kv_process_env_var(t_shell *shell, char *env_var);
 int		kv_free_cd_paths(char *path, char *oldpwd, char *err_msg);
+int		kv_open_quotes(t_shell *shell);
 bool	kv_valid_cmd(char *cmd);
 char	*kv_getinput(t_shell *shell);
 char	*kv_getenv(t_shell *shell, const char *name);

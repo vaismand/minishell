@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/26 17:54:44 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/26 18:03:16 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,12 +116,8 @@ char	*kv_cmd_parser(char *cmd, t_shell *shell)
 		else
 			state.new_cmd[state.k++] = cmd[i];
 	}
-	if (shell->dquote || shell->quote)
-	{
-		free(state.new_cmd);
-		printf("minishell: syntax error\n");
-		return (NULL);
-	}
 	state.new_cmd[state.k] = '\0';
+	if (kv_open_quotes(shell))
+		return (free(cmd), free(state.new_cmd), NULL);
 	return (free(cmd), state.new_cmd);
 }

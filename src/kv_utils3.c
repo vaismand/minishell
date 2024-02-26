@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:31:37 by dkohn             #+#    #+#             */
-/*   Updated: 2024/02/26 17:39:04 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/02/26 18:02:29 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,14 @@ void	readline_heredoc(char *heredoc, int fd)
 		free(line);
 		line = readline("> ");
 	}
+}
+
+int	kv_open_quotes(t_shell *shell)
+{
+	if (shell->dquote || shell->quote)
+	{
+		printf("minishell: syntax error\n");
+		return (1);
+	}
+	return (0);
 }
