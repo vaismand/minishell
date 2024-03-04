@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 21:34:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/24 14:23:43 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/04 13:00:02 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,47 +67,44 @@ void	kv_is_dir_exit(t_shell *shell)
 	exit(127);
 }
 
-int	kv_is_valid_env_name(const char *name)
-{
-	if (!name || !*name || (!ft_isalpha(*name) && *name != '_'))
-		return (0);
-	while (*name && *name != '=')
-	{
-		if (!ft_isalnum(*name) && *name != '_' && *name != ' ')
-			return (0);
-		name++;
-	}
-	if (*name == '=')
-	{
-		name++;
-		return (1);
-	}
-	return (2);
+int kv_is_valid_env_name(const char *name) {
+    if (!name || !*name || (!ft_isalpha(*name) && *name != '_'))
+        return (0);
+    while (*name && *name != '=') {
+        if (!ft_isalnum(*name) && *name != '_')
+            return (0);
+        name++;
+    }
+    if (*name == '=')
+        return (1); // Valid name with an '=' sign
+    return (2); // Valid name without an '=' sign
 }
 
-int	kv_process_env_var(t_shell *shell, char *env_var)
+int kv_process_env_var(t_shell *shell, char *env_var)
 {
-	int		result;
-	char	*name;
-	char	*value;
-	char	*equal_sign;
+    char *name;
+    char *value;
+    char *equal_sign;
 
-	equal_sign = ft_strchr(env_var, '=');
-	if (equal_sign)
+    equal_sign = ft_strchr(env_var, '=');
+    if (equal_sign)
 	{
-		name = ft_substr(env_var, 0, equal_sign - env_var);
-		value = ft_substr(equal_sign + 1, 0, ft_strlen(equal_sign + 1));
-		if (!name || !value)
-		{
-			free(name);
-			free(value);
-			return (-1);
-		}
-		result = kv_setenv(shell, name, value);
-		free(name);
-		free(value);
-		return (result);
-	}
-	else
-		return (kv_unsetenv(shell, env_var));
+        name = ft_substr(env_var, 0, equal_sign - env_var);
+        value = ft_substr(equal_sign + 1, 0, ft_strlen(equal_sign + 1));
+    } 
+	else 
+	{
+        name = ft_strdup(env_var);
+        value = ft_strdup("");
+    }
+    if (!name || !value) 
+	{
+        free(name);
+        free(value);
+        return (-1);
+    }
+    int result = kv_setenv(shell, name, value);
+    free(name);
+    free(value);
+    return result;
 }

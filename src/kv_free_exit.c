@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_free_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:10:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/26 17:30:22 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/04 11:31:36 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,13 @@ void	kv_freepipex(t_list *pipex)
 void	kv_free_exit(t_shell *shell, int exit_code)
 {
 	rl_clear_history();
-	if (shell->env_var)
+	if (shell->env_list)
 	{
-		free(shell->env_var);
-		shell->env_var = NULL;
+		free(shell->env_list);
+		shell->env_list = NULL;
 	}
-	if (shell->envp)
-		kv_free_paths(shell->envp);
+	// if (shell->envp)
+	// 	free(shell->envp);
 	if (shell->cmd_list)
 		kv_freepipex(shell->cmd_list);
 	free(shell);

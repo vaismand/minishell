@@ -6,130 +6,147 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 19:38:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/24 14:23:28 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/04 14:39:34 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-char	*kv_getenv(t_shell *shell, const char *name)
+t_env_var	*kv_getenv(t_shell *shell, const char *name)
 {
-	int		i;
-	int		len;
-	char	*env_var;
-
-	i = 0;
-	len = ft_strlen(name);
-	while (shell->envp[i])
+    t_env_var *current;
+	
+	current = shell->env_list;
+    while (current != NULL)
 	{
-		if (ft_strncmp(shell->envp[i], name, len) == 0 \
-			&& shell->envp[i][len] == '=')
-		{
-			env_var = ft_strdup(shell->envp[i] + len + 1);
-			if (!env_var)
-				return (NULL);
-			return (env_var);
-		}
-		i++;
-	}
-	return (NULL);
+        if (strcmp(current->v_name, name) == 0)
+            return current; 
+        current = current->next;
+    }
+    return NULL;
 }
 
-static int	kv_add_new_env_var(t_shell *shell, char *new_value)
+int find_or_create_env_var(t_shell *shell, const char *name, const char *value, bool exported)
 {
-	int		i;
-	int		len;
-	char	**new_envp;
-
-	len = 0;
-	while (shell->envp && shell->envp[len])
-		len++;
-	new_envp = malloc(sizeof(char *) * (len + 2));
-	if (!new_envp)
+    t_env_var *current = shell->env_list; // Assuming shell->env_vars is the head of your list
+    t_env_var *prev = NULL;
+    while (current) 
 	{
-		free(new_value);
-		return (-1);
-	}
-	i = 0;
-	while (i < len)
-	{
-		new_envp[i] = shell->envp[i];
-		i++;
-	}
-	new_envp[len] = new_value;
-	new_envp[len + 1] = NULL;
-	free(shell->envp);
-	shell->envp = new_envp;
-	return (0);
+        if (strcmp(current->v_name, name) == 0) 
+		{
+            free(current->v_value); // Free the old value if it exists
+            current->v_value = value ? strdup(value) : NULL; // Assign new value or NULL
+            current->exported = exported;
+            return (0); // Success
+        }
+        prev = current;
+        current = current->next;
+    }
+    t_env_var *new_var = (t_env_var *)malloc(sizeof(t_env_var));
+    if (!new_var)
+        return (-1); // Memory allocation failure
+    new_var->v_name = strdup(name);
+    new_var->v_value = value ? strdup(value) : NULL;
+    new_var->exported = exported;
+    new_var->next = NULL;
+    if (prev)
+        prev->next = new_var;
+    else
+        shell->env_list = new_var; // The list was empty
+    return (0); // Success
 }
 
-int	kv_setenv(t_shell *shell, const char *name, const char *value)
+void kv_add_env_var(t_shell *shell, const char *env_str)
 {
-	int		i;
-	char	*new_var;
-	char	*new_value;
+    t_env_var *new_var;
+    char *delimiter;
+    int len;
 
-	new_var = ft_strjoin(name, "=");
-	if (!new_var)
-		return (-1);
-	new_value = ft_strjoin(new_var, value);
-	free(new_var);
-	if (!new_value)
-		return (-1);
-	i = 0;
-	while (shell->envp && shell->envp[i])
-	{
-		if (ft_strncmp(shell->envp[i], name, ft_strlen(name)) == 0)
-		{
-			free(shell->envp[i]);
-			shell->envp[i] = new_value;
-			return (0);
-		}
-		i++;
-	}
-	return (kv_add_new_env_var(shell, new_value));
+    new_var = (t_env_var *)malloc(sizeof(t_env_var));
+    if (!new_var)
+        kv_free_exit(shell, 1);
+    delimiter = strchr(env_str, '=');
+    if (delimiter != NULL)
+        len = delimiter - env_str;
+    else
+        len = ft_strlen(env_str);
+    new_var->v_name = ft_substr(env_str, 0, len);
+    if (delimiter != NULL)
+        new_var->v_value = ft_strdup(delimiter + 1);
+    else
+        new_var->v_value = ft_strdup("");
+    new_var->exported = true;
+    new_var->next = shell->env_list;
+    shell->env_list = new_var;
 }
 
-static char	**remove_env_var(char **envp, const char *name, int len)
+int kv_add_new_env_var(t_shell *shell, const char *name, const char *value)
 {
-	char	**new_envp;
-	int		i;
-	int		j;
+    t_env_var *new_var = (t_env_var *)malloc(sizeof(t_env_var));
+    if (!new_var) 
+		return (-1);
+    new_var->v_name = ft_strdup(name);
+    new_var->v_value = ft_strdup(value);
+    new_var->exported = true;
+    new_var->next = shell->env_list;
 
-	new_envp = ft_calloc(len, sizeof(char *));
-	i = 0;
-	j = 0;
-	while (envp[i])
+    if (!new_var->v_name || !new_var->v_value)
 	{
-		if (ft_strncmp(envp[i], name, ft_strlen(name)) != 0)
+        if (new_var->v_name) free(new_var->v_name);
+        if (new_var->v_value) free(new_var->v_value);
+        free(new_var);
+        return (-1);
+    }
+    shell->env_list = new_var;
+    return (0);
+}
+
+int kv_setenv(t_shell *shell, const char *name, const char *value) 
+{
+    t_env_var *current = shell->env_list;
+
+    while (current != NULL) 
+	{
+        if (strcmp(current->v_name, name) == 0)
 		{
-			new_envp[j] = ft_strdup(envp[i]);
-			if (!new_envp[j])
-				return (kv_free_paths(new_envp), NULL);
-			j++;
-		}
-		i++;
-	}
-	new_envp[j] = NULL;
-	kv_free_paths(envp);
-	return (new_envp);
+            free(current->v_value);
+            current->v_value = ft_strdup(value);
+            if (!current->v_value) return (-1);
+            return (0);
+        }
+        current = current->next;
+    }
+    return kv_add_new_env_var(shell, name, value);
 }
 
 int	kv_unsetenv(t_shell *shell, const char *name)
 {
-	int		len;
-	char	*tmp;
-	char	**new_envp;
+    t_env_var	*current;
+    t_env_var	*prev;
+    int		found;
 
-	len = 0;
-	tmp = kv_getenv(shell, name);
-	if (!tmp)
-		return (free(tmp), 0);
-	while (shell->envp && shell->envp[len])
-		len++;
-	new_envp = remove_env_var(shell->envp, name, len);
-	if (!new_envp)
+    current = shell->env_list;
+    prev = NULL;
+    found = 0; // Indicates whether the variable was found and removed
+    while (current != NULL)
+    {
+        if (strcmp(current->v_name, name) == 0)
+        {
+            if (prev != NULL)
+                prev->next = current->next;
+            else
+                shell->env_list = current->next;
+            free(current->v_name);
+            free(current->v_value);
+            free(current);
+            found = 1; // Variable was found and removed
+            break; // Exit after removing the variable
+        }
+        prev = current;
+        current = current->next;
+    }
+	if (found)
+    	return (0);
+	else
 		return (-1);
-	shell->envp = new_envp;
-	return (free(tmp), 0);
 }

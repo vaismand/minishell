@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/26 17:51:59 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/04 12:08:00 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,17 @@ static void	kv_init_shell(t_shell *shell, char **envp)
 {
 	int	i;
 
-	i = -1;
-	shell->envp = (char **)malloc(sizeof(char *) * (kv_arr_len(envp) + 1));
-	if (!shell->envp)
-		kv_free_exit(shell, 1);
-	while (envp[++i])
-	{
-		shell->envp[i] = ft_strdup(envp[i]);
-		if (!shell->envp[i])
-			kv_free_exit(shell, 1);
-	}
-	shell->envp[i] = NULL;
+	shell->envp = envp;
 	shell->cmd_list = NULL;
 	shell->exit_status = 0;
-	shell->env_var = malloc(sizeof(t_env_var));
-	if (!shell->env_var)
-		kv_free_exit(shell, 1);
-	shell->env_var->v_name = NULL;
-	shell->env_var->v_value = NULL;
+	shell->error_msg = NULL;
+	shell->env_list = NULL;
+	i = 0;
+    while (envp[i])
+    {
+        kv_add_env_var(shell, envp[i]);
+        i++;
+    }
 	kv_set_signals();
 }
 

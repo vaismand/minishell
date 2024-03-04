@@ -3,57 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   kv_builtins.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/26 17:41:05 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/04 12:37:03 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-//function to print export env when no arguments are passed
-static int	kv_print_export(t_shell *shell)
+static int kv_export_command(t_shell *shell)
 {
-	int	i;
+    char **cmd;
+    int i;
+    int status;
 
-	i = 0;
-	while (shell->envp[i])
+    i = 1;
+    cmd = shell->cmd_list->cmd;
+    shell->error_msg = "minishell: export: not a valid identifier\n";
+    if (kv_arr_len(cmd) == 1)
+        return (kv_print_export(shell));
+    while (cmd[i])
 	{
-		printf("declare -x %s\n", shell->envp[i]);
-		i++;
-	}
-	return (0);
-}
-
-static int	kv_export_command(t_shell *shell)
-{
-	char	**cmd;
-	int		i;
-	int		status;
-
-	i = 1;
-	cmd = shell->cmd_list->cmd;
-	shell->error_msg = "minishell: export: not a valid identifier\n";
-	if (kv_arr_len(cmd) == 1)
-		return (kv_print_export(shell));
-	while (cmd[i])
-	{
-		status = kv_is_valid_env_name(cmd[i]);
-		if (status == 0)
+        if (kv_is_valid_env_name(cmd[i]))
+            status = kv_process_env_var(shell, cmd[i]);
+        else 
 		{
-			write(2, shell->error_msg, ft_strlen(shell->error_msg));
-			return (1);
-		}
-		else if (status == 2)
-			return (0);
-		else
-			status = kv_process_env_var(shell, cmd[i]);
-		if (status != 0)
-			break ;
-		i++;
-	}
-	return (status);
+            write(2, shell->error_msg, ft_strlen(shell->error_msg));
+            return (1);
+        }
+        if (status != 0)
+            break;
+        i++;
+    }
+    return (status);
 }
 
 static int	kv_unset_command(t_shell *shell)

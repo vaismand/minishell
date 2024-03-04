@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/26 18:02:43 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/04 14:16:56 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,11 @@ typedef struct cd_state
 }	t_cd_state;
 typedef struct s_env_var
 {
+	int					is_set;
 	char				*v_name;
 	char				*v_value;
 	bool				exported;
-	struct s_env_list	*next;
+	struct s_env_var	*next;
 }	t_env_var;
 
 typedef struct s_split_state
@@ -69,7 +70,7 @@ typedef struct s_shell
 	char		*error_msg;
 	char		**envp;
 	t_list		*cmd_list;
-	t_env_var	*env_var;
+	t_env_var	*env_list;
 }	t_shell;
 
 extern int	g_sigstat;
@@ -91,9 +92,10 @@ int		kv_unsetenv(t_shell *shell, const char *name);
 int		kv_process_env_var(t_shell *shell, char *env_var);
 int		kv_free_cd_paths(char *path, char *oldpwd, char *err_msg);
 int		kv_open_quotes(t_shell *shell);
+int		kv_print_export(t_shell *shell);
+int		find_or_create_env_var(t_shell *shell, const char *name, const char *value, bool exported);
 bool	kv_valid_cmd(char *cmd);
 char	*kv_getinput(t_shell *shell);
-char	*kv_getenv(t_shell *shell, const char *name);
 char	*kv_strip_cmd(char *cmd);
 char	*kv_path_creator(t_shell *shell, char **cmd);
 char	*kv_strip_cmd(char *cmd);
@@ -101,6 +103,7 @@ char	*kv_cmd_parser(char *cmd, t_shell *shell);
 char	*kv_remove_outer_quotes(char *str);
 char	**kv_split_ignore_quotes(char const *s, char c);
 char	*kv_build_and_check_path(const char *base, const char *cmd);
+void	kv_add_env_var(t_shell *shell, const char *env_str);
 void	kv_redirecting(t_list *pipex);
 void	kv_set_signals(void);
 void	kv_child_handler(int signo);
@@ -115,5 +118,6 @@ void	kv_handle_quotes(char c, t_shell *shell);
 void	kv_free_perror(char *name, char *value, int error_msg);
 void	readline_heredoc(char *heredoc, int fd);
 t_list	*kv_new_lst(t_shell *shell, char **argv);
+t_env_var	*kv_getenv(t_shell *shell, const char *name);
 
 #endif

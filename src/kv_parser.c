@@ -3,39 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   kv_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/26 18:03:16 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/04 13:20:18 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-char	*kv_path_creator(t_shell *shell, char **cmd)
+char *kv_path_creator(t_shell *shell, char **cmd)
 {
-	char	**paths;
-	char	*path;
-	char	*path_env;
-	int		i;
+    char **paths;
+    char *path;
+    t_env_var *path_env_var;
+    const char *path_env;
+    int i;
 
-	if (access(cmd[0], F_OK) == 0)
-		return (ft_strdup(cmd[0]));
-	path_env = kv_getenv(shell, "PATH");
-	if (!path_env)
-		return (NULL);
-	paths = ft_split(path_env, ':');
-	if (!paths)
-		return (free(path_env), NULL);
-	path = NULL;
-	i = 0;
-	while (paths[i] && !path)
+    if (access(cmd[0], F_OK) == 0)
+        return (ft_strdup(cmd[0]));
+    path_env_var = kv_getenv(shell, "PATH");
+    if (!path_env_var || !path_env_var->v_value)
+        return (NULL);
+    path_env = path_env_var->v_value;
+    paths = ft_split(path_env, ':');
+    if (!paths)
+        return (NULL);
+    path = NULL;
+    i = 0;
+    while (paths[i] && !path)
 	{
-		path = kv_build_and_check_path(paths[i], cmd[0]);
-		i++;
-	}
-	kv_free_paths(paths);
-	return (free(path_env), path);
+        path = kv_build_and_check_path(paths[i], cmd[0]);
+        i++;
+    }
+    kv_free_paths(paths);
+    return (path);
 }
 
 static int	kv_get_exit_status(char *new_cmd, int *i, t_shell *shell)
@@ -54,34 +56,43 @@ static int	kv_get_exit_status(char *new_cmd, int *i, t_shell *shell)
 	return (k);
 }
 
-static int	kv_env_var_v(char *new_cmd, char *cmd, \
-	int *i, t_shell *shell)
+static int kv_is_delimiter(char c)
 {
-	int	k;
-	int	j;
+    return (c == ' ' || c == '$' || c == '\'' || c == '\"' || c == '\0');
+}
 
-	shell->env_var->v_name = malloc(sizeof(char) * (ft_strlen(cmd) + 1));
-	if (!shell->env_var->v_name)
-		perror("malloc error");
+static int kv_find_delimiter(const char *str)
+{
+    int i = 0;
+    while (str[i] && !kv_is_delimiter(str[i])) {
+        i++;
+    }
+    return i;
+}
+
+static int kv_env_list_v(char *new_cmd, const char *cmd, int *i, t_shell *shell)
+{
+    int j;
+	int k;
+	int len;
+	char *env_var;
+	t_env_var *env;
+
+	j = 0;
 	k = 0;
-	j = *i;
-	while (cmd[++j] && cmd[j] != ' ' && cmd[j] != '$' \
-		&& cmd[j] != '\'' && cmd[j] != '\"')
-		shell->env_var->v_name[k++] = cmd[j];
-	shell->env_var->v_name[k] = '\0';
-	shell->env_var->v_value = kv_getenv(shell, shell->env_var->v_name);
-	if (!shell->env_var->v_value)
-		shell->env_var->v_value = "";
-	k = 0;
-	while (shell->env_var->v_value[k])
+	len = kv_find_delimiter(&cmd[*i + 1]);
+	env_var = ft_substr(&cmd[*i + 1], 0, len);
+	if (!env_var)
+		return (0);
+	env = kv_getenv(shell, env_var);
+	free(env_var);
+	if (env && env->v_value)
 	{
-		new_cmd[k] = shell->env_var->v_value[k];
-		k++;
+		while (env->v_value[j])
+			new_cmd[k++] = env->v_value[j++];
 	}
-	if (shell->env_var->v_value && shell->env_var->v_value[0] != '\0')
-		free(shell->env_var->v_value);
-	*i = j - 1;
-	return (free(shell->env_var->v_name), k);
+	*i += len;
+	return (k);
 }
 
 static int	kv_init_local_vars(int *i, int *k, t_shell *shell)
@@ -109,7 +120,7 @@ char	*kv_cmd_parser(char *cmd, t_shell *shell)
 			state.k += kv_get_exit_status(&state.new_cmd[state.k], &i, shell);
 		else if (cmd[i] && cmd[i] == '$' && !shell->quote
 			&& ft_isalpha(cmd[i + 1]))
-			state.k += kv_env_var_v(&state.new_cmd[state.k], cmd, &i, shell);
+			state.k += kv_env_list_v(&state.new_cmd[state.k], cmd, &i, shell);
 		else if ((cmd[i] == '<' || cmd[i] == '>') && !shell->dquote
 			&& !shell->quote && cmd[i + 1] != ' ')
 			kv_handle_redirection_parser(cmd, &i, &state);

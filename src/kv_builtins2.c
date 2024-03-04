@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:29:54 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/24 14:23:26 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/04 14:23:27 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,24 @@
 
 static char	*kv_change_dir(t_shell *shell, t_cd_state *state, char **cmd)
 {
+	t_env_var	*env_var;
+
+	env_var = NULL;
 	if (!cmd[1])
 	{
-		state->path = kv_getenv(shell, "HOME");
+		env_var = kv_getenv(shell, "HOME");
+		if (!env_var || !env_var->v_value)
+			return (NULL);
+		state->path = ft_strdup(env_var->v_value);
 		if (!state->path)
 			return (NULL);
 	}
 	else if (ft_strcmp(cmd[1], "-") == 0)
 	{
-		state->path = kv_getenv(shell, "OLDPWD");
+		env_var = kv_getenv(shell, "OLDPWD");
+		if (!env_var || !env_var->v_value)
+			return (NULL);
+		state->path = ft_strdup(env_var->v_value);
 		if (!state->path)
 			return (NULL);
 		printf("%s\n", state->path);
@@ -99,12 +108,20 @@ int	kv_pwd_command(void)
 	return (0);
 }
 
-int	kv_env_command(t_shell *shell)
+int kv_env_command(t_shell *shell)
 {
-	int	i;
+    t_env_var *current;
 
-	i = -1;
-	while (shell->envp[++i])
-		printf("%s\n", shell->envp[i]);
-	return (0);
+    current = shell->env_list;
+    while (current != NULL)
+    {
+        if (current->exported && current->is_set)
+			printf("%s", current->v_name);
+		if (current->v_value != NULL)
+			printf("=%s\n", current->v_value);
+		else
+			printf("\n");
+        current = current->next;
+    }
+    return (0);
 }
