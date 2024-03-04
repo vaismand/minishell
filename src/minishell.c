@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/04 12:08:00 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/04 21:08:59 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ static void	kv_init_shell(t_shell *shell, char **envp)
 	shell->error_msg = NULL;
 	shell->env_list = NULL;
 	i = 0;
-    while (envp[i])
-    {
-        kv_add_env_var(shell, envp[i]);
-        i++;
-    }
+	while (envp[i])
+	{
+		kv_add_env_var(shell, envp[i]);
+		i++;
+	}
 	kv_set_signals();
 }
 

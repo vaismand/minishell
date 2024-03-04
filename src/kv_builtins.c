@@ -6,37 +6,37 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/04 12:37:03 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/04 21:01:47 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static int kv_export_command(t_shell *shell)
+static int	kv_export_command(t_shell *shell)
 {
-    char **cmd;
-    int i;
-    int status;
+	char	**cmd;
+	int		i;
+	int		status;
 
-    i = 1;
-    cmd = shell->cmd_list->cmd;
-    shell->error_msg = "minishell: export: not a valid identifier\n";
-    if (kv_arr_len(cmd) == 1)
-        return (kv_print_export(shell));
-    while (cmd[i])
+	i = 1;
+	cmd = shell->cmd_list->cmd;
+	shell->error_msg = "minishell: export: not a valid identifier\n";
+	if (kv_arr_len(cmd) == 1)
+		return (kv_print_export(shell));
+	while (cmd[i])
 	{
-        if (kv_is_valid_env_name(cmd[i]))
-            status = kv_process_env_var(shell, cmd[i]);
-        else 
+		if (kv_is_valid_env_name(cmd[i]))
+			status = kv_process_env_var(shell, cmd[i]);
+		else
 		{
-            write(2, shell->error_msg, ft_strlen(shell->error_msg));
-            return (1);
-        }
-        if (status != 0)
-            break;
-        i++;
-    }
-    return (status);
+			write(2, shell->error_msg, ft_strlen(shell->error_msg));
+			return (1);
+		}
+		if (status != 0)
+			break ;
+		i++;
+	}
+	return (status);
 }
 
 static int	kv_unset_command(t_shell *shell)

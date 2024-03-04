@@ -6,56 +6,52 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:47:42 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/04 13:11:11 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/04 21:14:14 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static void sort_envp(char **envp, int count)
+static void	sort_envp(char **envp, int count)
 {
-    int		i;
-    int		j;
-    char	*temp;
+	int		i;
+	int		j;
+	char	*temp;
 
-    i = 0;
-    while (i < count - 1)
-    {
-        j = 0;
-        while (j < count - i - 1)
-        {
-            if (strcmp(envp[j], envp[j + 1]) > 0)
-            {
-                temp = envp[j];
-                envp[j] = envp[j + 1];
-                envp[j + 1] = temp;
-            }
-            j++;
-        }
-        i++;
-    }
+	i = 0;
+	while (i < count - 1)
+	{
+		j = 0;
+		while (j < count - i - 1)
+		{
+			if (strcmp(envp[j], envp[j + 1]) > 0)
+			{
+				temp = envp[j];
+				envp[j] = envp[j + 1];
+				envp[j + 1] = temp;
+			}
+			j++;
+		}
+		i++;
+	}
 }
 
-void print_env_var(const char *env_var)
+void	print_env_var(const char *env_var)
 {
-    char *delimiter_pos = strchr(env_var, '=');
+	char	*delimiter_pos;
+	int		name_len;
 
-    if (delimiter_pos != NULL) {
-        // Calculate the length of the name part
-        int name_len = delimiter_pos - env_var;
-
-        // Check if the value part is just quotes
-        if (*(delimiter_pos + 1) == '\"' && *(delimiter_pos + 2) == '\"') {
-            // This means the value is empty, so print without quotes
-            printf("declare -x %.*s\n", name_len, env_var);
-        } else {
-            // Print the whole variable as is, including its value
-            printf("declare -x %.*s%s\n", name_len, env_var, delimiter_pos);
-        }
-    } else {
-        // If there's no '=', it's treated as a name with no value
-        printf("declare -x %s\n", env_var);
-    }
+	delimiter_pos = strchr(env_var, '=');
+	if (delimiter_pos != NULL)
+	{
+		name_len = delimiter_pos - env_var;
+		if (*(delimiter_pos + 1) == '\"' && *(delimiter_pos + 2) == '\"')
+			printf("declare -x %.*s\n", name_len, env_var);
+		else
+			printf("declare -x %.*s%s\n", name_len, env_var, delimiter_pos);
+	} 
+	else
+		printf("declare -x %s\n", env_var);
 }
 
 void print_sorted_envp(char **envp, int count)

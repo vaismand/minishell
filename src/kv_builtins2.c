@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:29:54 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/04 15:31:49 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/04 21:10:22 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,14 +108,14 @@ int	kv_pwd_command(void)
 	return (0);
 }
 
-int kv_env_command(t_shell *shell)
+int	kv_env_command(t_shell *shell)
 {
-    t_env_var *current;
+	t_env_var	*current;
 
-    current = shell->env_list;
-    while (current != NULL)
-    {
-        if (current->exported)
+	current = shell->env_list;
+	while (current != NULL)
+	{
+		if (current->exported)
 		{
 			printf("%s", current->v_name);
 			{
@@ -125,7 +125,7 @@ int kv_env_command(t_shell *shell)
 					printf("\n");
 			}
 		}
-        current = current->next;
-    }
-    return (0);
+		current = current->next;
+	}
+	return (0);
 }
