@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 21:34:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/04 13:00:02 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/04 15:53:52 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,5 +106,5 @@ int kv_process_env_var(t_shell *shell, char *env_var)
     int result = kv_setenv(shell, name, value);
     free(name);
     free(value);
-    return result;
+    return (result);
 }

@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:29:54 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/04 14:23:27 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/04 15:31:49 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,12 +115,16 @@ int kv_env_command(t_shell *shell)
     current = shell->env_list;
     while (current != NULL)
     {
-        if (current->exported && current->is_set)
+        if (current->exported)
+		{
 			printf("%s", current->v_name);
-		if (current->v_value != NULL)
-			printf("=%s\n", current->v_value);
-		else
-			printf("\n");
+			{
+				if (current->v_value != NULL)
+					printf("=%s\n", current->v_value);
+				else
+					printf("\n");
+			}
+		}
         current = current->next;
     }
     return (0);

@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 19:38:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/04 14:39:34 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/04 15:56:40 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,11 @@ int kv_add_new_env_var(t_shell *shell, const char *name, const char *value)
 		return (-1);
     new_var->v_name = ft_strdup(name);
     new_var->v_value = ft_strdup(value);
-    new_var->exported = true;
+    if (ft_strcmp(new_var->v_value, "") == 0)
+        new_var->exported = false;
+    else
+        new_var->exported = true;
     new_var->next = shell->env_list;
-
     if (!new_var->v_name || !new_var->v_value)
 	{
         if (new_var->v_name) free(new_var->v_name);
@@ -105,18 +107,18 @@ int kv_setenv(t_shell *shell, const char *name, const char *value)
 {
     t_env_var *current = shell->env_list;
 
-    while (current != NULL) 
-	{
+    while (current != NULL)
+    {
         if (strcmp(current->v_name, name) == 0)
-		{
+        {
             free(current->v_value);
             current->v_value = ft_strdup(value);
-            if (!current->v_value) return (-1);
+            current->exported = true;
             return (0);
         }
         current = current->next;
     }
-    return kv_add_new_env_var(shell, name, value);
+    return (kv_add_new_env_var(shell, name, value));
 }
 
 int	kv_unsetenv(t_shell *shell, const char *name)
