@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_execute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/26 17:27:20 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/05 21:00:32 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ static void	kv_execute_child(t_shell *shell)
 {
 	int	builtin;
 
-	signal(SIGINT, kv_child_handler);
 	kv_redirecting(shell->cmd_list);
 	builtin = kv_child_builtin(shell);
 	if (builtin != 2)
@@ -112,6 +111,9 @@ int	kv_execute_command(t_shell *shell)
 	else if (pid < 0)
 		return (perror("minishell: fork error"), 1);
 	else
+	{
 		kv_parent(pid, shell);
+		g_sigstat = false;
+	}
 	return (shell->exit_status);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_signal.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:21:45 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/26 17:37:58 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/05 21:01:44 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,11 @@ void	kv_child_handler(int signo)
 	}
 }
 
-static void	kv_sigint_handler(int signo)
+void	kv_sigint_handler(int signo)
 {
 	(void)signo;
 	if (g_sigstat)
-	{
-		ft_putstr_fd("\n", 1);
-		g_sigstat = false;
-	}
+		g_sigstat = true;
 	else
 	{
 		ft_putstr_fd("\n", 1);
