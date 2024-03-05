@@ -6,11 +6,25 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:10:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/04 20:53:57 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:12:20 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void	kv_freeenv(t_env_var *env_list)
+{
+	t_env_var	*tmp;
+
+	while (env_list)
+	{
+		tmp = env_list;
+		env_list = env_list->next;
+		free(tmp->v_name);
+		free(tmp->v_value);
+		free(tmp);
+	}
+}
 
 void	kv_free_paths(char **paths)
 {
@@ -70,7 +84,7 @@ void	kv_free_exit(t_shell *shell, int exit_code)
 	rl_clear_history();
 	if (shell->env_list)
 	{
-		free(shell->env_list);
+		kv_freeenv(shell->env_list);
 		shell->env_list = NULL;
 	}
 	if (shell->cmd_list)
