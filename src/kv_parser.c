@@ -6,38 +6,38 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/04 13:20:18 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/05 11:56:35 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-char *kv_path_creator(t_shell *shell, char **cmd)
+char	*kv_path_creator(t_shell *shell, char **cmd)
 {
-    char **paths;
-    char *path;
-    t_env_var *path_env_var;
-    const char *path_env;
-    int i;
+	char		**paths;
+	char		*path;
+	t_env_var	*path_env_var;
+	const char	*path_env;
+	int			i;
 
-    if (access(cmd[0], F_OK) == 0)
-        return (ft_strdup(cmd[0]));
-    path_env_var = kv_getenv(shell, "PATH");
-    if (!path_env_var || !path_env_var->v_value)
-        return (NULL);
-    path_env = path_env_var->v_value;
-    paths = ft_split(path_env, ':');
-    if (!paths)
-        return (NULL);
-    path = NULL;
-    i = 0;
-    while (paths[i] && !path)
+	if (access(cmd[0], F_OK) == 0)
+		return (ft_strdup(cmd[0]));
+	path_env_var = kv_getenv(shell, "PATH");
+	if (!path_env_var || !path_env_var->v_value)
+		return (NULL);
+	path_env = path_env_var->v_value;
+	paths = ft_split(path_env, ':');
+	if (!paths)
+		return (NULL);
+	path = NULL;
+	i = 0;
+	while (paths[i] && !path)
 	{
-        path = kv_build_and_check_path(paths[i], cmd[0]);
-        i++;
-    }
-    kv_free_paths(paths);
-    return (path);
+		path = kv_build_and_check_path(paths[i], cmd[0]);
+		i++;
+	}
+	kv_free_paths(paths);
+	return (path);
 }
 
 static int	kv_get_exit_status(char *new_cmd, int *i, t_shell *shell)
@@ -56,27 +56,14 @@ static int	kv_get_exit_status(char *new_cmd, int *i, t_shell *shell)
 	return (k);
 }
 
-static int kv_is_delimiter(char c)
+static int	kv_env_list_v(char *new_cmd, const char *cmd, \
+	int *i, t_shell *shell)
 {
-    return (c == ' ' || c == '$' || c == '\'' || c == '\"' || c == '\0');
-}
-
-static int kv_find_delimiter(const char *str)
-{
-    int i = 0;
-    while (str[i] && !kv_is_delimiter(str[i])) {
-        i++;
-    }
-    return i;
-}
-
-static int kv_env_list_v(char *new_cmd, const char *cmd, int *i, t_shell *shell)
-{
-    int j;
-	int k;
-	int len;
-	char *env_var;
-	t_env_var *env;
+	int			j;
+	int			k;
+	int			len;
+	char		*env_var;
+	t_env_var	*env;
 
 	j = 0;
 	k = 0;

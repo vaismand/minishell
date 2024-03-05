@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/04 14:16:56 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:06:38 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int		kv_process_env_var(t_shell *shell, char *env_var);
 int		kv_free_cd_paths(char *path, char *oldpwd, char *err_msg);
 int		kv_open_quotes(t_shell *shell);
 int		kv_print_export(t_shell *shell);
+int		kv_find_delimiter(const char *str);
 int		find_or_create_env_var(t_shell *shell, const char *name, const char *value, bool exported);
 bool	kv_valid_cmd(char *cmd);
 char	*kv_getinput(t_shell *shell);

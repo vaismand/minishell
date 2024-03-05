@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:47:42 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/04 21:14:14 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/05 14:54:21 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,78 +49,80 @@ void	print_env_var(const char *env_var)
 			printf("declare -x %.*s\n", name_len, env_var);
 		else
 			printf("declare -x %.*s%s\n", name_len, env_var, delimiter_pos);
-	} 
+	}
 	else
 		printf("declare -x %s\n", env_var);
 }
 
-void print_sorted_envp(char **envp, int count)
+void	print_sorted_envp(char **envp, int count)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (i < count)
-    {
-        print_env_var(envp[i]);
-        i++;
-    }
+	i = 0;
+	while (i < count)
+	{
+		print_env_var(envp[i]);
+		i++;
+	}
 }
 
-char **env_list_to_array(t_shell *shell, int *count)
+char	**env_list_to_array(t_shell *shell, int *count)
 {
-    t_env_var *current;
-    char **envp_copy;
-    int len;
-    int i;
-    int str_len;
+	t_env_var	*current;
+	char		**envp_copy;
+	int			len;
+	int			i;
+	int			str_len;
 
-    current = shell->env_list;
-    len = 0;
-    while (current)
-    {
-        len++;
-        current = current->next;
-    }
-    envp_copy = (char **)malloc(sizeof(char *) * (len + 1));
-    if (!envp_copy)
-        return (NULL);
-    current = shell->env_list;
-    i = 0;
-    while (i < len)
-    {
-        str_len = strlen(current->v_name) + strlen(current->v_value) + 4; // +3 for '=', double quotes, and '\0'
-        envp_copy[i] = (char *)malloc(str_len);
-        if (envp_copy[i] == NULL)
-        {
-            while (i > 0)
-                free(envp_copy[--i]);
-            free(envp_copy);
-            return (NULL);
-        }
-        strcpy(envp_copy[i], current->v_name);
-        strcat(envp_copy[i], "=\"");
-        strcat(envp_copy[i], current->v_value);
-        strcat(envp_copy[i], "\"");
-        current = current->next;
-        i++;
-    }
-    envp_copy[len] = NULL;
-    *count = len;
-    return (envp_copy);
+	current = shell->env_list;
+	len = 0;
+	while (current)
+	{
+		len++;
+		current = current->next;
+	}
+	envp_copy = (char **)malloc(sizeof(char *) * (len + 1));
+	if (!envp_copy)
+		return (NULL);
+	current = shell->env_list;
+	i = 0;
+	while (i < len)
+	{
+		str_len = strlen(current->v_name) + strlen(current->v_value) + 4;
+		envp_copy[i] = (char *)malloc(str_len);
+		if (envp_copy[i] == NULL)
+		{
+			while (i > 0)
+				free(envp_copy[--i]);
+			free(envp_copy);
+			return (NULL);
+		}
+		strcpy(envp_copy[i], current->v_name);
+		strcat(envp_copy[i], "=\"");
+		strcat(envp_copy[i], current->v_value);
+		strcat(envp_copy[i], "\"");
+		current = current->next;
+		i++;
+	}
+	envp_copy[len] = NULL;
+	*count = len;
+	return (envp_copy);
 }
 
-int kv_print_export(t_shell *shell)
+int	kv_print_export(t_shell *shell)
 {
-    int count;
-    char **envp_copy = env_list_to_array(shell, &count);
-    if (!envp_copy)
-        return (-1);
-    sort_envp(envp_copy, count);
-    print_sorted_envp(envp_copy, count);
-    for (int i = 0; i < count; i++) 
-    {
-        free(envp_copy[i]);
-    }
-    free(envp_copy);
-    return (0);
+	int		count;
+	int		i;
+	char	**envp_copy;
+
+	envp_copy = env_list_to_array(shell, &count);
+	if (!envp_copy)
+		return (-1);
+	sort_envp(envp_copy, count);
+	print_sorted_envp(envp_copy, count);
+	i = 0;
+	while (i < count)
+		free(envp_copy[i++]);
+	free(envp_copy);
+	return (0);
 }
