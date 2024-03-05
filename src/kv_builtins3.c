@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_builtins3.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:47:42 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/05 14:54:21 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/06 00:35:03 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,39 +71,14 @@ char	**env_list_to_array(t_shell *shell, int *count)
 	t_env_var	*current;
 	char		**envp_copy;
 	int			len;
-	int			i;
-	int			str_len;
 
 	current = shell->env_list;
-	len = 0;
-	while (current)
-	{
-		len++;
-		current = current->next;
-	}
+	len = kv_count_env_var(current);
 	envp_copy = (char **)malloc(sizeof(char *) * (len + 1));
 	if (!envp_copy)
 		return (NULL);
 	current = shell->env_list;
-	i = 0;
-	while (i < len)
-	{
-		str_len = strlen(current->v_name) + strlen(current->v_value) + 4;
-		envp_copy[i] = (char *)malloc(str_len);
-		if (envp_copy[i] == NULL)
-		{
-			while (i > 0)
-				free(envp_copy[--i]);
-			free(envp_copy);
-			return (NULL);
-		}
-		strcpy(envp_copy[i], current->v_name);
-		strcat(envp_copy[i], "=\"");
-		strcat(envp_copy[i], current->v_value);
-		strcat(envp_copy[i], "\"");
-		current = current->next;
-		i++;
-	}
+	kv_copy_env(current, envp_copy, len);
 	envp_copy[len] = NULL;
 	*count = len;
 	return (envp_copy);

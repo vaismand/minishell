@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/05 20:55:40 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/06 00:27:12 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,8 @@ void		kv_handle_redirection_parser(char *cmd, int *i, \
 void		kv_handle_quotes(char c, t_shell *shell);
 void		kv_free_perror(char *name, char *value, int error_msg);
 void		readline_heredoc(char *heredoc, int fd);
+void		kv_copy_env(t_env_var	*current, char **envp_copy, int len);
+int			kv_count_env_var(t_env_var *env_var);
 t_list		*kv_new_lst(t_shell *shell, char **argv);
 t_env_var	*kv_getenv(t_shell *shell, const char *name);
 

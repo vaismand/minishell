@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+         #
+#    By: dkohn <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/24 14:23:01 by dvaisman          #+#    #+#              #
-#    Updated: 2024/03/04 12:01:33 by dvaisman         ###   ########.fr        #
+#    Updated: 2024/03/06 00:27:56 by dkohn            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRCS = src/minishell.c \
 		src/kv_builtins.c \
 		src/kv_builtins2.c \
 		src/kv_builtins3.c \
+		src/kv_builtins_utils.c \
 		src/kv_pipex.c \
 		src/kv_pipex_utils.c \
 		src/kv_file_opening.c \
