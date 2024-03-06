@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/05 11:56:35 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/06 19:06:01 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,11 @@ char	*kv_cmd_parser(char *cmd, t_shell *shell)
 	kv_init_local_vars(&i, &state.k, shell);
 	while (cmd[++i])
 	{
+		if (cmd[i] == '|' && cmd[i + 1] == '|' && !shell->quote && !shell->dquote)
+		{
+			shell->exit_status = 2;
+			return (free(cmd), free(state.new_cmd), perror("minishell: syntax error near unexpected token `||'"), NULL);
+		}
 		kv_handle_quotes(cmd[i], shell);
 		if (cmd[i] && cmd[i] == '$' && cmd[i + 1] == '?' && !shell->quote)
 			state.k += kv_get_exit_status(&state.new_cmd[state.k], &i, shell);

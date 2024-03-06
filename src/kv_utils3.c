@@ -3,33 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   kv_utils3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:31:37 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/05 15:06:20 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/06 20:12:35 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-void	readline_heredoc(char *heredoc, int fd)
-{
-	char	*line;
-
-	line = readline("> ");
-	while (line)
-	{
-		if (ft_strcmp(line, heredoc) == 0)
-		{
-			free(line);
-			break ;
-		}
-		write(fd, line, ft_strlen(line));
-		write(fd, "\n", 1);
-		free(line);
-		line = readline("> ");
-	}
-}
 
 int	kv_open_quotes(t_shell *shell)
 {
@@ -78,4 +59,12 @@ void	kv_add_env_var(t_shell *shell, const char *env_str)
 	new_var->exported = true;
 	new_var->next = shell->env_list;
 	shell->env_list = new_var;
+}
+
+void kv_write_redir(char *redir_type, char *filename, t_list *cmd_list)
+{
+	filename = kv_remove_outer_quotes(filename);
+	cmd_list->redir_type = ft_strdup(redir_type);
+	cmd_list->filename = ft_strdup(filename);
+	free(filename);
 }
