@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 15:05:03 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/07 03:42:23 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/07 14:31:32 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ void	kv_write_redir(char *redir, char *filename, t_list *cmd_list)
 	filename = kv_remove_outer_quotes(filename);
 	new_redir->redir_type = ft_strdup(redir);
 	new_redir->filename = ft_strdup(filename);
+	free(redir);
+	free(filename);
 	new_redir->next = NULL;
 	if (!new_redir->redir_type || !new_redir->filename)
 		return (perror("minishell"));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_free_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:10:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/05 15:12:20 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/07 14:33:05 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,24 @@ void	kv_free_paths(char **paths)
 	paths = NULL;
 }
 
-static void	free_heredoc(t_list *pipex)
+static void	free_redir(t_list *pipex)
 {
+	t_redir	*tmp;
+	
 	if (pipex->heredoc)
 	{
 		unlink(pipex->heredoc);
 		free(pipex->heredoc);
 		pipex->heredoc = NULL;
+	}
+	while (pipex->redir)
+	{
+
+		tmp = pipex->redir;
+		pipex->redir = pipex->redir->next;
+		free(tmp->redir_type);
+		free(tmp->filename);
+		free(tmp);
 	}
 }
 
@@ -71,7 +82,7 @@ void	kv_freepipex(t_list *pipex)
 			free(pipex->path);
 			pipex->path = NULL;
 		}
-		free_heredoc(pipex);
+		free_redir(pipex);
 		tmp = pipex;
 		pipex = pipex->next;
 		free(tmp);
