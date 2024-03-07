@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:04:04 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/06 19:59:47 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/07 01:12:10 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,17 @@ typedef struct s_list
 	char			**cmd;
 	char			*path;
 	char			*heredoc;
-	char 			*filename;
-	char			*redir_type;
+	struct s_redir	*redir;
 	struct s_list	*prev;
 	struct s_list	*next;
 }	t_list;
+
+typedef struct s_redir
+{
+	char			*redir_type;
+	char			*filename;
+	struct s_redir	*next;
+}	t_redir;
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42

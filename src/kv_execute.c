@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/06 20:21:24 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/07 03:46:44 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ static void	kv_execute_child(t_shell *shell)
 {
 	int	builtin;
 
-	kv_handle_redirection(shell->cmd_list);
 	kv_redirecting(shell->cmd_list);
 	builtin = kv_child_builtin(shell);
 	if (builtin != 2)
@@ -75,6 +74,7 @@ static void	kv_execute_child(t_shell *shell)
 
 static int	pre_execution_checks(t_shell *shell)
 {
+	kv_handle_redirection(shell->cmd_list);
 	if (!shell->cmd_list->cmd || !shell->cmd_list->cmd[0])
 		return (0);
 	if (shell->cmd_list->next && pipe(shell->cmd_list->pd) < 0)

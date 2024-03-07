@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:31:37 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/06 20:12:35 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/07 01:11:20 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,4 @@ void	kv_add_env_var(t_shell *shell, const char *env_str)
 	new_var->exported = true;
 	new_var->next = shell->env_list;
 	shell->env_list = new_var;
-}
-
-void kv_write_redir(char *redir_type, char *filename, t_list *cmd_list)
-{
-	filename = kv_remove_outer_quotes(filename);
-	cmd_list->redir_type = ft_strdup(redir_type);
-	cmd_list->filename = ft_strdup(filename);
-	free(filename);
 }

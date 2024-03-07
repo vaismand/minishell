@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:42:20 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/02/26 17:40:01 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/07 02:07:32 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ static t_list	*kv_set_tmp_to_zero(t_shell *shell, t_list *tmp, int i)
 	tmp->file_error = 0;
 	tmp->prev = NULL;
 	tmp->heredoc = NULL;
+	tmp->redir = NULL;
 	tmp->pd[0] = 0;
 	tmp->pd[1] = 0;
 	tmp->path = kv_path_creator(shell, tmp->cmd);

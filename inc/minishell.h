@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/06 20:21:13 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/07 03:45:09 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,8 @@ char		*kv_cmd_parser(char *cmd, t_shell *shell);
 char		*kv_remove_outer_quotes(char *str);
 char		**kv_split_ignore_quotes(char const *s, char c);
 char		*kv_build_and_check_path(const char *base, const char *cmd);
+int			kv_parsing_stuff(char *cmd, t_shell *shell,
+				t_parser_state *state, int *i);
 void		kv_add_env_var(t_shell *shell, const char *env_str);
 void		kv_redirecting(t_list *pipex);
 void		kv_set_signals(void);
@@ -122,8 +124,15 @@ void		kv_handle_redirection(t_list *cmd_list);
 void		kv_handle_quotes(char c, t_shell *shell);
 void		kv_free_perror(char *name, char *value, int error_msg);
 void		readline_heredoc(char *heredoc, int fd);
+void		kv_write_redir(char *redir, char *filename, t_list *cmd_list);
 void		kv_copy_env(t_env_var	*current, char **envp_copy, int len);
+void		kv_check_for_heredoc(t_list *cmd_list);
+int			kv_open_file_read(char *file);
+int			kv_open_file_write(char *file);
 int			kv_count_env_var(t_env_var *env_var);
+int			kv_get_exit_status(char *new_cmd, int *i, t_shell *shell);
+int			kv_env_list_v(char *new_cmd, const char *cmd, \
+	int *i, t_shell *shell);
 t_list		*kv_new_lst(t_shell *shell, char **argv);
 t_env_var	*kv_getenv(t_shell *shell, const char *name);
 

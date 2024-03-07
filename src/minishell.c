@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/06 20:12:58 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/07 01:53:47 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,7 @@ static void	kv_process_command(t_shell *shell, t_list **cmd_list, char *command)
 	if (args >= 2)
 	{
 		kv_redir_open(tmp2, tmp);
-		if (tmp->redir_type && ft_strncmp(tmp->redir_type, "<<", 2) == 0)
-			kv_handle_heredoc(tmp);
+		kv_check_for_heredoc(tmp);
 	}
 	ft_lstadd_back(cmd_list, tmp);
 	kv_free_paths(tmp2);
