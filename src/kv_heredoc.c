@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_heredoc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 19:23:08 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/07 01:11:56 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/08 16:21:11 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	kv_handle_heredoc(t_list *cmd_list)
 	fd = kv_open_file_write(cmd_list->heredoc);
 	if (fd < 0)
 		return (-1);
+	g_sigstat = 2;
 	readline_heredoc(cmd_list->redir->filename, fd);
 	close(fd);
 	fd = kv_open_file_read(cmd_list->heredoc);
@@ -41,7 +42,7 @@ void	readline_heredoc(char *heredoc, int fd)
 	while (1)
 	{
 		line = readline("> ");
-		if (ft_strcmp(line, heredoc) == 0)
+		if (ft_strcmp(line, heredoc) == 0 || g_sigstat == 0)
 		{
 			free(line);
 			break ;
@@ -50,6 +51,7 @@ void	readline_heredoc(char *heredoc, int fd)
 		write(fd, "\n", 1);
 		free(line);
 	}
+	g_sigstat = 0;
 }
 
 void	kv_check_for_heredoc(t_list *cmd_list)

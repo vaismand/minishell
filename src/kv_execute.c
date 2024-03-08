@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_execute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/07 03:46:44 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/08 15:41:07 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static void	kv_parent(pid_t pid, t_shell *shell)
 {
+	g_sigstat = 1;
 	waitpid(pid, &shell->status, WUNTRACED);
 	while (!WIFEXITED(shell->status) && !WIFSIGNALED(shell->status))
 		waitpid(pid, &shell->status, WUNTRACED);
@@ -29,7 +30,7 @@ static void	kv_parent(pid_t pid, t_shell *shell)
 	}
 	if (shell->cmd_list->out)
 		close(shell->cmd_list->out);
-	g_sigstat = false;
+	g_sigstat = 0;
 }
 
 static void	kv_command_not_found(t_shell *shell)
@@ -52,6 +53,7 @@ static void	kv_execute_child(t_shell *shell)
 {
 	int	builtin;
 
+	signal(SIGINT, SIG_DFL);
 	kv_redirecting(shell->cmd_list);
 	builtin = kv_child_builtin(shell);
 	if (builtin != 2)
@@ -112,9 +114,6 @@ int	kv_execute_command(t_shell *shell)
 	else if (pid < 0)
 		return (perror("minishell: fork error"), 1);
 	else
-	{
 		kv_parent(pid, shell);
-		g_sigstat = false;
-	}
 	return (shell->exit_status);
 }

@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:21:45 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/05 21:01:44 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/08 16:25:20 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,17 @@ void	kv_child_handler(int signo)
 void	kv_sigint_handler(int signo)
 {
 	(void)signo;
-	if (g_sigstat)
-		g_sigstat = true;
+	if (g_sigstat == 2)
+	{
+		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		g_sigstat = 0;
+	}
+	else if (g_sigstat == 1)
+	{
+		ft_putchar_fd('\n', STDOUT_FILENO);
+	}
 	else
 	{
 		ft_putstr_fd("\n", 1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/07 01:53:47 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/08 15:31:21 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ static void	kv_run_shell_loop(t_shell *shell)
 			shell->cmd_list = shell->cmd_list->next;
 		}
 		kv_freepipex(tmp);
+		kv_set_signals();
 	}
 }
 
