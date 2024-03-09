@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/09 09:50:33 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/09 14:11:30 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static void	kv_parent(pid_t pid, t_shell *shell)
 {
-	g_sigstat = 1;
+	if (g_sigstat != -1)
+		g_sigstat = 1;
 	waitpid(pid, &shell->status, WUNTRACED);
 	while (!WIFEXITED(shell->status) && !WIFSIGNALED(shell->status))
 		waitpid(pid, &shell->status, WUNTRACED);
@@ -26,7 +27,8 @@ static void	kv_parent(pid_t pid, t_shell *shell)
 		close(shell->cmd_list->in);
 	if (shell->cmd_list->out)
 		close(shell->cmd_list->out);
-	g_sigstat = 0;
+	if (g_sigstat != -1)
+		g_sigstat = 0;
 }
 
 static void	kv_command_not_found(t_shell *shell)
@@ -49,16 +51,15 @@ static void	kv_execute_child(t_shell *shell)
 {
 	int	builtin;
 
+	if (g_sigstat == -1)
+		exit(130);
+	kv_handle_redirection(shell->cmd_list);
 	kv_redirecting(shell->cmd_list);
 	builtin = kv_child_builtin(shell);
 	if (builtin != 2)
 		kv_free_exit(shell, builtin);
 	if (shell->cmd_list->path == NULL)
 		kv_command_not_found(shell);
-	signal(SIGINT, kv_child_handler);
-	signal(SIGQUIT, SIG_DFL);
-	if (g_sigstat == -1)
-		exit(130);
 	if (execve(shell->cmd_list->path, shell->cmd_list->cmd, shell->envp) == -1)
 	{
 		if (errno == ENOENT || errno == 14 || errno == 8)
@@ -75,7 +76,6 @@ static void	kv_execute_child(t_shell *shell)
 
 static int	pre_execution_checks(t_shell *shell)
 {
-	kv_handle_redirection(shell->cmd_list);
 	if (!shell->cmd_list->cmd || !shell->cmd_list->cmd[0])
 		return (0);
 	if (shell->cmd_list->next && pipe(shell->cmd_list->pd) < 0)
@@ -106,12 +106,16 @@ int	kv_execute_command(t_shell *shell)
 		if (builtin != 2)
 			return (builtin);
 	}
+	kv_update_shlvl(shell);
 	pid = fork();
 	if (pid == 0)
+	{
+		signal(SIGINT, kv_child_handler);
 		kv_execute_child(shell);
-	else if (pid < 0)
-		return (perror("minishell: fork error"), 1);
-	else
+	}
+	else if (pid > 0)
 		kv_parent(pid, shell);
+	else
+		return (perror("minishell: fork error"), 1);
 	return (shell->exit_status);
 }
