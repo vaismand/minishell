@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:21:45 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/08 16:25:20 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/09 09:52:54 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,12 @@ void	kv_sigint_handler(int signo)
 	if (g_sigstat == 2)
 	{
 		ioctl(STDIN_FILENO, TIOCSTI, "\n");
+		g_sigstat = -1;
 		rl_replace_line("", 0);
 		rl_on_new_line();
-		g_sigstat = 0;
 	}
 	else if (g_sigstat == 1)
-	{
-		ft_putchar_fd('\n', STDOUT_FILENO);
-	}
+		(void)signo;
 	else
 	{
 		ft_putstr_fd("\n", 1);
@@ -55,7 +53,6 @@ void	kv_set_signals(void)
 	sigaction(SIGINT, &sigint_act, NULL);
 	sigquit_act.sa_handler = SIG_IGN;
 	sigquit_act.sa_flags = 0;
-	g_sigstat = false;
 	sigemptyset(&sigquit_act.sa_mask);
 	sigaction(SIGQUIT, &sigquit_act, NULL);
 }
