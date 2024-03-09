@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/09 14:17:34 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/09 16:01:44 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ static void	kv_execute_child(t_shell *shell)
 
 	if (g_sigstat == -1)
 		exit(130);
-	kv_handle_redirection(shell->cmd_list);
 	kv_redirecting(shell->cmd_list);
 	builtin = kv_child_builtin(shell);
 	if (builtin != 2)
@@ -76,6 +75,8 @@ static void	kv_execute_child(t_shell *shell)
 
 static int	pre_execution_checks(t_shell *shell)
 {
+	if (g_sigstat != -1)
+		kv_handle_redirection(shell->cmd_list);
 	if (!shell->cmd_list->cmd || !shell->cmd_list->cmd[0])
 		return (0);
 	if (shell->cmd_list->next && pipe(shell->cmd_list->pd) < 0)
@@ -109,13 +110,10 @@ int	kv_execute_command(t_shell *shell)
 	kv_update_shlvl(shell);
 	pid = fork();
 	if (pid == 0)
-	{
-		signal(SIGINT, kv_child_handler);
 		kv_execute_child(shell);
-	}
-	else if (pid > 0)
-		kv_parent(pid, shell);
-	else
+	else if (pid < 0)
 		return (perror("minishell: fork error"), 1);
+	else
+		kv_parent(pid, shell);
 	return (shell->exit_status);
 }

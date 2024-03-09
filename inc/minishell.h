@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/09 14:11:26 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/09 16:00:45 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,6 @@ extern int	g_sigstat;
 
 int			kv_execute_command(t_shell *shell);
 int			kv_count(char const *s, char c);
-int			kv_check_nested_shell(t_shell *shell);
-void		kv_update_shlvl(t_shell *shell);
 int			kv_count_cmds(char **cmd);
 int			kv_arr_len(char **arr);
 int			kv_parent_builtin(t_shell *shell);
@@ -97,7 +95,7 @@ int			kv_print_export(t_shell *shell);
 int			kv_find_delimiter(const char *str);
 int			find_or_create_env_var(t_shell *shell, const char *name, \
 	const char *value, bool exported);
-int			kv_check_for_nested_shell(t_shell *shell);
+int			kv_check_nested_shell(t_shell *shell);
 bool		kv_valid_cmd(char *cmd);
 char		*kv_getinput(t_shell *shell);
 char		*kv_strip_cmd(char *cmd);
@@ -111,6 +109,7 @@ int			kv_parsing_stuff(char *cmd, t_shell *shell,
 				t_parser_state *state, int *i);
 void		kv_add_env_var(t_shell *shell, const char *env_str);
 void		kv_redirecting(t_list *pipex);
+void		kv_update_shlvl(t_shell *shell);
 void		kv_set_signals(void);
 void		kv_sigint_handler(int signo);
 void		kv_child_handler(int signo);
