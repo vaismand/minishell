@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:21:45 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/09 14:18:00 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/09 14:27:10 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ void	kv_sigint_handler(int signo)
 	}
 	else if (g_sigstat == 1)
 		ft_putstr_fd("\n", 1);
-	else if (g_sigstat == 3)
-		(void)signo;
 	else
 	{
 		ft_putstr_fd("\n", 1);
