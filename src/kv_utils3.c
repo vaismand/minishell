@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:31:37 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/09 16:11:13 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/09 16:16:57 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	kv_add_env_var(t_shell *shell, const char *env_str)
 	new_var = (t_env_var *)malloc(sizeof(t_env_var));
 	if (!new_var)
 		kv_free_exit(shell, 1);
-	delimiter = strchr(env_str, '=');
+	delimiter = ft_strchr(env_str, '=');
 	if (delimiter != NULL)
 		len = delimiter - env_str;
 	else

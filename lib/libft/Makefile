@@ -6,7 +6,7 @@
 #    By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/11 17:29:31 by dkohn             #+#    #+#              #
-#    Updated: 2024/02/24 14:23:03 by dvaisman         ###   ########.fr        #
+#    Updated: 2024/03/09 16:15:53 by dvaisman         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,8 @@ SOURCES = srcs/ft_atoi.c \
 			srcs/ft_strchr.c \
 			srcs/ft_strcmp.c \
 			srcs/ft_strdup.c \
+			srcs/ft_strcat.c \
+			srcs/ft_strcpy.c \
 			srcs/ft_strjoin.c \
 			srcs/ft_strlcat.c \
 			srcs/ft_strlcpy.c \

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_builtins3.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/04 11:47:42 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/06 00:35:03 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/09 16:17:48 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	sort_envp(char **envp, int count)
 		j = 0;
 		while (j < count - i - 1)
 		{
-			if (strcmp(envp[j], envp[j + 1]) > 0)
+			if (ft_strcmp(envp[j], envp[j + 1]) > 0)
 			{
 				temp = envp[j];
 				envp[j] = envp[j + 1];
@@ -41,7 +41,7 @@ void	print_env_var(const char *env_var)
 	char	*delimiter_pos;
 	int		name_len;
 
-	delimiter_pos = strchr(env_var, '=');
+	delimiter_pos = ft_strchr(env_var, '=');
 	if (delimiter_pos != NULL)
 	{
 		name_len = delimiter_pos - env_var;

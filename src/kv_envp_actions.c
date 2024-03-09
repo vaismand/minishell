@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/08 19:38:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/05 15:05:39 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/09 16:17:45 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_env_var	*kv_getenv(t_shell *shell, const char *name)
 	current = shell->env_list;
 	while (current != NULL)
 	{
-		if (strcmp(current->v_name, name) == 0)
+		if (ft_strcmp(current->v_name, name) == 0)
 			return (current);
 		current = current->next;
 	}
@@ -61,7 +61,7 @@ int	kv_setenv(t_shell *shell, const char *name, const char *value)
 	current = shell->env_list;
 	while (current != NULL)
 	{
-		if (strcmp(current->v_name, name) == 0)
+		if (ft_strcmp(current->v_name, name) == 0)
 		{
 			free(current->v_value);
 			current->v_value = ft_strdup(value);
@@ -83,7 +83,7 @@ static t_env_var	*kv_find_and_remove_env_var(t_shell *shell, \
 	prev = NULL;
 	while (current != NULL)
 	{
-		if (strcmp(current->v_name, name) == 0)
+		if (ft_strcmp(current->v_name, name) == 0)
 		{
 			if (prev != NULL)
 				prev->next = current->next;

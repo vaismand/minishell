@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_builtins_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 00:19:27 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/06 00:37:59 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/09 16:13:51 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	kv_copy_env(t_env_var *current, char **envp_copy, int len)
 	i = 0;
 	while (i < len)
 	{
-		str_len = strlen(current->v_name) + strlen(current->v_value) + 4;
+		str_len = ft_strlen(current->v_name) + ft_strlen(current->v_value) + 4;
 		envp_copy[i] = (char *)malloc(str_len);
 		if (envp_copy[i] == NULL)
 		{
@@ -29,10 +29,10 @@ void	kv_copy_env(t_env_var *current, char **envp_copy, int len)
 			free(envp_copy);
 			return ;
 		}
-		strcpy(envp_copy[i], current->v_name);
-		strcat(envp_copy[i], "=\"");
-		strcat(envp_copy[i], current->v_value);
-		strcat(envp_copy[i], "\"");
+		ft_strcpy(envp_copy[i], current->v_name);
+		ft_strcat(envp_copy[i], "=\"");
+		ft_strcat(envp_copy[i], current->v_value);
+		ft_strcat(envp_copy[i], "\"");
 		current = current->next;
 		i++;
 	}
