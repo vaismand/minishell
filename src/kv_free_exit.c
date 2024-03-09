@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_free_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:10:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/08 15:14:43 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/09 16:57:54 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,13 @@ static void	free_redir(t_list *pipex)
 {
 	t_redir	*tmp;
 
-	if (pipex->heredoc)
-	{
-		unlink(pipex->heredoc);
-		free(pipex->heredoc);
-		pipex->heredoc = NULL;
-	}
+	tmp = pipex->redir;
 	while (pipex->redir)
 	{
 		tmp = pipex->redir;
 		pipex->redir = pipex->redir->next;
+		if (access(tmp->filename, F_OK == 0))
+			unlink(tmp->filename);
 		free(tmp->redir_type);
 		free(tmp->filename);
 		free(tmp);
