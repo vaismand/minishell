@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/09 16:01:44 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/11 13:26:20 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static void	kv_parent(pid_t pid, t_shell *shell)
 		close(shell->cmd_list->out);
 	if (g_sigstat != -1)
 		g_sigstat = 0;
+	signal(SIGINT, kv_sigint_handler);
 }
 
 static void	kv_command_not_found(t_shell *shell)
@@ -51,6 +52,9 @@ static void	kv_execute_child(t_shell *shell)
 {
 	int	builtin;
 
+	g_sigstat = 1;
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	if (g_sigstat == -1)
 		exit(130);
 	kv_redirecting(shell->cmd_list);
@@ -114,6 +118,10 @@ int	kv_execute_command(t_shell *shell)
 	else if (pid < 0)
 		return (perror("minishell: fork error"), 1);
 	else
+	{
+		if (kv_check_nested_shell(shell))
+			signal(SIGINT, SIG_IGN);
 		kv_parent(pid, shell);
+	}
 	return (shell->exit_status);
 }

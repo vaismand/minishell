@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/09 15:52:48 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/11 13:34:56 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int	main(int ac, char **av, char **envp)
 	if (av && ac > 1)
 		exit(0);
 	kv_init_shell(shell, envp);
+	kv_decrease_shlvl(shell);
 	kv_run_shell_loop(shell);
 	return (kv_free_exit(shell, 0), 0);
 }

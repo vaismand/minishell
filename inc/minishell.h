@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/09 16:00:45 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/11 12:35:32 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ void		readline_heredoc(char *heredoc, int fd);
 void		kv_write_redir(char *redir, char *filename, t_list *cmd_list);
 void		kv_copy_env(t_env_var	*current, char **envp_copy, int len);
 void		kv_check_for_heredoc(t_list *cmd_list);
+void		kv_decrease_shlvl(t_shell *shell);
 int			kv_open_file_read(char *file);
 int			kv_open_file_write(char *file);
 int			kv_count_env_var(t_env_var *env_var);
