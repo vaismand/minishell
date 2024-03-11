@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_free_exit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:10:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/09 16:57:54 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/11 12:24:11 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,22 +42,22 @@ void	kv_free_paths(char **paths)
 	paths = NULL;
 }
 
-static void	free_redir(t_list *pipex)
-{
-	t_redir	*tmp;
+// static void	free_redir(t_list *pipex)
+// {
+// 	t_redir	*tmp;
 
-	tmp = pipex->redir;
-	while (pipex->redir)
-	{
-		tmp = pipex->redir;
-		pipex->redir = pipex->redir->next;
-		if (access(tmp->filename, F_OK == 0))
-			unlink(tmp->filename);
-		free(tmp->redir_type);
-		free(tmp->filename);
-		free(tmp);
-	}
-}
+// 	tmp = pipex->redir;
+// 	while (pipex->redir)
+// 	{
+// 		tmp = pipex->redir;
+// 		pipex->redir = pipex->redir->next;
+// 		if (access(tmp->filename, F_OK == 0))
+// 			unlink(tmp->filename);
+// 		free(tmp->redir_type);
+// 		free(tmp->filename);
+// 		free(tmp);
+// 	}
+// }
 
 void	kv_freepipex(t_list *pipex)
 {
@@ -78,7 +78,7 @@ void	kv_freepipex(t_list *pipex)
 			free(pipex->path);
 			pipex->path = NULL;
 		}
-		free_redir(pipex);
+		//free_redir(pipex);
 		tmp = pipex;
 		pipex = pipex->next;
 		free(tmp);
