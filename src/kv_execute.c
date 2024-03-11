@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_execute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/11 13:26:20 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/11 21:06:31 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,8 @@ static void	kv_execute_child(t_shell *shell)
 {
 	int	builtin;
 
-	g_sigstat = 1;
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
 	if (g_sigstat == -1)
-		exit(130);
+		kv_free_exit(shell, 130);
 	kv_redirecting(shell->cmd_list);
 	builtin = kv_child_builtin(shell);
 	if (builtin != 2)
@@ -111,17 +108,14 @@ int	kv_execute_command(t_shell *shell)
 		if (builtin != 2)
 			return (builtin);
 	}
-	kv_update_shlvl(shell);
+	if (ft_strcmp(shell->cmd_list->cmd[0], "./minishell") == 0)
+		signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == 0)
 		kv_execute_child(shell);
 	else if (pid < 0)
 		return (perror("minishell: fork error"), 1);
 	else
-	{
-		if (kv_check_nested_shell(shell))
-			signal(SIGINT, SIG_IGN);
 		kv_parent(pid, shell);
-	}
 	return (shell->exit_status);
 }

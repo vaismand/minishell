@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 15:05:03 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/07 14:31:32 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/11 19:18:46 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,15 @@ void	kv_handle_redirection(t_list *cmd_list)
 	tmp = cmd_list->redir;
 	while (tmp && cmd_list->file_error == 0)
 	{
+		if (ft_strncmp(tmp->redir_type, ">", 1) == 0 && cmd_list->out > 0)
+			close(cmd_list->out);
+		else if (ft_strcmp(tmp->redir_type, "<") == 0 && cmd_list->in > 0)
+			close(cmd_list->in);
 		if (ft_strcmp(tmp->redir_type, ">>") == 0)
+		{
 			cmd_list->out = open(tmp->filename, O_WRONLY
 					| O_CREAT | O_APPEND, 0644);
+		}
 		else if (ft_strcmp(tmp->redir_type, ">") == 0)
 			cmd_list->out = open(tmp->filename, O_WRONLY
 					| O_CREAT | O_TRUNC, 0644);

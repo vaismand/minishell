@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/11 13:34:56 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/11 21:07:49 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static void	kv_init_shell(t_shell *shell, char **envp)
 		kv_add_env_var(shell, envp[i]);
 		i++;
 	}
+	shell->envp[i] = NULL;
 	kv_set_signals();
 	g_sigstat = 0;
 }
@@ -98,6 +99,7 @@ static void	kv_run_shell_loop(t_shell *shell)
 			shell->exit_status = kv_execute_command(shell);
 			shell->cmd_list = shell->cmd_list->next;
 		}
+		g_sigstat = 0;
 		kv_freepipex(tmp);
 	}
 }
@@ -112,7 +114,6 @@ int	main(int ac, char **av, char **envp)
 	if (av && ac > 1)
 		exit(0);
 	kv_init_shell(shell, envp);
-	kv_decrease_shlvl(shell);
 	kv_run_shell_loop(shell);
 	return (kv_free_exit(shell, 0), 0);
 }

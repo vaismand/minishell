@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 18:11:31 by dkohn             #+#    #+#             */
-/*   Updated: 2023/12/08 16:42:43 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/11 18:19:09 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ long	ft_atoi(const char *str)
 	int		sign;
 	long	result;
 
+	if (!str)
+		return (0);
 	i = 0;
 	sign = 1;
 	result = 0;

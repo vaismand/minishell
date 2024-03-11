@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_utils3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:31:37 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/09 16:16:57 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/11 20:06:05 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,3 +60,4 @@ void	kv_add_env_var(t_shell *shell, const char *env_str)
 	new_var->next = shell->env_list;
 	shell->env_list = new_var;
 }
+
