@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:31:37 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/11 20:06:05 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/12 18:30:47 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ int	kv_open_quotes(t_shell *shell)
 {
 	if (shell->dquote || shell->quote)
 	{
-		printf("minishell: syntax error\n");
+		write(2, "minishell: syntax error: open quotes\n", 37);
+		shell->exit_status = 130;
 		return (1);
 	}
 	return (0);
@@ -61,3 +62,20 @@ void	kv_add_env_var(t_shell *shell, const char *env_str)
 	shell->env_list = new_var;
 }
 
+size_t	kv_longest_env(t_shell *shell)
+{
+	t_env_var	*tmp;
+	int			len;
+	int			max;
+
+	tmp = shell->env_list;
+	max = 0;
+	while (tmp)
+	{
+		len = ft_strlen(tmp->v_value);
+		if (len > max)
+			max = len;
+		tmp = tmp->next;
+	}
+	return (max + 1);
+}

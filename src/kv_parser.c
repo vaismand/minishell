@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/11 20:34:25 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/12 18:31:07 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,8 @@ char	*kv_cmd_parser(char *cmd, t_shell *shell)
 	t_parser_state	state;
 	int				i;
 
-	state.new_cmd = ft_calloc(ft_strlen(cmd) + 100, sizeof(char));
+	state.new_cmd = ft_calloc(ft_strlen(cmd) + kv_longest_env(shell),
+			sizeof(char));
 	if (!state.new_cmd)
 		return (NULL);
 	kv_init_local_vars(&i, &state.k, shell);

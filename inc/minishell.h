@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/11 19:01:33 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/12 17:51:22 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,7 @@ void		kv_copy_env(t_env_var	*current, char **envp_copy, int len);
 void		kv_check_for_heredoc(t_list *cmd_list);
 int			kv_open_file_read(char *file);
 int			kv_open_file_write(char *file);
+size_t		kv_longest_env(t_shell *shell);
 int			kv_count_env_var(t_env_var *env_var);
 char		*kv_get_env_char(t_shell *shell, char *name);
 int			kv_get_exit_status(char *new_cmd, int *i, t_shell *shell);

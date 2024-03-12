@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_builtins2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:29:54 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/04 21:10:22 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/12 16:45:48 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	kv_exit_command(t_shell *shell)
 	if (kv_arr_len(cmd) > 2)
 	{
 		write(2, "minishell: exit: too many arguments\n", 36);
-		return (kv_free_exit(shell, 1), 1);
+		return (1);
 	}
 	if (!cmd[1])
 		exit_status = shell->exit_status;
@@ -87,7 +87,7 @@ int	kv_exit_command(t_shell *shell)
 		if (ft_isalpha(cmd[1][0]))
 		{
 			write(2, "minishell: exit: numeric argument required\n", 43);
-			exit_status = 2;
+			return (kv_free_exit(shell, 2), 1);
 		}
 		else if (exit_status < 0 || exit_status > 255)
 			exit_status = exit_status % 256;
