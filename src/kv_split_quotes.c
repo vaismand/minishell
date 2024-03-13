@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:30:38 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/13 16:24:12 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 17:05:47 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,13 +108,21 @@ char	*kv_remove_outer_quotes(char *str)
 	return (new_str);
 }
 
-int	kv_check_shlvl(t_shell *shell)
+void kv_check_minishell(t_shell *shell)
 {
-	t_env_var	*shlvl;
+	int i;
 
-	shlvl = kv_getenv(shell, "SHLVL");
-	if (!shlvl)
-		return (0);
-	return (ft_atoi(shlvl->v_value));
-
+	i = 0;
+	while (shell->envp[i])
+	{
+		if (ft_strncmp(shell->envp[i], "SHLVL=", 6) == 0)
+		{
+			if (ft_atoi(shell->envp[i] + 6) > 2)
+			{
+				write(2, "forget about it\n", 16);
+				kv_free_exit(shell, 69);
+			}
+		}
+		i++;
+	}
 }

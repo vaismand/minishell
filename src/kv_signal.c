@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:21:45 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 16:13:42 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 17:06:42 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ void	kv_child_handler(int signo)
 
 void	kv_sigint_handler(int signo)
 {
-	(void)signo;
+	if (signo == SIGINT)
+	{
+		g_sigstat = 130;
+	}
 	if (g_sigstat == 2)
 	{
 		ioctl(STDIN_FILENO, TIOCSTI, "\n");

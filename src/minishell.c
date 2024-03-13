@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 16:17:36 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 17:05:31 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static void	kv_init_shell(t_shell *shell, char **envp)
 		i++;
 	}
 	shell->envp[i] = NULL;
+	kv_check_minishell(shell);
 	kv_set_signals();
 	g_sigstat = 0;
 }

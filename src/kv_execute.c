@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 16:28:47 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 16:40:05 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,9 +109,6 @@ int	kv_execute_command(t_shell *shell)
 		if (builtin != 2)
 			return (builtin);
 	}
-	printf("shlvl: %d\n", kv_check_shlvl(shell));
-	if (kv_check_shlvl(shell) > 2)
-		signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == 0)
 		kv_execute_child(shell);
