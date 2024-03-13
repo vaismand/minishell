@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 18:18:11 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/13 19:09:33 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_parser_state
 	int		i;
 	int		k;
 	char	*new_cmd;
+	int		dollar;
 }	t_parser_state;
 
 typedef struct cd_state
@@ -81,6 +82,7 @@ int			kv_count(char const *s, char c);
 int			kv_count_cmds(char **cmd);
 int			kv_arr_len(char **arr);
 int			kv_parent_builtin(t_shell *shell);
+int			kv_count_expand(char *cmd);
 int			kv_child_builtin(t_shell *shell);
 int			kv_is_valid_env_name(const char *name);
 int			kv_exit_command(t_shell *shell);
