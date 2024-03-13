@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 21:34:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/12 16:56:04 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 16:12:28 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,16 @@ void	kv_is_dir_exit(t_shell *shell)
 	shell->error_msg = "minishell: command not found\n";
 	if (cmd[0] == '/' || cmd[0] == '.')
 	{
-		shell->error_msg = "minishell: Is a directory\n";
-		if (access(cmd, F_OK) == 0 && access(cmd, X_OK) < 0)
+		if (cmd && access(cmd, F_OK) == 0 && access(cmd, X_OK) < 0)
 			perror("minishell: Permission denied");
-		else if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
-			write(2, shell->error_msg, ft_strlen(shell->error_msg));
-		else if (access(shell->cmd_list->path, F_OK) == 0 \
+		else if (cmd && access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
+			write(2, "minishell: Is a directory\n", 26);
+		else if (shell->cmd_list->path
+			&& access(shell->cmd_list->path, F_OK) == 0
 			&& access(shell->cmd_list->path, X_OK) < 0)
 			perror("minishell: Is a directory");
-		else if (access(shell->cmd_list->path, F_OK) == 0 \
+		else if (shell->cmd_list->path && \
+			access(shell->cmd_list->path, F_OK) == 0 \
 			&& access(shell->cmd_list->path, X_OK) == 0)
 			perror("minishell: Permission denied");
 		else

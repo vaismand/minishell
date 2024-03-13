@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:30:38 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/07 14:30:39 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 16:24:12 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,4 +106,15 @@ char	*kv_remove_outer_quotes(char *str)
 	}
 	*j = 0;
 	return (new_str);
+}
+
+int	kv_check_shlvl(t_shell *shell)
+{
+	t_env_var	*shlvl;
+
+	shlvl = kv_getenv(shell, "SHLVL");
+	if (!shlvl)
+		return (0);
+	return (ft_atoi(shlvl->v_value));
+
 }

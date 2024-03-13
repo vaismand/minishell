@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:31:37 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/13 11:42:33 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 16:27:02 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,12 @@ void	kv_add_env_var(t_shell *shell, const char *env_str)
 		len = ft_strlen(env_str);
 	new_var->v_name = ft_substr(env_str, 0, len);
 	if (delimiter != NULL)
-		new_var->v_value = ft_strdup(delimiter + 1);
+	{
+		if (ft_strcmp(new_var->v_name, "SHLVL") == 0)
+			new_var->v_value = ft_itoa(ft_atoi(delimiter + 1) + 1);
+		else
+			new_var->v_value = ft_strdup(delimiter + 1);
+	}
 	else
 		new_var->v_value = ft_strdup("");
 	if (!new_var->v_value)

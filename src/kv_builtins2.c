@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:29:54 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/12 16:45:48 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 15:34:00 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ int	kv_cd_command(t_shell *shell)
 	if (!state.oldpwd)
 		return (kv_free_cd_paths(NULL, NULL, "getcwd failed"));
 	state.path = kv_change_dir(shell, &state, cmd);
+	if (!state.path)
+		return (kv_free_cd_paths(state.path, state.oldpwd, "no good folder\n"));
 	if (chdir(state.path) < 0)
 		return (kv_free_cd_paths(state.path, state.oldpwd, \
 		"No such file or directory\n"));

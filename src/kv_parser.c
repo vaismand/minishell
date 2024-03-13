@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/12 18:31:07 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 15:55:39 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ char	*kv_path_creator(t_shell *shell, char **cmd)
 	const char	*path_env;
 	int			i;
 
-	if (access(cmd[0], F_OK) == 0 && (cmd[0][0] == '/'
-		|| cmd[0][0] == '.'))
+	if (cmd[0] && access(cmd[0], F_OK) == 0
+		&& (cmd[0][0] == '/' || cmd[0][0] == '.'))
 		return (ft_strdup(cmd[0]));
 	path_env_var = kv_getenv(shell, "PATH");
 	if (!path_env_var || !path_env_var->v_value)

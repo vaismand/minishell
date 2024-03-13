@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/12 17:00:26 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 16:28:47 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ static void	kv_command_not_found(t_shell *shell)
 	if (shell->cmd_list->cmd[0][0] == '/' \
 		|| shell->cmd_list->cmd[0][0] == '.')
 	{
-		if (access(shell->cmd_list->cmd[0], F_OK) == 0)
+		if (shell->cmd_list->cmd[0]
+			&& access(shell->cmd_list->cmd[0], F_OK) == 0)
 			perror("minishell: Permission denied");
 		else
 			perror("minishell: No such file or directory");
@@ -108,7 +109,8 @@ int	kv_execute_command(t_shell *shell)
 		if (builtin != 2)
 			return (builtin);
 	}
-	if (ft_strcmp(shell->cmd_list->cmd[0], "./minishell") == 0)
+	printf("shlvl: %d\n", kv_check_shlvl(shell));
+	if (kv_check_shlvl(shell) > 2)
 		signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid == 0)

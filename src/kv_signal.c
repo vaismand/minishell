@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:21:45 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/11 20:34:45 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 16:13:42 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ void	kv_sigint_handler(int signo)
 		rl_on_new_line();
 	}
 	else if (g_sigstat == 1)
+	{
 		ft_putstr_fd("\n", 1);
+		g_sigstat = 130;
+	}
 	else
 	{
 		ft_putstr_fd("\n", 1);
