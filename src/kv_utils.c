@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 21:34:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 16:12:28 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 18:04:30 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,11 @@ void	kv_is_dir_exit(t_shell *shell)
 			perror("minishell: Permission denied");
 		else
 			perror("minishell: No such file or directory");
-		exit(126);
+		kv_free_exit(shell, 126);
 	}
 	else
 		write(2, shell->error_msg, ft_strlen(shell->error_msg));
-	exit(127);
+	kv_free_exit(shell, 127);
 }
 
 int	kv_is_valid_env_name(const char *name)

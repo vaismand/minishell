@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 17:42:15 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/13 18:13:24 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	kv_process_command(t_shell *shell, t_list **cmd_list, char *command)
 	t_list	*tmp;
 	char	**tmp2;
 
-	tmp2 = kv_split_ignore_quotes(command, ' ');
+	tmp2 = kv_split_ignore_quotes(command, ' ', shell);
 	if (!tmp2 || !tmp2[0])
 	{
 		if (!tmp2)
@@ -66,7 +66,7 @@ static void	kv_cmd_list_init(t_shell *shell, t_list **cmd_list, char *cmd)
 {
 	char	**argv;
 
-	argv = kv_split_ignore_quotes(cmd, '|');
+	argv = kv_split_ignore_quotes(cmd, '|', shell);
 	if (!argv || !argv[0])
 	{
 		kv_free_paths(argv);
@@ -109,11 +109,14 @@ int	main(int ac, char **av, char **envp)
 {
 	t_shell	*shell;
 
+	if (av && ac > 1)
+	{
+		write(2, "minishell: too many arguments\n", 30);
+		exit(1);
+	}
 	shell = malloc(sizeof(t_shell));
 	if (!shell)
 		return (1);
-	if (av && ac > 1)
-		exit(0);
 	kv_init_shell(shell, envp);
 	kv_run_shell_loop(shell);
 	return (kv_free_exit(shell, 0), 0);

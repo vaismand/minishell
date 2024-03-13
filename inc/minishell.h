@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 16:48:00 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 18:14:57 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,11 @@ typedef struct s_env_var
 
 typedef struct s_split_state
 {
-	int		i;
-	int		j;
-	int		k;
-	int		inside_quotes;
+	int				i;
+	int				j;
+	int				k;
+	int				inside_quotes;
+	struct s_shell	*shell;
 }	t_split_state;
 
 typedef struct s_shell
@@ -103,7 +104,7 @@ char		*kv_path_creator(t_shell *shell, char **cmd);
 char		*kv_strip_cmd(char *cmd);
 char		*kv_cmd_parser(char *cmd, t_shell *shell);
 char		*kv_remove_outer_quotes(char *str);
-char		**kv_split_ignore_quotes(char const *s, char c);
+char		**kv_split_ignore_quotes(char const *s, char c, t_shell *shell);
 char		*kv_build_and_check_path(const char *base, const char *cmd);
 int			kv_parsing_stuff(char *cmd, t_shell *shell,
 				t_parser_state *state, int *i);

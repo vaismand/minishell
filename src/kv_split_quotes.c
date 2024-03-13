@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_split_quotes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:30:38 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/13 17:47:39 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/13 18:11:17 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	kv_update_state(t_split_state *state, char const *s, \
 		{
 			strs[state->k] = ft_substr(s, state->j, state->i - state->j);
 			if (!strs[state->k])
-				exit(EXIT_FAILURE);
+				kv_free_exit(state->shell, EXIT_FAILURE);
 			state->k++;
 		}
 		state->j = state->i + 1;
@@ -54,11 +54,12 @@ static void	kv_update_state(t_split_state *state, char const *s, \
 	state->i++;
 }
 
-char	**kv_split_ignore_quotes(char const *s, char c)
+char	**kv_split_ignore_quotes(char const *s, char c, t_shell *shell)
 {
 	char			**strs;
 	t_split_state	state;
 
+	state.shell = shell;
 	state.i = 0;
 	state.j = 0;
 	state.k = 0;
@@ -108,9 +109,9 @@ char	*kv_remove_outer_quotes(char *str)
 	return (new_str);
 }
 
-void kv_check_minishell(t_shell *shell)
+void	kv_check_minishell(t_shell *shell)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (shell->envp[i])
@@ -120,7 +121,7 @@ void kv_check_minishell(t_shell *shell)
 			if (ft_atoi(shell->envp[i] + 6) > 2)
 			{
 				write(2, "forget about it\n", 16);
-				kv_free_exit(shell, shell->exit_status);
+				kv_free_exit(shell, 69);
 			}
 		}
 		i++;

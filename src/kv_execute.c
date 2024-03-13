@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_execute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 17:36:30 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/13 18:05:26 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ static void	kv_execute_child(t_shell *shell)
 	}
 	else
 		perror("minishell: execve error");
-	exit(shell->exit_status);
+	kv_free_exit(shell, shell->exit_status);
 }
 
 static int	pre_execution_checks(t_shell *shell)
