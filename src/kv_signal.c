@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_signal.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:21:45 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 17:06:42 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 17:42:28 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,15 @@ void	kv_child_handler(int signo)
 {
 	if (signo == SIGINT)
 	{
+		printf("signal SIGINT received\n");
 		ft_putchar_fd('\n', STDOUT_FILENO);
-		exit(130);
+		g_sigstat = 130;
 	}
 }
 
 void	kv_sigint_handler(int signo)
 {
-	if (signo == SIGINT)
-	{
-		g_sigstat = 130;
-	}
+	(void)signo;
 	if (g_sigstat == 2)
 	{
 		ioctl(STDIN_FILENO, TIOCSTI, "\n");
@@ -35,10 +33,7 @@ void	kv_sigint_handler(int signo)
 		rl_on_new_line();
 	}
 	else if (g_sigstat == 1)
-	{
 		ft_putstr_fd("\n", 1);
-		g_sigstat = 130;
-	}
 	else
 	{
 		ft_putstr_fd("\n", 1);
@@ -46,6 +41,7 @@ void	kv_sigint_handler(int signo)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
+	g_sigstat = 130;
 }
 
 void	kv_set_signals(void)

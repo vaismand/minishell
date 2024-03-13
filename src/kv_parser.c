@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 17:17:16 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 17:54:54 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,10 @@ int	kv_get_exit_status(char *new_cmd, int *i, t_shell *shell)
 	int		k;
 	char	*exit_status;
 
-	exit_status = ft_itoa(shell->exit_status);
+	if (g_sigstat == 130)
+		exit_status = ft_strdup("130");
+	else
+		exit_status = ft_itoa(shell->exit_status);
 	j = 0;
 	k = 0;
 	while (exit_status[j])

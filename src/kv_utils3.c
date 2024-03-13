@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_utils3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:31:37 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/13 17:04:51 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 17:29:59 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,7 @@ void	kv_add_env_var(t_shell *shell, const char *env_str)
 		len = ft_strlen(env_str);
 	new_var->v_name = ft_substr(env_str, 0, len);
 	if (ft_strcmp(new_var->v_name, "SHLVL") == 0)
-	{
 		delimiter[1]++;
-		printf("SHLVL = %s\n", delimiter + 1);
-	}
 	if (delimiter != NULL)
 		new_var->v_value = ft_strdup(delimiter + 1);
 	else

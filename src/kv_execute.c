@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_execute.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 16:40:05 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 17:36:30 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 static void	kv_parent(pid_t pid, t_shell *shell)
 {
 	if (g_sigstat != -1)
+	{
+		shell->exit_status = 130;
 		g_sigstat = 1;
+	}
 	waitpid(pid, &shell->status, WUNTRACED);
 	while (!WIFEXITED(shell->status) && !WIFSIGNALED(shell->status))
 		waitpid(pid, &shell->status, WUNTRACED);
@@ -111,7 +114,10 @@ int	kv_execute_command(t_shell *shell)
 	}
 	pid = fork();
 	if (pid == 0)
+	{
+		signal(SIGINT, kv_child_handler);
 		kv_execute_child(shell);
+	}
 	else if (pid < 0)
 		return (perror("minishell: fork error"), 1);
 	else

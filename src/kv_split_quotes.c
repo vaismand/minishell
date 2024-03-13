@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_split_quotes.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 15:30:38 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/13 17:05:47 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 17:47:39 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void kv_check_minishell(t_shell *shell)
 			if (ft_atoi(shell->envp[i] + 6) > 2)
 			{
 				write(2, "forget about it\n", 16);
-				kv_free_exit(shell, 69);
+				kv_free_exit(shell, shell->exit_status);
 			}
 		}
 		i++;
