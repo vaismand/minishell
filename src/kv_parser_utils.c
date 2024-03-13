@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/04 22:51:53 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/11 20:13:12 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 19:07:21 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,25 @@ int	kv_parsing_stuff(char *cmd, t_shell *shell, t_parser_state *state, int *i)
 	else
 		state->new_cmd[state->k++] = cmd[*i];
 	return (0);
+}
+
+int	kv_count_expand(char *cmd)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (cmd[i])
+	{
+		if (cmd[i] == '$' && ft_isalpha(cmd[i + 1]))
+		{
+			count++;
+			i++;
+		}
+		i++;
+	}
+	if (count > 0)
+		return (count);
+	return (1);
 }

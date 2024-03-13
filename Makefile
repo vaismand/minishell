@@ -6,7 +6,7 @@
 #    By: dkohn <marvin@42.fr>                       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/24 14:23:01 by dvaisman          #+#    #+#              #
-#    Updated: 2024/03/12 17:32:09 by dkohn            ###   ########.fr        #
+#    Updated: 2024/03/13 18:20:58 by dkohn            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,7 +65,4 @@ clean:
 
 re: fclean all
 
-norm:
-	norminette -R CheckForbiddenSourceHeader */*.[ch]
-
-.PHONY: all clean fclean re norm .c.o
+.PHONY: all clean fclean re

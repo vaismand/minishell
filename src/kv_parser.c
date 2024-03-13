@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 17:54:54 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/13 19:00:51 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,8 @@ char	*kv_cmd_parser(char *cmd, t_shell *shell)
 	t_parser_state	state;
 	int				i;
 
-	state.new_cmd = ft_calloc(ft_strlen(cmd) + kv_longest_env(shell),
-			sizeof(char));
+	state.new_cmd = ft_calloc(ft_strlen(cmd) + (kv_longest_env(shell)
+				* kv_count_expand(cmd)), sizeof(char));
 	if (!state.new_cmd)
 		return (NULL);
 	kv_init_local_vars(&i, &state.k, shell);
