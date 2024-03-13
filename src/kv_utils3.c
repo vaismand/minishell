@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/26 17:31:37 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/12 18:30:47 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/13 11:42:33 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void	kv_add_env_var(t_shell *shell, const char *env_str)
 		new_var->v_value = ft_strdup(delimiter + 1);
 	else
 		new_var->v_value = ft_strdup("");
+	if (!new_var->v_value)
+		return (kv_free_exit(shell, 1));
 	new_var->exported = true;
 	new_var->next = shell->env_list;
 	shell->env_list = new_var;
