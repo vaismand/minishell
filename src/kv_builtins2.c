@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:29:54 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 18:18:15 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/14 16:05:19 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,6 @@ int	kv_exit_command(t_shell *shell)
 	int		exit_status;
 
 	cmd = shell->cmd_list->cmd;
-	if (kv_arr_len(cmd) > 2)
-	{
-		write(2, "minishell: exit: too many arguments\n", 36);
-		return (1);
-	}
 	if (!cmd[1])
 		exit_status = shell->exit_status;
 	else
@@ -88,9 +83,14 @@ int	kv_exit_command(t_shell *shell)
 		exit_status = ft_atoi(cmd[1]);
 		if (ft_isalpha(cmd[1][0]))
 		{
-			write(2, "minishell: exit: numeric argument required\n", 43);
+			write(2, "exit\nminishell: exit: ", 22);
+			write(2, cmd[1], ft_strlen(cmd[1]));
+			write(2, " : numeric argument required\n", 30);
 			return (kv_free_exit(shell, 2), 1);
 		}
+		else if (kv_arr_len(cmd) > 2)
+			return (write(2, "exit\nminishell: exit: \
+				too many arguments\n", 41), 1);
 		else if (exit_status < 0 || exit_status > 255)
 			exit_status = exit_status % 256;
 	}
