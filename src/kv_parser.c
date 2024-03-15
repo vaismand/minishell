@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_parser.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 10:46:43 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 19:09:51 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/15 18:00:34 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,13 @@ int	kv_env_list_v(char *new_cmd, const char *cmd, \
 	return (k);
 }
 
-static int	kv_init_local_vars(int *i, int *k, t_shell *shell)
+void	kv_init_local_vars(int *i, int *k, t_shell *shell)
 {
 	*i = -1;
 	*k = 0;
 	shell->quote = false;
 	shell->dquote = false;
-	return (0);
+	return ;
 }
 
 char	*kv_cmd_parser(char *cmd, t_shell *shell)

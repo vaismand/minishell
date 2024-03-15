@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:04:04 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/09 16:15:28 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/15 17:59:56 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_list
 	char			*path;
 	char			*heredoc;
 	struct s_redir	*redir;
+	struct s_shell	*shell;
 	struct s_list	*prev;
 	struct s_list	*next;
 }	t_list;

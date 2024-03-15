@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_pipex_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 15:42:20 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 18:18:23 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/15 17:44:54 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static t_list	*kv_set_tmp_to_zero(t_shell *shell, t_list *tmp, int i)
 	tmp->redir = NULL;
 	tmp->pd[0] = 0;
 	tmp->pd[1] = 0;
+	tmp->shell = shell;
 	tmp->path = kv_path_creator(shell, tmp->cmd);
 	return (tmp);
 }
