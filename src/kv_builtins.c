@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 09:23:26 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 18:18:15 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/15 20:59:55 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,22 +63,17 @@ static int	kv_echo_command(t_shell *shell)
 	int		n_flag;
 
 	cmd = shell->cmd_list->cmd;
-	i = 1;
 	n_flag = 0;
-	if (cmd[i] && ft_strncmp(cmd[i], "-n", 3) == 0)
-	{
-		n_flag = 1;
-		i++;
-	}
+	i = kv_process_n(cmd, &n_flag);
 	while (cmd[i])
 	{
-		printf("%s", cmd[i]);
+		ft_putstr_fd(cmd[i], 1);
 		if (cmd[i + 1])
-			printf(" ");
+			ft_putstr_fd(" ", 1);
 		i++;
 	}
 	if (!n_flag)
-		printf("\n");
+		ft_putstr_fd("\n", 1);
 	return (0);
 }
 

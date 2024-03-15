@@ -6,21 +6,11 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:21:45 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 18:18:25 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/15 20:43:52 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-void	kv_child_handler(int signo)
-{
-	if (signo == SIGINT)
-	{
-		printf("signal SIGINT received\n");
-		ft_putchar_fd('\n', STDOUT_FILENO);
-		g_sigstat = 130;
-	}
-}
 
 void	kv_sigint_handler(int signo)
 {

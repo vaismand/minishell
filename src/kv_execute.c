@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 18:18:18 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/15 20:49:24 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,7 @@ int	kv_execute_command(t_shell *shell)
 	}
 	pid = fork();
 	if (pid == 0)
-	{
-		signal(SIGINT, kv_child_handler);
 		kv_execute_child(shell);
-	}
 	else if (pid < 0)
 		return (perror("minishell: fork error"), 1);
 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/15 18:01:20 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/15 20:56:52 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int			kv_free_cd_paths(char *path, char *oldpwd, char *err_msg);
 int			kv_open_quotes(t_shell *shell);
 int			kv_print_export(t_shell *shell);
 int			kv_find_delimiter(const char *str);
+int			kv_process_n(char **cmd, int *n_flag);
 int			find_or_create_env_var(t_shell *shell, const char *name, \
 	const char *value, bool exported);
 int			kv_check_nested_shell(t_shell *shell);

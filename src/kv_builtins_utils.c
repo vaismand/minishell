@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 00:19:27 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/13 18:18:14 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/15 21:00:27 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,28 @@ int	kv_count_env_var(t_env_var *env_var)
 		current = current->next;
 	}
 	return (count);
+}
+
+int	kv_process_n(char **cmd, int *n_flag)
+{
+	int	i;
+	int	j;
+
+	i = 1;
+	while (cmd[i] && cmd[i][0] == '-' && cmd[i][1] == 'n')
+	{
+		j = 2;
+		while (cmd[i][j])
+		{
+			if (cmd[i][j] != 'n')
+				break ;
+			j++;
+		}
+		if (cmd[i][j] == '\0')
+			*n_flag = 1;
+		else
+			break ;
+		i++;
+	}
+	return (i);
 }
