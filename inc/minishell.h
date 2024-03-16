@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/15 20:56:52 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/16 21:20:18 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ typedef struct s_split_state
 typedef struct s_shell
 {
 	int			status;
+	int			term_sig;
 	int			exit_status;
 	int			i;
 	bool		quote;
