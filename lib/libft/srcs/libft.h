@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/11 17:04:04 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/15 17:59:56 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/16 22:10:16 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ typedef struct s_list
 	int				pd[2];
 	int				out;
 	int				in;
-	int				pid;
 	int				index;
 	int				file_error;
 	char			**cmd;
 	char			*path;
 	char			*heredoc;
+	pid_t			pid;
 	struct s_redir	*redir;
 	struct s_shell	*shell;
 	struct s_list	*prev;

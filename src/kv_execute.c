@@ -6,22 +6,22 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/16 22:12:14 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/16 22:32:33 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static void	kv_parent(pid_t pid, t_shell *shell)
+void	kv_parent(t_shell *shell)
 {
 	if (g_sigstat != -1)
 	{
 		shell->exit_status = 130;
 		g_sigstat = 1;
 	}
-	waitpid(pid, &shell->status, 0);
+	waitpid(shell->cmd_list->pid, &shell->status, 0);
 	while (!WIFEXITED(shell->status) && !WIFSIGNALED(shell->status))
-		waitpid(pid, &shell->status, WUNTRACED);
+		waitpid(shell->cmd_list->pid, &shell->status, WUNTRACED);
 	if (WIFEXITED(shell->status))
 		shell->exit_status = WEXITSTATUS(shell->status);
 	else if (WIFSIGNALED(shell->status))
@@ -104,7 +104,6 @@ static int	pre_execution_checks(t_shell *shell)
 //executes the command
 int	kv_execute_command(t_shell *shell)
 {
-	pid_t	pid;
 	int		builtin;
 	int		checks;
 
@@ -117,16 +116,14 @@ int	kv_execute_command(t_shell *shell)
 		if (builtin != 2)
 			return (builtin);
 	}
-	pid = fork();
-	if (pid == 0)
+	shell->cmd_list->pid = fork();
+	if (shell->cmd_list->pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		kv_execute_child(shell);
 	}
-	else if (pid < 0)
+	else if (shell->cmd_list->pid < 0)
 		return (perror("minishell: fork error"), 1);
-	else
-		kv_parent(pid, shell);
 	return (shell->exit_status);
 }
