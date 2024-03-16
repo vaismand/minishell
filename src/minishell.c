@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/16 21:46:34 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/16 22:25:15 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ static void	kv_run_shell_loop(t_shell *shell)
 			shell->exit_status = kv_execute_command(shell);
 			shell->cmd_list = shell->cmd_list->next;
 		}
+		shell->cmd_list = tmp;
+		kv_wait_parents(shell);
 		g_sigstat = 0;
 		kv_freepipex(tmp);
 	}
