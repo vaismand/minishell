@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 00:19:27 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/15 21:00:27 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/16 22:02:14 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,18 @@ int	kv_process_n(char **cmd, int *n_flag)
 		i++;
 	}
 	return (i);
+}
+
+int	kv_check_sigterm(t_shell *shell)
+{
+	if (shell->term_sig == SIGINT)
+		shell->exit_status = 130;
+	else if (shell->term_sig == SIGQUIT)
+	{
+		ft_putstr_fd("Quit\n", STDOUT_FILENO);
+		shell->exit_status = 131;
+	}
+	else
+		shell->exit_status = 128 + shell->term_sig;
+	return (shell->exit_status);
 }

@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/16 22:23:15 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/16 22:26:55 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct s_shell
 extern int	g_sigstat;
 
 int			kv_execute_command(t_shell *shell);
+int			kv_check_sigterm(t_shell *shell);
 int			kv_count(char const *s, char c);
 int			kv_count_cmds(char **cmd);
 int			kv_arr_len(char **arr);
