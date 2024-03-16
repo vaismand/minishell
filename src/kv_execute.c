@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/16 21:29:12 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/16 21:59:19 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,11 @@ static void	kv_parent(pid_t pid, t_shell *shell)
 	while (!WIFEXITED(shell->status) && !WIFSIGNALED(shell->status))
 		waitpid(pid, &shell->status, WUNTRACED);
 	if (WIFEXITED(shell->status))
-		shell->exit_status = WEXITSTATUS(shell->status);
+		shell->exit_status = g_sigstat;
 	else if (WIFSIGNALED(shell->status))
 	{
 		shell->term_sig = WTERMSIG(shell->status);
-		if (shell->term_sig == SIGINT)
-            shell->exit_status = 130;
-        else if (shell->term_sig == SIGQUIT)
-		{
-            ft_putstr_fd("Quit\n", STDOUT_FILENO);
-            shell->exit_status = 131;
-        } 
-		else
-            shell->exit_status = 128 + shell->term_sig;
+		shell->exit_status = kv_check_sigterm(shell);
 	}
 	if (shell->cmd_list->next)
 		close(shell->cmd_list->pd[1]);
