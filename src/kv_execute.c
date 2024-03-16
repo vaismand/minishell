@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/17 00:23:46 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/17 00:24:47 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,9 @@ void	kv_parent(t_shell *shell)
 		shell->term_sig = WTERMSIG(shell->status);
 		shell->exit_status = kv_check_sigterm(shell);
 	}
-	if (shell->cmd_list->next)
-		close(shell->cmd_list->pd[1]);
-	if (shell->cmd_list->in)
+	if (shell->cmd_list->in && shell->cmd_list->pid > 0)
 		close(shell->cmd_list->in);
-	if (shell->cmd_list->out)
+	if (shell->cmd_list->out && shell->cmd_list->pid > 0)
 		close(shell->cmd_list->out);
 	if (g_sigstat != -1)
 		g_sigstat = 0;
@@ -105,5 +103,7 @@ int	kv_execute_command(t_shell *shell)
 	}
 	else if (shell->cmd_list->pid < 0)
 		return (perror("minishell: fork error"), 1);
+	if (shell->cmd_list->next && shell->cmd_list->pid > 0)
+		close(shell->cmd_list->pd[1]);
 	return (shell->exit_status);
 }
