@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 21:34:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/13 18:18:29 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/16 22:29:01 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*kv_getinput(t_shell *shell)
 
 	input = readline("supershell$ ");
 	if (!input)
-		kv_free_exit(shell, 0);
+		kv_free_exit(shell, shell->exit_status);
 	else if (*input)
 		add_history(input);
 	else
