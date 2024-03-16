@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/16 22:26:55 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/16 23:58:53 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,9 @@ void		kv_freepipex(t_list *pipex);
 void		kv_free_paths(char **paths);
 void		kv_free_perror(char *name, char *value, int error_msg);
 void		kv_redir_open(char **argv, t_list *cmd_list);
-void		kv_is_dir_exit(t_shell *shell);
+void		kv_pre_exec_checks(t_shell *shell, char *cmd);
+void		kv_command_not_found(t_shell *shell);
+void		kv_print_error(char *error_msg, char *error_cmd, int shell_path);
 void		kv_handle_redirection_parser(char *cmd, int *i, \
 	t_parser_state *state);
 void		kv_wait_parents(t_shell *shell);

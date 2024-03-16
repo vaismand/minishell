@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 00:19:27 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/16 22:12:35 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/17 00:23:24 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,13 @@ int	kv_check_sigterm(t_shell *shell)
 	else
 		shell->exit_status = 128 + shell->term_sig;
 	return (shell->exit_status);
+}
+
+void	kv_print_error(char *error_msg, char *error_cmd, int shell_path)
+{
+	if (shell_path)
+		write(STDERR_FILENO, "minishell: ", 11);
+	write(STDERR_FILENO, error_cmd, ft_strlen(error_cmd));
+	write(STDERR_FILENO, ": ", 2);
+	write(STDERR_FILENO, error_msg, ft_strlen(error_msg));
 }

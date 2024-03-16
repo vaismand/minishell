@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dkohn <marvin@42.fr>                       +#+  +:+       +#+         #
+#    By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/24 14:23:01 by dvaisman          #+#    #+#              #
-#    Updated: 2024/03/13 18:20:58 by dkohn            ###   ########.fr        #
+#    Updated: 2024/03/16 23:46:34 by dvaisman         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,6 +32,7 @@ SRCS = src/minishell.c \
 		src/kv_utils.c \
 		src/kv_utils2.c \
 		src/kv_utils3.c \
+		src/kv_utils4.c \
 		src/kv_free_exit.c \
 
 

@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/16 22:32:42 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/17 00:22:18 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static void	kv_cmd_list_init(t_shell *shell, t_list **cmd_list, char *cmd)
 	kv_free_paths(argv);
 }
 
-static int	kv_run_shell_loop(t_shell *shell)
+static void	kv_run_shell_loop(t_shell *shell)
 {
 	char	*cmd;
 	t_list	*tmp;
@@ -105,7 +105,6 @@ static int	kv_run_shell_loop(t_shell *shell)
 		g_sigstat = 0;
 		kv_freepipex(tmp);
 	}
-	return (shell->exit_status);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -121,6 +120,6 @@ int	main(int ac, char **av, char **envp)
 	if (!shell)
 		return (1);
 	kv_init_shell(shell, envp);
-	shell->exit_status = kv_run_shell_loop(shell);
+	kv_run_shell_loop(shell);
 	return (kv_free_exit(shell, shell->exit_status), shell->exit_status);
 }

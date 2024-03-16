@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/16 22:32:33 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/17 00:23:46 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,23 +40,6 @@ void	kv_parent(t_shell *shell)
 	signal(SIGINT, kv_sigint_handler);
 }
 
-static void	kv_command_not_found(t_shell *shell)
-{
-	shell->error_msg = "minishell: command not found\n";
-	if (shell->cmd_list->cmd[0][0] == '/' \
-		|| shell->cmd_list->cmd[0][0] == '.')
-	{
-		if (shell->cmd_list->cmd[0]
-			&& access(shell->cmd_list->cmd[0], F_OK) == 0)
-			perror("minishell: Permission denied");
-		else
-			perror("minishell: No such file or directory");
-	}
-	else
-		write(2, shell->error_msg, ft_strlen(shell->error_msg));
-	kv_free_exit(shell, 127);
-}
-
 static void	kv_execute_child(t_shell *shell)
 {
 	int	builtin;
@@ -67,14 +50,11 @@ static void	kv_execute_child(t_shell *shell)
 	builtin = kv_child_builtin(shell);
 	if (builtin != 2)
 		kv_free_exit(shell, builtin);
-	if (shell->cmd_list->path == NULL)
-		kv_command_not_found(shell);
 	if (execve(shell->cmd_list->path, shell->cmd_list->cmd, shell->envp) == -1)
 	{
-		if (errno == ENOENT || errno == 14 || errno == 8)
-			kv_command_not_found(shell);
-		else if (errno == EACCES)
-			kv_is_dir_exit(shell);
+		if (errno == ENOENT || errno == 14 || errno == 8 \
+		|| errno == 2 || errno == EACCES)
+			kv_pre_exec_checks(shell, shell->cmd_list->cmd[0]);
 		else
 			perror("minishell: execve error");
 	}

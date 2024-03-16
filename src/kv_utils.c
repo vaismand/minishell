@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 21:34:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/16 22:29:01 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/16 23:49:22 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,35 +37,6 @@ char	*kv_getinput(t_shell *shell)
 		input = NULL;
 	}
 	return (input);
-}
-
-void	kv_is_dir_exit(t_shell *shell)
-{
-	char	*cmd;
-
-	cmd = shell->cmd_list->cmd[0];
-	shell->error_msg = "minishell: command not found\n";
-	if (cmd[0] == '/' || cmd[0] == '.')
-	{
-		if (cmd && access(cmd, F_OK) == 0 && access(cmd, X_OK) < 0)
-			perror("minishell: Permission denied");
-		else if (cmd && access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
-			write(2, "minishell: Is a directory\n", 26);
-		else if (shell->cmd_list->path
-			&& access(shell->cmd_list->path, F_OK) == 0
-			&& access(shell->cmd_list->path, X_OK) < 0)
-			perror("minishell: Is a directory");
-		else if (shell->cmd_list->path && \
-			access(shell->cmd_list->path, F_OK) == 0 \
-			&& access(shell->cmd_list->path, X_OK) == 0)
-			perror("minishell: Permission denied");
-		else
-			perror("minishell: No such file or directory");
-		kv_free_exit(shell, 126);
-	}
-	else
-		write(2, shell->error_msg, ft_strlen(shell->error_msg));
-	kv_free_exit(shell, 127);
 }
 
 int	kv_is_valid_env_name(const char *name)
