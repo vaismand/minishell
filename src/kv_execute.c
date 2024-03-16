@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/08 11:33:57 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/16 22:35:41 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/16 22:36:14 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	kv_parent(t_shell *shell)
 	while (!WIFEXITED(shell->status) && !WIFSIGNALED(shell->status))
 		waitpid(shell->cmd_list->pid, &shell->status, WUNTRACED);
 	if (WIFEXITED(shell->status))
-		shell->exit_status = g_sigstat;
+		shell->exit_status = WEXITSTATUS(shell->status);
 	else if (WIFSIGNALED(shell->status))
 	{
 		shell->term_sig = WTERMSIG(shell->status);
