@@ -1,0 +1,6 @@
+{
+	"files.associations": {
+		"*.ber": "restructuredtext",
+		"wait.h": "c"
+	}
+}

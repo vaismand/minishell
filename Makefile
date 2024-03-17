@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dkohn <marvin@42.fr>                       +#+  +:+       +#+         #
+#    By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/02/24 14:23:01 by dvaisman          #+#    #+#              #
-#    Updated: 2024/03/13 18:20:58 by dkohn            ###   ########.fr        #
+#    Updated: 2024/03/13 19:14:27 by dvaisman         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,7 +37,7 @@ SRCS = src/minishell.c \
 
 OBJS := $(SRCS:.c=.o)
 LIBFT     = ./lib/libft/libft.a
-CC        = cc -g
+CC        = cc
 RM        = rm -f
 
 RED       = \033[0;91m
