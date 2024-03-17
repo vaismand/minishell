@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:25 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/16 23:58:53 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/17 11:37:27 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ void		kv_child_handler(int signo);
 void		kv_free_exit(t_shell *shell, int exit_code);
 void		kv_parent(t_shell *shell);
 void		kv_freepipex(t_list *pipex);
+void		kv_replace_tabs(char *str);
 void		kv_free_paths(char **paths);
 void		kv_free_perror(char *name, char *value, int error_msg);
 void		kv_redir_open(char **argv, t_list *cmd_list);

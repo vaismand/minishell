@@ -6,7 +6,7 @@
 /*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/17 10:47:24 by dkohn            ###   ########.fr       */
+/*   Updated: 2024/03/17 11:38:01 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ static void	kv_process_command(t_shell *shell, t_list **cmd_list, char *command)
 	int		args;
 	t_list	*tmp;
 	char	**tmp2;
-
+	
+	kv_replace_tabs(command);
 	tmp2 = kv_split_ignore_quotes(command, ' ', shell);
 	if (!tmp2 || !tmp2[0])
 	{

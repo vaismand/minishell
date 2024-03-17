@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_utils4.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 23:40:42 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/17 10:41:31 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/17 11:37:09 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,17 @@ void	kv_pre_exec_checks(t_shell *shell, char *cmd)
 		kv_command_not_found(shell);
 	else
 		kv_command_not_found(shell);
+}
+
+void	kv_replace_tabs(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\t')
+			str[i] = ' ';
+		i++;
+	}
 }

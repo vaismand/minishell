@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/22 21:34:58 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/16 23:49:22 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/17 11:32:36 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ bool	kv_valid_cmd(char *cmd)
 		return (false);
 	}
 	return (true);
-}
+}	
 
 char	*kv_getinput(t_shell *shell)
 {
