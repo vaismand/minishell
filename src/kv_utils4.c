@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/16 23:40:42 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/17 00:23:16 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/17 10:31:08 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	kv_permission_denied(t_shell *shell)
 	char	*cmd;
 
 	cmd = shell->cmd_list->cmd[0];
-	kv_print_error("permission denied\n", cmd, 126);
+	kv_print_error("Permission denied\n", cmd, 126);
 	shell->exit_status = 126;
 }
 
@@ -60,10 +60,14 @@ void	kv_pre_exec_checks(t_shell *shell, char *cmd)
 	struct stat	statbuf;
 	int			stat_res;
 
+	if (cmd[0] == '$')
+		return (kv_command_not_found(shell));
 	stat_res = stat(cmd, &statbuf);
-	if (cmd[ft_strlen(cmd) - 1] == '/')
+	if (ft_strchr(cmd, '/'))
 	{
-		if (stat_res != 0)
+		if (!(statbuf.st_mode & S_IXUSR))
+			kv_permission_denied(shell);
+		else if (stat_res != 0)
 		{
 			kv_print_error("No such file or directory\n", cmd, 1);
 			shell->exit_status = 127;
@@ -72,12 +76,7 @@ void	kv_pre_exec_checks(t_shell *shell, char *cmd)
 			kv_is_dir_exit(shell);
 	}
 	else if (stat_res == 0)
-	{
-		if (S_ISDIR(statbuf.st_mode))
-			kv_is_dir_exit(shell);
-		else if (!(statbuf.st_mode & S_IXUSR))
-			kv_permission_denied(shell);
-	}
+		kv_command_not_found(shell);
 	else
 		kv_command_not_found(shell);
 }
