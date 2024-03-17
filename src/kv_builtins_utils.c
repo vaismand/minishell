@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 00:19:27 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/13 18:18:14 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/17 00:24:40 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,51 @@ int	kv_count_env_var(t_env_var *env_var)
 		current = current->next;
 	}
 	return (count);
+}
+
+int	kv_process_n(char **cmd, int *n_flag)
+{
+	int	i;
+	int	j;
+
+	i = 1;
+	while (cmd[i] && cmd[i][0] == '-' && cmd[i][1] == 'n')
+	{
+		j = 2;
+		while (cmd[i][j])
+		{
+			if (cmd[i][j] != 'n')
+				break ;
+			j++;
+		}
+		if (cmd[i][j] == '\0')
+			*n_flag = 1;
+		else
+			break ;
+		i++;
+	}
+	return (i);
+}
+
+int	kv_check_sigterm(t_shell *shell)
+{
+	if (shell->term_sig == SIGINT)
+		shell->exit_status = 130;
+	else if (shell->term_sig == SIGQUIT)
+	{
+		ft_putstr_fd("Quit\n", STDOUT_FILENO);
+		shell->exit_status = 131;
+	}
+	else
+		shell->exit_status = 128 + shell->term_sig;
+	return (shell->exit_status);
+}
+
+void	kv_print_error(char *error_msg, char *error_cmd, int shell_path)
+{
+	if (shell_path)
+		write(STDERR_FILENO, "minishell: ", 11);
+	write(STDERR_FILENO, error_cmd, ft_strlen(error_cmd));
+	write(STDERR_FILENO, ": ", 2);
+	write(STDERR_FILENO, error_msg, ft_strlen(error_msg));
 }

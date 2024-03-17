@@ -6,13 +6,54 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/06 19:23:08 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/13 18:18:21 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/16 21:36:58 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-static void	kv_readline_heredoc(char *heredoc, int fd)
+static void	kv_heredoc_quotes(char *heredoc, int *quote)
+{
+	if (ft_strncmp(heredoc + (ft_strlen(heredoc) - 2), "\'\'", 2) == 0
+		|| ft_strncmp(heredoc + ft_strlen(heredoc) - 2, "\"\"", 2) == 0)
+	{
+		*quote = true;
+		heredoc[ft_strlen(heredoc) - 2] = '\0';
+	}
+	else
+		*quote = false;
+}
+
+static char	*kv_heredoc_parser(char *cmd, t_list *cmd_list, char *heredoc)
+{
+	int		i;
+	int		quote;
+	int		k;
+	char	*new_cmd;
+
+	i = -1;
+	k = 0;
+	new_cmd = ft_calloc(ft_strlen(cmd) + (kv_longest_env(cmd_list->shell)
+				* kv_count_expand(cmd)), sizeof(char));
+	if (!new_cmd)
+		return (NULL);
+	kv_heredoc_quotes(heredoc, &quote);
+	while (cmd[++i])
+	{
+		if (cmd[i] && cmd[i] == '$' && cmd[i + 1] == '?' && !quote)
+			k += kv_get_exit_status(&new_cmd[k], &i, cmd_list->shell);
+		else if (cmd[i] && cmd[i] == '$' && !quote
+			&& ft_isalpha(cmd[i + 1]))
+			k += kv_env_list_v(&new_cmd[k], cmd, &i, cmd_list->shell);
+		else
+			new_cmd[k++] = cmd[i];
+	}
+	new_cmd[k] = '\0';
+	free(cmd);
+	return (new_cmd);
+}
+
+static void	kv_readline_heredoc(char *heredoc, int fd, t_list *cmd_list)
 {
 	char	*line;
 
@@ -21,6 +62,7 @@ static void	kv_readline_heredoc(char *heredoc, int fd)
 		line = readline("> ");
 		if (!line)
 			break ;
+		line = kv_heredoc_parser(line, cmd_list, heredoc);
 		if (line && (ft_strcmp(line, heredoc) == 0 || g_sigstat < 0))
 		{
 			free(line);
@@ -48,7 +90,7 @@ static int	kv_handle_heredoc(t_list *cmd_list)
 		return (-1);
 	if (g_sigstat != -1)
 		g_sigstat = 2;
-	kv_readline_heredoc(cmd_list->redir->filename, fd);
+	kv_readline_heredoc(cmd_list->redir->filename, fd, cmd_list);
 	close(fd);
 	free(cmd_list->redir->filename);
 	cmd_list->redir->filename = ft_strdup(cmd_list->heredoc);

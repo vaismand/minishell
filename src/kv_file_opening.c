@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   kv_file_opening.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 15:05:03 by dkohn             #+#    #+#             */
-/*   Updated: 2024/03/13 18:18:19 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/16 21:54:04 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,11 @@ void	kv_write_redir(char *redir, char *filename, t_list *cmd_list)
 	new_redir = (t_redir *)malloc(sizeof(t_redir));
 	if (!new_redir)
 		return (perror("minishell"));
-	redir = kv_remove_outer_quotes(redir);
-	filename = kv_remove_outer_quotes(filename);
-	new_redir->redir_type = ft_strdup(redir);
-	new_redir->filename = ft_strdup(filename);
-	free(redir);
-	free(filename);
+	new_redir->redir_type = kv_remove_outer_quotes(redir);
+	if (filename[0] == '\"' || filename[0] == '\'')
+		new_redir->filename = kv_remove_outer_quotes(filename);
+	else
+		new_redir->filename = ft_strdup(filename);
 	new_redir->next = NULL;
 	if (!new_redir->redir_type || !new_redir->filename)
 		return (perror("minishell"));
