@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
+/*   By: dkohn <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/28 13:33:21 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/17 00:24:53 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/17 10:47:24 by dkohn            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static void	kv_init_shell(t_shell *shell, char **envp)
 	shell->exit_status = 0;
 	shell->error_msg = NULL;
 	shell->env_list = NULL;
+	shell->status = 0;
+	shell->term_sig = 0;
 	i = 0;
 	while (envp[i])
 	{
