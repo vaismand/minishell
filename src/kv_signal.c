@@ -6,7 +6,7 @@
 /*   By: dvaisman <dvaisman@student.42vienna.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/07 21:21:45 by dvaisman          #+#    #+#             */
-/*   Updated: 2024/03/16 21:36:54 by dvaisman         ###   ########.fr       */
+/*   Updated: 2024/03/19 09:31:39 by dvaisman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ void	kv_sigint_handler(int signo)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
+	g_sigstat = 130;
 }
 
 void	kv_set_signals(void)
@@ -46,4 +47,4 @@ void	kv_set_signals(void)
 	sigquit_act.sa_flags = 0;
 	sigemptyset(&sigquit_act.sa_mask);
 	sigaction(SIGQUIT, &sigquit_act, NULL);
-}
+}	
