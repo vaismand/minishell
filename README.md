@@ -15,5 +15,5 @@ Getting Started
 To use MiniShell, you'll need a Unix-like system with GCC and Make installed.
 
 Installation:
-```make
-./minishell```
+```make```
+```./minishell```
