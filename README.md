@@ -1,5 +1,5 @@
 MiniShell
-Welcome to MiniShell, our lightweight version of a Unix shell. This project is a collaboration between Your Name and Poddani, designed to emulate basic functionalities of traditional shells like Bash.
+Welcome to MiniShell, our lightweight version of a Unix shell. This project is a collaboration between vaismand and Poddani, designed to emulate basic functionalities of traditional shells like Bash.
 
 Overview
 MiniShell aims to provide a simplified environment for executing commands, managing environment variables, and handling input/output redirections. It's built to offer insight into how shells operate behind the scenes, with a focus on process management and user interaction.
