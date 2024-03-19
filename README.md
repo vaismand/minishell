@@ -16,4 +16,6 @@ To use MiniShell, you'll need a Unix-like system with GCC and Make installed.
 
 Installation:<br>
 ```make```<br>
-```./minishell```
+```./minishell```<br>
+To use valgrind with suppression file in order to ignore leaks from readline():<br>
+```valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes --suppressions=ignore_readline.supp -s ./minishell```
