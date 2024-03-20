@@ -36,11 +36,11 @@ int	kv_count(char const *s, char c)
 static void	kv_update_state(t_split_state *state, char const *s, \
 	char c, char **strs)
 {
-	if (s[state->i] == '\'' || s[state->i] == '"')
-	{
+	if (s[state->i] == '\'' && !state->inside_dquotes)
 		state->inside_quotes = !state->inside_quotes;
-	}
-	else if (!state->inside_quotes && s[state->i] == c)
+	if (s[state->i] == '\"' && !state->inside_quotes)
+		state->inside_dquotes = !state->inside_dquotes;
+	else if (!state->inside_quotes && !state->inside_dquotes && s[state->i] == c)
 	{
 		if (state->i > state->j)
 		{
@@ -63,6 +63,7 @@ char	**kv_split_ignore_quotes(char const *s, char c, t_shell *shell)
 	state.i = 0;
 	state.j = 0;
 	state.k = 0;
+	state.inside_dquotes = 0;
 	state.inside_quotes = 0;
 	if (!s)
 		return (NULL);

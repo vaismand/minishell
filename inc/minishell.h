@@ -59,6 +59,7 @@ typedef struct s_split_state
 	int				j;
 	int				k;
 	int				inside_quotes;
+	int				inside_dquotes;
 	struct s_shell	*shell;
 }	t_split_state;
 
